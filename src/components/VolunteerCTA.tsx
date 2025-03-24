@@ -28,7 +28,7 @@ const VolunteerCTA = () => {
               to apply!
             </p>
             <Link
-              to="/community#volunteer"
+              to="/volunteer#volunteer-hero"
               className="inline-block bg-yellow-400 text-primary-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
             >
               Volunteer Now! →

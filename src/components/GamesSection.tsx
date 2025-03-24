@@ -1,43 +1,35 @@
 import React, { useEffect, useRef } from "react";
 
-// Import game images
-import beachImg from "../assets/img/beach.jpg"; // Using available images as placeholders
-import aburiImg from "../assets/img/Aburi.jpg";
-import akosomboImg from "../assets/img/Akosombo.jpg";
-import mg1344Img from "../assets/img/_MG_1344.jpg";
-import mg1414Img from "../assets/img/_MG_1414.jpg";
-import mg1424Img from "../assets/img/_MG_1424.jpg";
-import mg1614Img from "../assets/img/_MG_1614.jpg";
-import mg1623Img from "../assets/img/_MG_1623.jpg";
-import mg1656Img from "../assets/img/_MG_1656.jpg";
-import mg1677Img from "../assets/img/_MG_1677.jpg";
-import mg1679Img from "../assets/img/_MG_1679.jpg";
+// Import game images from games folder
+import archeryImg from "../assets/img/games/Archery.jpg";
+import cardsImg from "../assets/img/games/cards.jpg";
+import cupGamesImg from "../assets/img/games/cup games.jpg";
+import dartImg from "../assets/img/games/dart.jpg";
+import footballImg from "../assets/img/games/football.jpg";
+import limboImg from "../assets/img/games/limbo.jpg";
+import shootingRangeImg from "../assets/img/games/shooting range.jpg";
+import unoImg from "../assets/img/games/uno.jpg";
+import volleyImg from "../assets/img/games/volley.jpg";
 
 const games = [
-  { name: "Air Max", image: beachImg, id: 1, skillLevel: "Beginner" },
-  { name: "Blazer", image: aburiImg, id: 2, skillLevel: "Intermediate" },
-  { name: "Air Jordan 1", image: akosomboImg, id: 3, skillLevel: "Advanced" },
-  { name: "Dunk", image: mg1344Img, id: 4, skillLevel: "Beginner" },
-  { name: "Air Force 1", image: mg1414Img, id: 5, skillLevel: "Intermediate" },
-  { name: "Football", image: mg1424Img, id: 6, skillLevel: "Intermediate" },
-  { name: "Dart", image: mg1614Img, id: 7, skillLevel: "Beginner" },
-  { name: "Limbo", image: mg1623Img, id: 8, skillLevel: "Beginner" },
-  { name: "Table Tennis", image: mg1656Img, id: 9, skillLevel: "Intermediate" },
-  { name: "Swimming", image: mg1677Img, id: 10, skillLevel: "Advanced" },
-  { name: "Jenga", image: mg1679Img, id: 11, skillLevel: "Beginner" },
-  { name: "Uno", image: mg1424Img, id: 12, skillLevel: "Beginner" },
-  { name: "Cards", image: mg1614Img, id: 13, skillLevel: "Beginner" },
-  { name: "Sack Race", image: mg1623Img, id: 14, skillLevel: "Beginner" },
+  { name: "Archery", image: archeryImg, id: 1, skillLevel: "Intermediate" },
+  { name: "Cards", image: cardsImg, id: 2, skillLevel: "Beginner" },
+  { name: "Cup Games", image: cupGamesImg, id: 3, skillLevel: "Beginner" },
+  { name: "Dart", image: dartImg, id: 4, skillLevel: "Beginner" },
+  { name: "Football", image: footballImg, id: 5, skillLevel: "Intermediate" },
+  { name: "Limbo", image: limboImg, id: 6, skillLevel: "Beginner" },
   {
     name: "Shooting Range",
-    image: mg1656Img,
-    id: 15,
+    image: shootingRangeImg,
+    id: 7,
     skillLevel: "Intermediate",
   },
+  { name: "Uno", image: unoImg, id: 8, skillLevel: "Beginner" },
+  { name: "Volleyball", image: volleyImg, id: 9, skillLevel: "Intermediate" },
 ];
 
-// Filter to show only games (not shoes)
-const gameItems = games.filter((game) => game.id >= 6);
+// Use all games since we're now using actual game images
+const gameItems = games;
 
 const GamesSection: React.FC = () => {
   const scrollContainer = useRef<HTMLDivElement>(null);

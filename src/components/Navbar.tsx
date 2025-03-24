@@ -54,9 +54,14 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <Link to="/community" className="hidden md:block btn btn-primary">
+          <a
+            href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:block btn btn-primary"
+          >
             Join Community
-          </Link>
+          </a>
 
           {/* Mobile Menu Button */}
           <button
@@ -103,12 +108,14 @@ const Navbar = () => {
                 <MessageSquare className="h-5 w-5" />
                 <span>Contact</span>
               </Link>
-              <Link
-                to="/community"
+              <a
+                href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-primary w-full text-center"
               >
                 Join Community
-              </Link>
+              </a>
             </div>
           </div>
         )}

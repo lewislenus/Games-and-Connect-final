@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   MessageCircle,
   Users,
@@ -8,13 +9,22 @@ import {
   Gift,
   Star,
 } from "lucide-react";
+import communityImage from "../assets/img/community.jpg";
 
 const CommunityPage = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative py-20 bg-primary-700">
-        <div className="container-custom text-white">
+      <section className="relative py-20">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={communityImage}
+            alt="Community & Loyalty Program"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-900/80 to-secondary-900/80"></div>
+        </div>
+        <div className="container-custom relative z-10 text-white">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold mb-4">
               Community & Loyalty Program
@@ -23,9 +33,14 @@ const CommunityPage = () => {
               Connect with like-minded individuals, participate in discussions,
               and earn rewards for your active participation.
             </p>
-            <button className="btn bg-white text-primary-700 hover:bg-gray-100">
+            <a
+              href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn bg-white text-primary-700 hover:bg-gray-100"
+            >
               Join WhatsApp Community
-            </button>
+            </a>
           </div>
         </div>
       </section>
@@ -167,9 +182,14 @@ const CommunityPage = () => {
                 </div>
               </div>
 
-              <button className="btn btn-primary">
+              <a
+                href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
                 Join WhatsApp Community
-              </button>
+              </a>
             </div>
 
             <div className="relative">
@@ -491,12 +511,20 @@ const CommunityPage = () => {
             with Games & Connect.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="btn bg-white text-primary-700 hover:bg-gray-100">
+            <a
+              href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn bg-white text-primary-700 hover:bg-gray-100"
+            >
               Join WhatsApp Community
-            </button>
-            <button className="btn bg-secondary-500 text-white hover:bg-secondary-600">
+            </a>
+            <Link
+              to="/volunteer"
+              className="btn bg-secondary-500 text-white hover:bg-secondary-600"
+            >
               Apply to Volunteer
-            </button>
+            </Link>
           </div>
         </div>
       </section>

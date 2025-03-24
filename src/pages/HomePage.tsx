@@ -10,8 +10,10 @@ import { upcomingEvents } from "./EventsPage";
 import backgroundImage from "../assets/img/back.jpg";
 
 const HomePage = () => {
-  // Set the target date to April 18, 2025
-  const nextEventDate = new Date("2025-04-18T00:00:00");
+  // Get the first upcoming event
+  const nextEvent = upcomingEvents[0];
+  // Set the target date based on the event date
+  const nextEventDate = new Date("2025-04-18T00:00:00"); // Keeping the hardcoded date for now
 
   return (
     <div>
@@ -36,9 +38,14 @@ const HomePage = () => {
               <Link to="/events" className="btn btn-primary">
                 Explore Events
               </Link>
-              <Link to="/community" className="btn btn-secondary">
+              <a
+                href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+              >
                 Join Our Community
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -47,7 +54,8 @@ const HomePage = () => {
           <div className="container-custom">
             <CountdownTimer
               targetDate={nextEventDate}
-              eventTitle="Next Event: Games Day at Akosombo"
+              eventTitle={`Next Event: ${nextEvent.title}`}
+              eventId={nextEvent.id}
             />
           </div>
         </div>
@@ -259,9 +267,14 @@ const HomePage = () => {
             the best social events in Accra.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/community" className="btn btn-primary">
+            <a
+              href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+            >
               Join Our Community
-            </Link>
+            </a>
             <Link
               to="/events"
               className="btn btn-outline border-white text-white hover:bg-white hover:text-primary-700"

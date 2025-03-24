@@ -7,9 +7,9 @@ import EventsPage from "./pages/EventsPage";
 import CommunityPage from "./pages/CommunityPage";
 import ContactPage from "./pages/ContactPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
+import VolunteerRegistrationPage from "./pages/VolunteerRegistrationPage";
 import VolunteerCTA from "./components/VolunteerCTA";
 import GallerySection from "./components/GallerySection";
-
 
 function App() {
   return (
@@ -23,6 +23,7 @@ function App() {
             <Route path="/events/:eventId" element={<EventDetailsPage />} />
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/volunteer" element={<VolunteerRegistrationPage />} />
           </Routes>
         </main>
         <GallerySection />

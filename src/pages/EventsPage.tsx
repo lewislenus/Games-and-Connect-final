@@ -7,6 +7,7 @@ import akosomboImg from "../assets/img/Akosombo.jpg";
 import beachImg from "../assets/img/beach.jpg";
 import aburiImg from "../assets/img/Aburi.jpg";
 import triviaImg from "../assets/img/_MG_1656.jpg"; // Using an existing image for trivia
+import eventsImage from "../assets/img/events.jpg";
 
 // Updated event data with local images
 // Export upcomingEvents so it can be imported in HomePage
@@ -132,8 +133,16 @@ const EventsPage = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative py-20 bg-primary-700">
-        <div className="container-custom text-white">
+      <section className="relative py-20">
+        <div className="absolute inset-0 z-0">
+          <img
+            src={eventsImage}
+            alt="Our Events"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-900/80 to-secondary-900/80"></div>
+        </div>
+        <div className="container-custom relative z-10 text-white">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold mb-4">Our Events</h1>
             <p className="text-xl mb-0">

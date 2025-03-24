@@ -4,11 +4,13 @@ import { Link } from "react-router-dom";
 interface CountdownTimerProps {
   targetDate: Date;
   eventTitle: string;
+  eventId?: number; // Optional event ID for navigation
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({
   targetDate,
   eventTitle,
+  eventId,
 }) => {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
@@ -82,7 +84,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({
         </div>
         <div className="text-center">
           <Link
-            to="/events"
+            to={eventId ? `/events/${eventId}` : "/events"}
             className="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200"
           >
             Book Now →

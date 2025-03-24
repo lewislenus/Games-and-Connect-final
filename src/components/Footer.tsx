@@ -38,7 +38,7 @@ const Footer = () => {
                 <Twitter className="h-6 w-6" />
               </a>
               <a
-                href="https://whatsapp.com"
+                href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-400"
