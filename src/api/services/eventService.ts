@@ -1,54 +1,117 @@
-import api from "../config";
-
-export interface Event {
-  _id: string;
-  title: string;
-  date: string;
-  time: string;
-  location: string;
-  description: string;
-  image: string;
-  price: number;
-  capacity: number;
-  registrations: string[];
-  isPast: boolean;
-  createdAt: string;
-  updatedAt: string;
-}
 
 import { supabase } from '../supabase';
+import { storageService } from './storageService';
+
+export interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  image_url?: string;
+  capacity?: number;
+  price?: number;
+  created_at?: string;
+  updated_at?: string;
+}
 
 export const eventService = {
   async getEvents() {
-    const { data, error } = await supabase.from('events').select('*');
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .order('date', { ascending: true });
+    
     if (error) throw error;
     return data;
   },
 
-  async createEvent(eventData) {
+  async createEvent(eventData: Partial<Event>, imageFile?: File) {
+    let imageUrl;
+    if (imageFile) {
+      imageUrl = await storageService.uploadEventImage(imageFile);
+    }
+
     const { data, error } = await supabase
       .from('events')
-      .insert([eventData])
-      .select();
+      .insert([{ ...eventData, image_url: imageUrl }])
+      .select()
+      .single();
+
     if (error) throw error;
-    return data[0];
+    return data;
   },
 
-  async updateEvent(id, eventData) {
+  async updateEvent(id: string, eventData: Partial<Event>, imageFile?: File) {
+    let imageUrl = eventData.image_url;
+    
+    if (imageFile) {
+      if (imageUrl) {
+        await storageService.deleteEventImage(imageUrl);
+      }
+      imageUrl = await storageService.uploadEventImage(imageFile);
+    }
+
     const { data, error } = await supabase
       .from('events')
-      .update(eventData)
+      .update({ ...eventData, image_url: imageUrl })
       .eq('id', id)
-      .select();
+      .select()
+      .single();
+
     if (error) throw error;
-    return data[0];
+    return data;
   },
 
-  async deleteEvent(id) {
+  async deleteEvent(id: string) {
+    const event = await this.getEventById(id);
+    if (event?.image_url) {
+      await storageService.deleteEventImage(event.image_url);
+    }
+
     const { error } = await supabase
       .from('events')
       .delete()
       .eq('id', id);
+
     if (error) throw error;
+  },
+
+  async getEventById(id: string) {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async registerForEvent(eventId: string, userId: string) {
+    const { data, error } = await supabase
+      .from('event_registrations')
+      .insert([{
+        event_id: eventId,
+        user_id: userId,
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async getEventRegistrations(eventId: string) {
+    const { data, error } = await supabase
+      .from('event_registrations')
+      .select(`
+        *,
+        profiles:user_id(*)
+      `)
+      .eq('event_id', eventId);
+
+    if (error) throw error;
+    return data;
   }
 };
