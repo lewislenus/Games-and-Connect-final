@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply font-sans text-gray-800 bg-gray-50;
+    @apply font-sans text-gray-800 bg-secondary-100;
   }
   h1,
   h2,
