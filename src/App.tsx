@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
 import AdminLayout from "./components/AdminLayout";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import Footer from "./components/Footer";
