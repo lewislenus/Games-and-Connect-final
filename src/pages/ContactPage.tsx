@@ -223,12 +223,17 @@ const ContactPage = () => {
           </div>
 
           <div className="bg-gray-200 rounded-xl h-96 overflow-hidden">
-            {/* In a real implementation, this would be a Google Maps embed */}
-            <div className="w-full h-full flex items-center justify-center">
-              <p className="text-gray-600 text-lg">
-                Interactive Map of Accra, Ghana
-              </p>
-            </div>
+            <GoogleMap
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+              center={{ lat: 5.6037, lng: -0.1870 }}
+              zoom={12}
+              options={{
+                zoomControl: true,
+                streetViewControl: true,
+                mapTypeControl: true,
+                fullscreenControl: true,
+              }}
+            />
           </div>
 
           <div className="mt-8 text-center">
