@@ -25,24 +25,30 @@ export const eventService = {
     return data;
   },
 
-  async createEvent(event: any) {
-    const { data, error } = await supabase.from('events').insert(event);
-    if (error) throw error;
-    return data;
-  },
-
-  async updateEvent(id: string, event: any) {
+  async createEvent(eventData) {
     const { data, error } = await supabase
       .from('events')
-      .update(event)
-      .eq('id', id);
+      .insert([eventData])
+      .select();
     if (error) throw error;
-    return data;
+    return data[0];
   },
 
-  async deleteEvent(id: string) {
-    const { error } = await supabase.from('events').delete().eq('id', id);
+  async updateEvent(id, eventData) {
+    const { data, error } = await supabase
+      .from('events')
+      .update(eventData)
+      .eq('id', id)
+      .select();
     if (error) throw error;
-    return true;
+    return data[0];
+  },
+
+  async deleteEvent(id) {
+    const { error } = await supabase
+      .from('events')
+      .delete()
+      .eq('id', id);
+    if (error) throw error;
   }
 };
