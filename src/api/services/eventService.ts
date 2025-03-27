@@ -67,3 +67,33 @@ export const eventService = {
     return response.data;
   },
 };
+import { supabase } from '../supabase';
+
+export const eventService = {
+  async getEvents() {
+    const { data, error } = await supabase.from('events').select('*');
+    if (error) throw error;
+    return data;
+  },
+
+  async createEvent(event) {
+    const { data, error } = await supabase.from('events').insert(event).select();
+    if (error) throw error;
+    return data[0];
+  },
+
+  async updateEvent(id, event) {
+    const { data, error } = await supabase
+      .from('events')
+      .update(event)
+      .eq('id', id)
+      .select();
+    if (error) throw error;
+    return data[0];
+  },
+
+  async deleteEvent(id) {
+    const { error } = await supabase.from('events').delete().eq('id', id);
+    if (error) throw error;
+  }
+};
