@@ -33,7 +33,10 @@ function App() {
             
             {/* Admin routes */}
             <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboardPage />} />
               <Route path="dashboard" element={<AdminDashboardPage />} />
+              <Route path="events" element={<EventManagement />} />
+              <Route path="messages" element={<MessageList />} />
             </Route>
           </Routes>
         </main>
