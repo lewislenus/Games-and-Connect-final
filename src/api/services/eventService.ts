@@ -1,4 +1,3 @@
-
 import { supabase } from '../supabase';
 import { storageService } from './storageService';
 
@@ -7,10 +6,13 @@ export interface Event {
   title: string;
   description: string;
   date: string;
+  end_date?: string;
   location: string;
   image_url?: string;
   capacity?: number;
   price?: number;
+  status?: 'draft' | 'published' | 'cancelled' | 'completed';
+  organizer_id?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -21,7 +23,18 @@ export const eventService = {
       .from('events')
       .select('*')
       .order('date', { ascending: true });
-    
+
+    if (error) throw error;
+    return data;
+  },
+
+  async getEvent(id: string) {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .eq('id', id)
+      .single();
+
     if (error) throw error;
     return data;
   },
@@ -31,7 +44,6 @@ export const eventService = {
     if (imageFile) {
       imageUrl = await storageService.uploadEventImage(imageFile);
     }
-
     const { data, error } = await supabase
       .from('events')
       .insert([{ ...eventData, image_url: imageUrl }])
@@ -44,14 +56,12 @@ export const eventService = {
 
   async updateEvent(id: string, eventData: Partial<Event>, imageFile?: File) {
     let imageUrl = eventData.image_url;
-    
     if (imageFile) {
       if (imageUrl) {
         await storageService.deleteEventImage(imageUrl);
       }
       imageUrl = await storageService.uploadEventImage(imageFile);
     }
-
     const { data, error } = await supabase
       .from('events')
       .update({ ...eventData, image_url: imageUrl })
@@ -64,11 +74,10 @@ export const eventService = {
   },
 
   async deleteEvent(id: string) {
-    const event = await this.getEventById(id);
+    const event = await this.getEvent(id); // Use the new getEvent function
     if (event?.image_url) {
       await storageService.deleteEventImage(event.image_url);
     }
-
     const { error } = await supabase
       .from('events')
       .delete()
@@ -76,18 +85,6 @@ export const eventService = {
 
     if (error) throw error;
   },
-
-  async getEventById(id: string) {
-    const { data, error } = await supabase
-      .from('events')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
   async registerForEvent(eventId: string, userId: string) {
     const { data, error } = await supabase
       .from('event_registrations')
