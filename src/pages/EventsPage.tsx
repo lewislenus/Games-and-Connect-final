@@ -68,7 +68,7 @@ export const upcomingEvents = [
   },
 ];
 
-const pastEvents = [
+export const pastEvents = [
   {
     id: 101,
     title: "Beach Day & Games",
