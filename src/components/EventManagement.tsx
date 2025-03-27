@@ -5,11 +5,17 @@ import { supabase } from '../api/supabase';
 import { upcomingEvents, pastEvents } from '../pages/EventsPage';
 
 export default function EventManagement() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState([...upcomingEvents, ...pastEvents]);
   const [showEventModal, setShowEventModal] = useState(false);
   const [activeFilter, setActiveFilter] = useState('active');
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const filteredEvents = events.filter(event => {
+    if (activeFilter === 'active') return !event.isPast;
+    if (activeFilter === 'past') return event.isPast;
+    return true; // For 'all' filter
+  });
 
   useEffect(() => {
     const initializeEvents = async () => {
@@ -136,6 +142,32 @@ export default function EventManagement() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <div className="p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredEvents.map((event) => (
+            <div key={event.id} className="bg-white rounded-lg shadow-md p-6">
+              <img src={event.image} alt={event.title} className="w-full h-48 object-cover rounded-lg mb-4" />
+              <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
+              <p className="text-gray-600 mb-2">{event.date} • {event.time}</p>
+              <p className="text-gray-600 mb-4">{event.location}</p>
+              <div className="flex justify-between items-center">
+                <button 
+                  onClick={() => handleEdit(event.id)} 
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  Edit
+                </button>
+                <button 
+                  onClick={() => handleDelete(event.id)}
+                  className="text-red-600 hover:text-red-800"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
       <header className="bg-white border-b">
         <nav className="flex justify-between items-center px-6 py-4">
           <div className="flex items-center space-x-8">
