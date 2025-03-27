@@ -14,6 +14,8 @@ import EventDetailsPage from "./pages/EventDetailsPage";
 import VolunteerRegistrationPage from "./pages/VolunteerRegistrationPage";
 import VolunteerCTA from "./components/VolunteerCTA";
 import GallerySection from "./components/GallerySection";
+import EventManagement from "./components/EventManagement";
+import MessageList from "./components/MessageList";
 
 function App() {
   return (
