@@ -1,4 +1,6 @@
+
 import api from "../config";
+import { supabase } from '../supabase';
 
 export interface LoginCredentials {
   email: string;
@@ -28,56 +30,7 @@ export interface AuthResponse {
 }
 
 export const authService = {
-  // Login user
-  login: async (credentials: LoginCredentials) => {
-    const response = await api.post<AuthResponse>("/users/login", credentials);
-    if (response.data.success) {
-      localStorage.setItem("token", response.data.data.token);
-    }
-    return response.data;
-  },
-
-  // Register user
-  register: async (userData: RegisterData) => {
-    const response = await api.post<AuthResponse>("/users/register", userData);
-    if (response.data.success) {
-      localStorage.setItem("token", response.data.data.token);
-    }
-    return response.data;
-  },
-
-  // Logout user
-  logout: () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  },
-
-  // Get current user
-  getCurrentUser: async () => {
-    const response = await api.get<{ success: boolean; data: User }>(
-      "/users/me"
-    );
-    return response.data;
-  },
-
-  // Check if user is authenticated
-  isAuthenticated: () => {
-    return !!localStorage.getItem("token");
-  },
-
-  // Check if user is admin
-  isAdmin: async () => {
-    try {
-      const { data } = await authService.getCurrentUser();
-      return data.role === "admin";
-    } catch {
-      return false;
-    }
-  },
-};
-import { supabase } from '../supabase';
-
-export const authService = {
+  // Supabase auth methods
   async signUp(email: string, password: string) {
     return await supabase.auth.signUp({ email, password });
   },
@@ -88,5 +41,45 @@ export const authService = {
 
   async signOut() {
     return await supabase.auth.signOut();
-  }
+  },
+
+  // Legacy API methods
+  login: async (credentials: LoginCredentials) => {
+    const response = await api.post<AuthResponse>("/users/login", credentials);
+    if (response.data.success) {
+      localStorage.setItem("token", response.data.data.token);
+    }
+    return response.data;
+  },
+
+  register: async (userData: RegisterData) => {
+    const response = await api.post<AuthResponse>("/users/register", userData);
+    if (response.data.success) {
+      localStorage.setItem("token", response.data.data.token);
+    }
+    return response.data;
+  },
+
+  logout: () => {
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  },
+
+  getCurrentUser: async () => {
+    const response = await api.get<{ success: boolean; data: User }>("/users/me");
+    return response.data;
+  },
+
+  isAuthenticated: () => {
+    return !!localStorage.getItem("token");
+  },
+
+  isAdmin: async () => {
+    try {
+      const { data } = await authService.getCurrentUser();
+      return data.role === "admin";
+    } catch {
+      return false;
+    }
+  },
 };
