@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Calendar, Users, MessageSquare, Settings } from 'lucide-react';
 import EventForm from './EventForm';
 import { supabase } from '../api/supabase';
+import { upcomingEvents, pastEvents } from '../pages/EventsPage';
 
 export default function EventManagement() {
   const [events, setEvents] = useState([]);
@@ -11,7 +12,44 @@ export default function EventManagement() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchEvents();
+    const initializeEvents = async () => {
+      // First fetch existing events from Supabase
+      await fetchEvents();
+      
+      // Then add any missing events from our static data
+      const combinedEvents = [...upcomingEvents, ...pastEvents];
+      for (const event of combinedEvents) {
+        try {
+          const { data } = await supabase
+            .from('events')
+            .select('*')
+            .eq('title', event.title)
+            .single();
+            
+          if (!data) {
+            // Convert the event format to match our database schema
+            const newEvent = {
+              title: event.title,
+              description: event.description,
+              date: new Date(event.date).toISOString(),
+              location: event.location,
+              image_url: event.image,
+              capacity: parseInt(event.capacity),
+              price: parseFloat(event.price.replace('GHS ', '')),
+              status: event.isPast ? 'completed' : 'published'
+            };
+            
+            await supabase.from('events').insert([newEvent]);
+          }
+        } catch (error) {
+          console.error('Error adding event:', error);
+        }
+      }
+      // Fetch all events again to get the updated list
+      await fetchEvents();
+    };
+
+    initializeEvents();
   }, []);
 
   const fetchEvents = async () => {
