@@ -1,5 +1,4 @@
 
-import api from "../config";
 import { supabase } from '../supabase';
 
 export interface LoginCredentials {
@@ -11,28 +10,31 @@ export interface RegisterData extends LoginCredentials {
   name: string;
 }
 
-export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  eventsRegistered: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface AuthResponse {
-  success: boolean;
-  data: {
-    user: User;
-    token: string;
-  };
-}
-
 export const authService = {
-  // Supabase auth methods
-  async signUp(email: string, password: string) {
-    return await supabase.auth.signUp({ email, password });
+  async signUp(email: string, password: string, username: string) {
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (authError) throw authError;
+
+    // Create profile after successful signup
+    if (authData.user) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert([
+          {
+            id: authData.user.id,
+            username,
+            full_name: username,
+          },
+        ]);
+
+      if (profileError) throw profileError;
+    }
+
+    return authData;
   },
 
   async signIn(email: string, password: string) {
@@ -43,43 +45,34 @@ export const authService = {
     return await supabase.auth.signOut();
   },
 
-  // Legacy API methods
-  login: async (credentials: LoginCredentials) => {
-    const response = await api.post<AuthResponse>("/users/login", credentials);
-    if (response.data.success) {
-      localStorage.setItem("token", response.data.data.token);
-    }
-    return response.data;
+  async getProfile() {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) throw new Error('No user logged in');
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (error) throw error;
+    return data;
   },
 
-  register: async (userData: RegisterData) => {
-    const response = await api.post<AuthResponse>("/users/register", userData);
-    if (response.data.success) {
-      localStorage.setItem("token", response.data.data.token);
-    }
-    return response.data;
-  },
+  async updateProfile(updates: { username?: string; full_name?: string; avatar_url?: string }) {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) throw new Error('No user logged in');
 
-  logout: () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  },
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', user.id)
+      .select()
+      .single();
 
-  getCurrentUser: async () => {
-    const response = await api.get<{ success: boolean; data: User }>("/users/me");
-    return response.data;
-  },
-
-  isAuthenticated: () => {
-    return !!localStorage.getItem("token");
-  },
-
-  isAdmin: async () => {
-    try {
-      const { data } = await authService.getCurrentUser();
-      return data.role === "admin";
-    } catch {
-      return false;
-    }
-  },
+    if (error) throw error;
+    return data;
+  }
 };
