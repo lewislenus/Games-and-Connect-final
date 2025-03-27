@@ -62,7 +62,6 @@ const Carousel: React.FC<CarouselProps> = ({ className = "" }) => {
         >
           <motion.img
             src={images[currentIndex]}
-            srcSet={imageSrcSets[currentIndex]}
             sizes="100vw"
             loading={currentIndex === 0 ? 'eager' : 'lazy'}
             alt={`Slide ${currentIndex + 1}`}

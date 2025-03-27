@@ -17,13 +17,7 @@ export const optimizeImage = async (
   }
 };
 
-export const generateImageSrcSet = async (imagePath: string) => {
+export const generateImageSrcSet = (imagePath: string) => {
   const sizes = [400, 800, 1200];
-  const srcSet = await Promise.all(
-    sizes.map(async (size) => {
-      const optimized = await optimizeImage(imagePath, { width: size, quality: 80 });
-      return `${optimized} ${size}w`;
-    })
-  );
-  return srcSet.join(', ');
+  return sizes.map(size => `${imagePath} ${size}w`).join(', ');
 };
