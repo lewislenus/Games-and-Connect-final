@@ -19,11 +19,17 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/:eventId" element={<EventDetailsPage />} />
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/volunteer" element={<VolunteerRegistrationPage />} />
+            
+            {/* Admin routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route path="dashboard" element={<AdminDashboardPage />} />
+            </Route>
           </Routes>
         </main>
         <GallerySection />
