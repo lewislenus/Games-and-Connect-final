@@ -29,7 +29,18 @@ const VolunteerCTA = () => {
             </p>
             <Link
               to="/volunteer#volunteer-hero"
-              className="inline-block bg-yellow-400 text-primary-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 active:bg-yellow-500 active:translate-y-0.5 transition-all duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+              onClick={(e) => {
+                e.preventDefault();
+                const btn = e.currentTarget;
+                btn.classList.add('scale-95', 'bg-yellow-500');
+                setTimeout(() => {
+                  btn.classList.add('scale-110', 'bg-yellow-300');
+                  setTimeout(() => {
+                    window.location.href = '/volunteer#volunteer-hero';
+                  }, 200);
+                }, 150);
+              }}
+              className="inline-block bg-yellow-400 text-primary-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-all duration-200 text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
             >
               Volunteer Now! →
             </Link>
