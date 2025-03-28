@@ -1,6 +1,6 @@
 import React from "react";
 import { Calendar, MapPin, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
+import AnimatedLink from "./AnimatedLink";
 
 interface EventCardProps {
   id?: number;

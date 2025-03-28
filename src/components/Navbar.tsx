@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Home, Calendar, Users, MessageSquare, Menu, X } from "lucide-react";
 import logo from "../assets/img/logo.png";
+import AnimatedLink from "./AnimatedLink"; // Added import statement
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
