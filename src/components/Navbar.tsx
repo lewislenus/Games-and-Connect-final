@@ -24,34 +24,34 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link
+            <AnimatedLink
               to="/"
               className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
             >
               <Home className="h-4 w-4" />
               <span>Home</span>
-            </Link>
-            <Link
+            </AnimatedLink>
+            <AnimatedLink
               to="/events"
               className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
             >
               <Calendar className="h-4 w-4" />
               <span>Events</span>
-            </Link>
-            <Link
+            </AnimatedLink>
+            <AnimatedLink
               to="/community"
               className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
             >
               <Users className="h-4 w-4" />
               <span>Community</span>
-            </Link>
-            <Link
+            </AnimatedLink>
+            <AnimatedLink
               to="/contact"
               className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
             >
               <MessageSquare className="h-4 w-4" />
               <span>Contact</span>
-            </Link>
+            </AnimatedLink>
           </div>
 
           <a

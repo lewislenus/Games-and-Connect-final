@@ -55,12 +55,12 @@ const EventCard: React.FC<EventCardProps> = ({
         </div>
         <p className="text-gray-700 mb-4 flex-grow">{description}</p>
         {!isPast && (
-          <Link
+          <AnimatedLink
             to={id ? `/events/${id}` : "/events"}
             className="btn btn-primary w-full mt-auto text-center"
           >
             View Details
-          </Link>
+          </AnimatedLink>
         )}
         {isPast && (
           <Link
