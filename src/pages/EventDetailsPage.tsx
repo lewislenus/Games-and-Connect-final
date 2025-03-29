@@ -368,15 +368,8 @@ const EventDetailsPage = () => {
                   <div className="text-center py-12">
                     <h3 className="text-2xl font-bold mb-4">Past Event</h3>
                     <p className="text-gray-600 mb-6">
-                      This event has already taken place. Check out our gallery
-                      for photos or browse upcoming events.
+                      This event has already taken place. Check out our upcoming events.
                     </p>
-                    <button
-                      className="btn btn-outline w-full mb-4"
-                      onClick={() => setIsGalleryOpen(true)} // Open gallery on click
-                    >
-                      View Gallery
-                    </button>
                     <Link to="/events" className="btn btn-primary w-full">
                       See Upcoming Events
                     </Link>
