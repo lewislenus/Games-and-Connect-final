@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Calendar, MapPin, Clock } from "lucide-react";
 import AnimatedLink from "./AnimatedLink";
 
