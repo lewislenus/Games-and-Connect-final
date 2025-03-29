@@ -371,12 +371,20 @@ const EventDetailsPage = () => {
                       This event has already taken place. Check out our gallery
                       for photos or browse upcoming events.
                     </p>
-                    <button
+                    <Link
+                      to="/#gallery"
                       className="btn btn-outline w-full mb-4"
-                      onClick={() => setIsGalleryOpen(true)} // Open gallery on click
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.location.href = '/#gallery';
+                        window.scrollTo({
+                          top: document.getElementById('gallery')?.offsetTop,
+                          behavior: 'smooth'
+                        });
+                      }}
                     >
                       View Gallery
-                    </button>
+                    </Link>
                     <Link to="/events" className="btn btn-primary w-full">
                       See Upcoming Events
                     </Link>

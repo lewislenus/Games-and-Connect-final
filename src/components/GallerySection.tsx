@@ -106,7 +106,7 @@ const GallerySection = () => {
   }, [selectedImage, handlePrevImage, handleNextImage]);
 
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
+    <section id="gallery" className="py-16 bg-gradient-to-b from-gray-900 to-black">
       <div className="container-custom">
         <div className="text-center mb-12">
           <span className="text-primary-400 font-semibold mb-4 block">
