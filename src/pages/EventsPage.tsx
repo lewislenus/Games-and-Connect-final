@@ -33,25 +33,6 @@ export const upcomingEvents = [
 
 export const pastEvents = [
   {
-    id: 2,
-    title: "Night Games & Beach Party",
-    date: "June 2, 2025",
-    time: "4:00 PM - 10:00 PM",
-    location: "Labadi Beach, Accra",
-    description:
-      "Enjoy an evening of games followed by a lively beach party with music and bonfire. Includes beach games, networking, and refreshments.",
-    image: beachImg,
-    price: "GHS 200 per person",
-    capacity: "80 participants",
-    additionalInfo: [
-      "Beach entrance fees included",
-      "Dinner and refreshments provided",
-      "Live DJ and bonfire experience",
-      "Bring a change of clothes",
-    ],
-    isPast: true,
-  },
-  {
     id: 3,
     title: "Trivia Friday Special",
     date: "May 28, 2025",
