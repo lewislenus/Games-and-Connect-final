@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Instagram, Twitter } from "lucide-react";
+import { Instagram, Twitter, MessageCircle } from "lucide-react";
 import logoWhite from "../assets/img/logo white.png";
 
 const Footer = () => {
