@@ -8,12 +8,12 @@ import beachImg from "../assets/img/beach.jpg";
 import aburiImg from "../assets/img/Aburi.jpg";
 import triviaImg from "../assets/img/_MG_1656.jpg"; // Using an existing image for trivia
 import eventsImage from "../assets/img/events.jpg";
-import gallery1 from "../assets/gallery1.jpg";
-import gallery2 from "../assets/gallery2.jpg";
-import gallery3 from "../assets/gallery3.jpg";
-import gallery4 from "../assets/gallery4.jpg";
-import gallery5 from "../assets/gallery5.jpg";
-import gallery6 from "../assets/gallery6.jpg";
+import gallery1 from "../assets/img/gallery1.jpg";
+import gallery2 from "../assets/img/gallery2.jpg";
+import gallery3 from "../assets/img/gallery3.jpg";
+import gallery4 from "../assets/img/gallery4.jpg";
+import gallery5 from "../assets/img/gallery5.jpg";
+import gallery6 from "../assets/img/gallery6.jpg";
 
 
 // Updated event data with local images
