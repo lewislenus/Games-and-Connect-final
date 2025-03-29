@@ -9,7 +9,7 @@ import {
   Gift,
   Star,
 } from "lucide-react";
-import communityImage from "../assets/img/community.jpg";
+import communityImage from "../assets/img/events.jpg";
 
 const CommunityPage = () => {
   return (
