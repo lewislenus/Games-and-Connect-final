@@ -11,6 +11,7 @@ import {
   User,
   Phone,
   ArrowLeft,
+  X,
 } from "lucide-react";
 import { upcomingEvents } from "./EventsPage";
 
@@ -22,6 +23,15 @@ import aburiImg from "../assets/img/Aburi.jpg";
 const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false); // Added gallery modal state
+  // Add state for form fields
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    participants: 1,
+    specialRequests: "",
+  });
 
   // Import past events from EventsPage
   // This is a simplified approach - in a real app, you might fetch this data from an API
@@ -43,6 +53,7 @@ const EventDetailsPage = () => {
         "Professional photography services available",
       ],
       isPast: true,
+      gallery: [beachImg, aburiImg], // Added gallery images
     },
     {
       id: 102,
@@ -62,6 +73,7 @@ const EventDetailsPage = () => {
         "Comfortable walking shoes recommended",
       ],
       isPast: true,
+      gallery: [aburiImg, beachImg], // Added gallery images
     },
   ];
 
@@ -70,15 +82,6 @@ const EventDetailsPage = () => {
 
   // Find the event with the matching ID
   const event = allEvents.find((e) => e.id === parseInt(eventId || "0"));
-
-  // Add state for form fields
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    participants: 1,
-    specialRequests: "",
-  });
 
   // Redirect to events page if event not found
   useEffect(() => {
@@ -127,19 +130,7 @@ const EventDetailsPage = () => {
           alt={event.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           onClick={() => {
-            const modal = document.createElement("div");
-            modal.className =
-              "fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4";
-            modal.onclick = () => document.body.removeChild(modal);
-
-            const img = document.createElement("img");
-            img.src = event.image;
-            img.alt = event.title;
-            img.className = "max-w-full max-h-[90vh] object-contain";
-            img.onclick = (e) => e.stopPropagation();
-
-            modal.appendChild(img);
-            document.body.appendChild(modal);
+            setIsGalleryOpen(true); // Open gallery modal
           }}
         />
         {"isPast" in event && (
@@ -246,19 +237,7 @@ const EventDetailsPage = () => {
               <div
                 className="mb-6 overflow-hidden rounded-lg cursor-pointer w-[500px] h-[500px] mx-auto"
                 onClick={() => {
-                  const modal = document.createElement("div");
-                  modal.className =
-                    "fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4";
-                  modal.onclick = () => document.body.removeChild(modal);
-
-                  const img = document.createElement("img");
-                  img.src = event.image;
-                  img.alt = event.title;
-                  img.className = "max-w-full max-h-[90vh] object-contain";
-                  img.onclick = (e) => e.stopPropagation();
-
-                  modal.appendChild(img);
-                  document.body.appendChild(modal);
+                  setIsGalleryOpen(true); // Open gallery modal
                 }}
               >
                 <img
@@ -392,7 +371,10 @@ const EventDetailsPage = () => {
                       This event has already taken place. Check out our gallery
                       for photos or browse upcoming events.
                     </p>
-                    <button className="btn btn-outline w-full mb-4">
+                    <button
+                      className="btn btn-outline w-full mb-4"
+                      onClick={() => setIsGalleryOpen(true)} // Open gallery on click
+                    >
                       View Gallery
                     </button>
                     <Link to="/events" className="btn btn-primary w-full">
@@ -405,6 +387,30 @@ const EventDetailsPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Gallery Modal */}
+      {isGalleryOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+          <div className="relative bg-white rounded-lg shadow-lg p-4 w-96">
+            <button
+              className="absolute top-2 right-2"
+              onClick={() => setIsGalleryOpen(false)}
+            >
+              <X size={20} />
+            </button>
+            <div className="grid grid-cols-2 gap-4">
+              {event.gallery.map((img, index) => (
+                <img
+                  key={index}
+                  src={img}
+                  alt={`Gallery Image ${index + 1}`}
+                  className="w-full h-auto object-cover"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
