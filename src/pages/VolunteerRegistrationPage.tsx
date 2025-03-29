@@ -1,13 +1,19 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, Users, Calendar, CheckCircle } from "lucide-react";
-import {
-  volunteerService,
-  VolunteerData,
-} from "../api/services/volunteerService";
+import { registrationService } from "../api/services/registrationService"; // Assuming this service handles Supabase interaction
 
-// Using the VolunteerData interface from volunteerService
-type FormData = VolunteerData;
+// Using the VolunteerData interface from volunteerService.  This should be updated to reflect the Supabase schema.
+type FormData = {
+  name: string;
+  email: string;
+  phone: string;
+  interests: string[];
+  availability: string[];
+  experience?: string;
+  message: string;
+};
+
 
 const VolunteerRegistrationPage = () => {
   const {
@@ -25,7 +31,7 @@ const VolunteerRegistrationPage = () => {
       setSubmitError(null);
 
       // Send the form data to the backend using the volunteer service
-      await volunteerService.submitApplication(data);
+      await registrationService.createVolunteerRegistration(data);
 
       alert(
         "Thank you for your interest in volunteering! We'll contact you soon."
