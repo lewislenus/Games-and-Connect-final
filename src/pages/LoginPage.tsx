@@ -16,7 +16,7 @@ export default function LoginPage() {
     try {
       const { error } = await signIn(email, password);
       if (!error) {
-        navigate('/admin/dashboard');
+        navigate('/');
       }
     } catch (error) {
       console.error('Login error:', error);
