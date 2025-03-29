@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Instagram, Twitter, MessageCircle } from "lucide-react";
+import { Instagram, Twitter } from "lucide-react";
 import logoWhite from "../assets/img/logo white.png";
 
 const Footer = () => {
@@ -22,7 +22,7 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/games_connect_gh/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-400"
@@ -30,12 +30,32 @@ const Footer = () => {
                 <Instagram className="h-6 w-6" />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/GamesConnect_gh"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-primary-400"
               >
                 <Twitter className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@games_and_connect"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-primary-400"
+              >
+                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 014.07-4.07v-3.45a6.37 6.37 0 00-3.35 11.8 6.37 6.37 0 008.24-6.1V9.41a8.33 8.33 0 005.37 1.91v-3.45a4.85 4.85 0 01-1.91-1.18z"/>
+                </svg>
+              </a>
+              <a
+                href="https://www.facebook.com/gamesandconnect/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-primary-400"
+              >
+                <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
               </a>
               <a
                 href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
