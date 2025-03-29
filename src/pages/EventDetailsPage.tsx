@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { submitRegistration } from "../api/airtable";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Calendar,
@@ -105,20 +106,28 @@ const EventDetailsPage = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would send this data to your backend
-    console.log("Form submitted:", formData);
-    alert("Registration submitted successfully!");
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      participants: 1,
-      specialRequests: "",
-      location: "", // Added location field
-    });
+    try {
+      await submitRegistration({
+        ...formData,
+        eventId: eventId || '0',
+        eventName: event?.title || ''
+      });
+      alert("Registration submitted successfully!");
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        participants: 1,
+        specialRequests: "",
+        location: "",
+      });
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert("Failed to submit registration. Please try again.");
+    }
   };
 
   if (!event) return null;
