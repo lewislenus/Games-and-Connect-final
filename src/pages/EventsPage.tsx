@@ -30,27 +30,6 @@ export const upcomingEvents = [
       "Swimming is optional (bring swimwear if interested)",
     ],
   },
-  {
-    id: 2,
-    title: "Night Games & Beach Party",
-    date: "June 2, 2025",
-    time: "4:00 PM - 10:00 PM",
-    location: "Labadi Beach, Accra",
-    description:
-      "Enjoy an evening of games followed by a lively beach party with music and bonfire. Includes beach games, networking, and refreshments.",
-    image: beachImg,
-    price: "GHS 200 per person",
-    capacity: "80 participants",
-    additionalInfo: [
-      "Beach entrance fees included",
-      "Dinner and refreshments provided",
-      "Live DJ and bonfire experience",
-      "Bring a change of clothes",
-    ],
-  },
-  {
-    id: 3,
-    title: "Trivia Friday Special",
     date: "May 28, 2025",
     time: "6:00 PM - 9:00 PM",
     location: "The Loft, Osu, Accra",
@@ -69,6 +48,44 @@ export const upcomingEvents = [
 ];
 
 export const pastEvents = [
+  {
+    id: 2,
+    title: "Night Games & Beach Party",
+    date: "June 2, 2025",
+    time: "4:00 PM - 10:00 PM",
+    location: "Labadi Beach, Accra",
+    description:
+      "Enjoy an evening of games followed by a lively beach party with music and bonfire. Includes beach games, networking, and refreshments.",
+    image: beachImg,
+    price: "GHS 200 per person",
+    capacity: "80 participants",
+    additionalInfo: [
+      "Beach entrance fees included",
+      "Dinner and refreshments provided",
+      "Live DJ and bonfire experience",
+      "Bring a change of clothes",
+    ],
+    isPast: true,
+  },
+  {
+    id: 3,
+    title: "Trivia Friday Special",
+    date: "May 28, 2025",
+    time: "6:00 PM - 9:00 PM",
+    location: "The Loft, Osu, Accra",
+    description:
+      "An evening of engaging trivia across various categories. Teams compete for exciting prizes while enjoying great food and drinks.",
+    image: triviaImg,
+    price: "GHS 100 per person",
+    capacity: "60 participants",
+    additionalInfo: [
+      "Teams of 4-6 people",
+      "Dinner and one drink included",
+      "Additional drinks available for purchase",
+      "Prizes for top 3 teams",
+    ],
+    isPast: true,
+  },
   {
     id: 101,
     title: "Beach Day & Games",
