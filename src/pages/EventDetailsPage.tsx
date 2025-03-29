@@ -31,6 +31,7 @@ const EventDetailsPage = () => {
     phone: "",
     participants: 1,
     specialRequests: "",
+    location: "", // Added location field
   });
 
   // Import past events from EventsPage
@@ -116,6 +117,7 @@ const EventDetailsPage = () => {
       phone: "",
       participants: 1,
       specialRequests: "",
+      location: "", // Added location field
     });
   };
 
@@ -337,16 +339,42 @@ const EventDetailsPage = () => {
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Special Requests or Comments
+                          Your Location *
+                        </label>
+                        <input
+                          type="text"
+                          name="location"
+                          value={formData.location}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
+                          placeholder="Your current location"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Special Requests
                         </label>
                         <textarea
                           name="specialRequests"
                           value={formData.specialRequests}
                           onChange={handleInputChange}
-                          rows={4}
+                          rows={3}
                           className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
-                          placeholder="Any dietary restrictions, accessibility needs, or other requests?"
+                          placeholder="Any special requirements or notes"
                         ></textarea>
+                      </div>
+
+                      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h4 className="font-medium text-gray-900 mb-2 flex items-center">
+                          Payment Details
+                          <svg className="w-4 h-4 text-green-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                          </svg>
+                        </h4>
+                        <p className="text-sm text-gray-600">MTN Mobile Money: 059 859 9616</p>
+                        <p className="text-sm text-gray-600">(Mainstream House)</p>
                       </div>
 
                       <div className="pt-4">
