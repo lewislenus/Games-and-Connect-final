@@ -8,13 +8,6 @@ import beachImg from "../assets/img/beach.jpg";
 import aburiImg from "../assets/img/Aburi.jpg";
 import triviaImg from "../assets/img/_MG_1656.jpg"; // Using an existing image for trivia
 import eventsImage from "../assets/img/events.jpg";
-import gallery1 from "../assets/img/gallery1.jpg";
-import gallery2 from "../assets/img/gallery2.jpg";
-import gallery3 from "../assets/img/gallery3.jpg";
-import gallery4 from "../assets/img/gallery4.jpg";
-import gallery5 from "../assets/img/gallery5.jpg";
-import gallery6 from "../assets/img/gallery6.jpg";
-
 
 // Updated event data with local images
 // Export upcomingEvents so it can be imported in HomePage
@@ -47,7 +40,7 @@ export const pastEvents = [
     location: "The Loft, Osu, Accra",
     description:
       "An evening of engaging trivia across various categories. Teams compete for exciting prizes while enjoying great food and drinks.",
-    image: gallery1, // Replaced with gallery image
+    image: triviaImg,
     price: "GHS 100 per person",
     capacity: "60 participants",
     additionalInfo: [
@@ -57,7 +50,6 @@ export const pastEvents = [
       "Prizes for top 3 teams",
     ],
     isPast: true,
-    gallery: [gallery2, gallery3, gallery4, gallery5, gallery6],
   },
   {
     id: 101,
@@ -67,7 +59,7 @@ export const pastEvents = [
     location: "Labadi Beach, Accra",
     description:
       "A day of fun beach games, swimming, and networking at Labadi Beach. The event included volleyball, tug of war, and sand castle building competitions with prizes for winners.",
-    image: gallery1, // Replaced with gallery image
+    image: beachImg,
     price: "GHS 150 per person",
     capacity: "75 participants",
     additionalInfo: [
@@ -76,7 +68,6 @@ export const pastEvents = [
       "Professional photography services available",
     ],
     isPast: true,
-    gallery: [gallery2, gallery3, gallery4, gallery5, gallery6],
   },
   {
     id: 102,
@@ -86,7 +77,7 @@ export const pastEvents = [
     location: "Aburi Botanical Gardens",
     description:
       "A refreshing hike through the beautiful Aburi Botanical Gardens followed by a picnic lunch and team-building activities. Participants enjoyed the serene environment and made new connections.",
-    image: gallery1, // Replaced with gallery image
+    image: aburiImg,
     price: "GHS 180 per person",
     capacity: "40 participants",
     additionalInfo: [
@@ -96,7 +87,6 @@ export const pastEvents = [
       "Comfortable walking shoes recommended",
     ],
     isPast: true,
-    gallery: [gallery2, gallery3, gallery4, gallery5, gallery6],
   },
 ];
 
