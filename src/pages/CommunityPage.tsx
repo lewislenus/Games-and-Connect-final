@@ -194,7 +194,7 @@ const CommunityPage = () => {
 
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                src={communityImage}
                 alt="Community members interacting"
                 className="rounded-lg shadow-lg"
               />
