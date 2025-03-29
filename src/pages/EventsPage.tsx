@@ -15,36 +15,20 @@ export const upcomingEvents = [
   {
     id: 1,
     title: "Games Day at Akosombo",
-    date: "May 15, 2025",
+    date: "April 18, 2025",
     time: "9:00 AM - 6:00 PM",
     location: "Akosombo, Eastern Region",
     description:
-      "A full day of outdoor games, team challenges, and networking by the Volta Lake. Includes transportation, meals, and all game equipment.",
+      "Join us for an exciting day of outdoor games and activities at the beautiful Akosombo. Enjoy team sports, water activities, and more in this scenic location.",
     image: akosomboImg,
-    price: "GHS 250 per person",
-    capacity: "50 participants",
+    price: "GHS 200 per person",
+    capacity: "100 participants",
     additionalInfo: [
       "Transportation from Accra included",
-      "Breakfast and lunch provided",
-      "Bring comfortable clothes and shoes",
+      "Lunch and refreshments provided",
       "Swimming is optional (bring swimwear if interested)",
     ],
-  },
-    date: "May 28, 2025",
-    time: "6:00 PM - 9:00 PM",
-    location: "The Loft, Osu, Accra",
-    description:
-      "Test your knowledge in our special edition trivia night with amazing prizes. Categories include general knowledge, pop culture, sports, and Ghana-specific trivia.",
-    image: triviaImg,
-    price: "GHS 100 per person",
-    capacity: "60 participants",
-    additionalInfo: [
-      "Teams of 4-6 people",
-      "Food and drinks available for purchase",
-      "Cash prizes for winning teams",
-      "Pre-registration required",
-    ],
-  },
+  }
 ];
 
 export const pastEvents = [
