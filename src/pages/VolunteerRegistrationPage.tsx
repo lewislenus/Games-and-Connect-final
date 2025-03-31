@@ -12,6 +12,9 @@ type FormData = {
   availability: string[];
   experience?: string;
   message: string;
+
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+
 };
 
 
@@ -33,9 +36,8 @@ const VolunteerRegistrationPage = () => {
       // Send the form data to the backend using the volunteer service
       await registrationService.createVolunteerRegistration(data);
 
-      alert(
-        "Thank you for your interest in volunteering! We'll contact you soon."
-      );
+      setShowThankYouModal(true);
+      setTimeout(() => setShowThankYouModal(false), 3000);
       reset();
     } catch (error) {
       console.error("Error submitting volunteer form:", error);
@@ -245,6 +247,20 @@ const VolunteerRegistrationPage = () => {
                         className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                         value="Community Engagement"
                         {...register("interests")}
+
+      {/* Thank You Modal */}
+      {showThankYouModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 max-w-md text-center">
+            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
+            <p className="text-gray-600">
+              Thank you for your interest in volunteering! We'll contact you soon with more information.
+            </p>
+          </div>
+        </div>
+      )}
+
                       />
                       <label
                         htmlFor="community-engagement"
