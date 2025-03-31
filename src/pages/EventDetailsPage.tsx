@@ -41,13 +41,13 @@ const EventDetailsPage = () => {
     {
       id: 101,
       title: "Beach Day & Games",
-      date: "April 10, 2025",
+      date: "January 04, 2025",
       time: "10:00 AM - 5:00 PM",
-      location: "Labadi Beach, Accra",
+      location: "Bojo Beach, Accra",
       description:
         "A day of fun beach games, swimming, and networking at Labadi Beach. The event included volleyball, tug of war, and sand castle building competitions with prizes for winners.",
       image: beachImg,
-      price: "GHS 150 per person",
+      price: "GHS 250 per person",
       capacity: "75 participants",
       additionalInfo: [
         "Beach entrance fees included",
@@ -60,13 +60,13 @@ const EventDetailsPage = () => {
     {
       id: 102,
       title: "Aburi Botanical Gardens Hike",
-      date: "March 25, 2025",
+      date: "November 25, 2024",
       time: "9:00 AM - 4:00 PM",
       location: "Aburi Botanical Gardens",
       description:
         "A refreshing hike through the beautiful Aburi Botanical Gardens followed by a picnic lunch and team-building activities. Participants enjoyed the serene environment and made new connections.",
       image: aburiImg,
-      price: "GHS 180 per person",
+      price: "GHS 300 per person",
       capacity: "40 participants",
       additionalInfo: [
         "Transportation from Accra included",
@@ -96,7 +96,7 @@ const EventDetailsPage = () => {
   const handleInputChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -111,8 +111,8 @@ const EventDetailsPage = () => {
     try {
       await submitRegistration({
         ...formData,
-        eventId: eventId || '0',
-        eventName: event?.title || ''
+        eventId: eventId || "0",
+        eventName: event?.title || "",
       });
       alert("Registration submitted successfully!");
       // Reset form
@@ -125,7 +125,7 @@ const EventDetailsPage = () => {
         location: "",
       });
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error("Registration error:", error);
       alert("Failed to submit registration. Please try again.");
     }
   };
@@ -378,12 +378,26 @@ const EventDetailsPage = () => {
                       <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <h4 className="font-medium text-gray-900 mb-2 flex items-center">
                           Payment Details
-                          <svg className="w-4 h-4 text-green-500 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                          <svg
+                            className="w-4 h-4 text-green-500 ml-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
                           </svg>
                         </h4>
-                        <p className="text-sm text-gray-600">MTN Mobile Money: 059 859 9616</p>
-                        <p className="text-sm text-gray-600">(Mainstream House)</p>
+                        <p className="text-sm text-gray-600">
+                          MTN Mobile Money: 059 859 9616
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          (Mainstream House)
+                        </p>
                       </div>
 
                       <div className="pt-4">
@@ -405,7 +419,8 @@ const EventDetailsPage = () => {
                   <div className="text-center py-12">
                     <h3 className="text-2xl font-bold mb-4">Past Event</h3>
                     <p className="text-gray-600 mb-6">
-                      This event has already taken place. Check out our upcoming events.
+                      This event has already taken place. Check out our upcoming
+                      events.
                     </p>
                     <Link to="/events" className="btn btn-primary w-full">
                       See Upcoming Events
