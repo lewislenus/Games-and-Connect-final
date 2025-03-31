@@ -26,10 +26,8 @@ const EventDetailsPage = () => {
   const navigate = useNavigate();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false); // Added gallery modal state
   // Add state for form fields
-  const [formData, setFormData] = useState({
-
   const [showThankYouModal, setShowThankYouModal] = useState(false);
-
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",

@@ -12,10 +12,10 @@ type FormData = {
   availability: string[];
   experience?: string;
   message: string;
-
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
-
 };
+
+const VolunteerRegistrationPage = () => {
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
 
 
 const VolunteerRegistrationPage = () => {
