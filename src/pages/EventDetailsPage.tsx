@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { submitRegistration } from "../api/airtable";
+import { supabase } from "../api/supabase";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
   Calendar,
@@ -109,13 +109,24 @@ const EventDetailsPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await submitRegistration({
-        ...formData,
-        eventId: eventId || "0",
-        eventName: event?.title || "",
-      });
-      alert("Registration submitted successfully!");
-      // Reset form
+      const { data, error } = await supabase
+        .from('event_registrations')
+        .insert([{
+          event_id: eventId,
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          participants: Number(formData.participants),
+          special_requests: formData.specialRequests,
+          location: formData.location,
+          status: 'pending'
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      alert("Registration submitted successfully! We'll send you a confirmation email shortly.");
       setFormData({
         name: "",
         email: "",
