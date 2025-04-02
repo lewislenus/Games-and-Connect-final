@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, Users, Calendar, CheckCircle } from "lucide-react";
-import { registrationService } from "../api/services/registrationService";
+import { supabase } from "../api/supabase";
 
 type FormData = {
   name: string;
@@ -29,7 +29,22 @@ const VolunteerRegistrationPage: React.FC = () => {
     try {
       setIsSubmitting(true);
       setSubmitError(null);
-      await registrationService.createVolunteerRegistration(data);
+      
+      const { error } = await supabase
+        .from('volunteer_registrations')
+        .insert([{
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          interests: data.interests,
+          availability: data.availability,
+          experience: data.experience,
+          message: data.message,
+          status: 'pending'
+        }]);
+
+      if (error) throw error;
+      
       setShowThankYouModal(true);
       setTimeout(() => setShowThankYouModal(false), 3000);
       reset();
