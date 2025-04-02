@@ -248,29 +248,6 @@ const VolunteerRegistrationPage = () => {
                         value="Community Engagement"
                         {...register("interests")}
                       />
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Thank You Modal */}
-      {showThankYouModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-8 max-w-md text-center">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
-            <p className="text-gray-600">
-              Thank you for your interest in volunteering! We'll contact you soon with more information.
-            </p>
-          </div>
-        </div>
-      )}
-
-                      />
                       <label
                         htmlFor="community-engagement"
                         className="ml-2 block text-sm text-gray-700"
@@ -477,6 +454,19 @@ const VolunteerRegistrationPage = () => {
           </div>
         </div>
       </section>
+
+      {/* Thank You Modal */}
+      {showThankYouModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 max-w-md text-center">
+            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
+            <p className="text-gray-600">
+              Thank you for your interest in volunteering! We'll contact you soon with more information.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
