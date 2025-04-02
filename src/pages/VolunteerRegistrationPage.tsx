@@ -1,9 +1,9 @@
+
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, Users, Calendar, CheckCircle } from "lucide-react";
-import { registrationService } from "../api/services/registrationService"; // Assuming this service handles Supabase interaction
+import { registrationService } from "../api/services/registrationService";
 
-// Using the VolunteerData interface from volunteerService.  This should be updated to reflect the Supabase schema.
 type FormData = {
   name: string;
   email: string;
@@ -14,11 +14,8 @@ type FormData = {
   message: string;
 };
 
-const VolunteerRegistrationPage = () => {
+const VolunteerRegistrationPage: React.FC = () => {
   const [showThankYouModal, setShowThankYouModal] = useState(false);
-
-
-const VolunteerRegistrationPage = () => {
   const {
     register,
     handleSubmit,
@@ -32,10 +29,7 @@ const VolunteerRegistrationPage = () => {
     try {
       setIsSubmitting(true);
       setSubmitError(null);
-
-      // Send the form data to the backend using the volunteer service
       await registrationService.createVolunteerRegistration(data);
-
       setShowThankYouModal(true);
       setTimeout(() => setShowThankYouModal(false), 3000);
       reset();
@@ -229,8 +223,7 @@ const VolunteerRegistrationPage = () => {
                         className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                         value="Event Coordination"
                         {...register("interests", {
-                          required:
-                            "Please select at least one area of interest",
+                          required: "Please select at least one area of interest",
                         })}
                       />
                       <label
