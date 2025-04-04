@@ -471,13 +471,7 @@ const EventDetailsPage = () => {
         </div>
       )}
     </div>
-  );
-};
-
-export default EventDetailsPage;
-
-
-      {/* Thank You Modal */}
+  {/* Thank You Modal */}
       {showThankYouModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-8 max-w-md text-center">
@@ -489,3 +483,8 @@ export default EventDetailsPage;
           </div>
         </div>
       )}
+    </div>
+  );
+};
+
+export default EventDetailsPage;
