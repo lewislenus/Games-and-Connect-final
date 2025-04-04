@@ -13,6 +13,7 @@ import {
   Phone,
   ArrowLeft,
   X,
+  CheckCircle,
 } from "lucide-react";
 import { upcomingEvents } from "./EventsPage";
 

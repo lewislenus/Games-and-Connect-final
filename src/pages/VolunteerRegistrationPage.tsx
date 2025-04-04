@@ -77,6 +77,7 @@ const VolunteerRegistrationPage: React.FC = () => {
       <section className="section bg-white">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Left Column */}
             <div>
               <h2 className="text-3xl font-bold mb-6">Apply to Volunteer</h2>
               <p className="text-gray-600 mb-8">
@@ -139,6 +140,7 @@ const VolunteerRegistrationPage: React.FC = () => {
               </div>
             </div>
 
+            {/* Right Column - Form */}
             <div>
               {submitError && (
                 <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
