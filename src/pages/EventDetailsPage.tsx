@@ -13,7 +13,6 @@ import {
   Phone,
   ArrowLeft,
   X,
-  CheckCircle,
 } from "lucide-react";
 import { upcomingEvents } from "./EventsPage";
 
@@ -27,7 +26,6 @@ const EventDetailsPage = () => {
   const navigate = useNavigate();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false); // Added gallery modal state
   // Add state for form fields
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -128,8 +126,7 @@ const EventDetailsPage = () => {
 
       if (error) throw error;
 
-      setShowThankYouModal(true);
-      setTimeout(() => setShowThankYouModal(false), 3000);
+      alert("Registration submitted successfully! We'll send you a confirmation email shortly.");
       setFormData({
         name: "",
         email: "",
@@ -467,19 +464,6 @@ const EventDetailsPage = () => {
                 />
               ))}
             </div>
-          </div>
-        </div>
-      )}
-    </div>
-  {/* Thank You Modal */}
-      {showThankYouModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-8 max-w-md text-center">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
-            <p className="text-gray-600">
-              Your registration has been submitted successfully. We'll send you a confirmation email shortly.
-            </p>
           </div>
         </div>
       )}

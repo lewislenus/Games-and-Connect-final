@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, Users, Calendar, CheckCircle } from "lucide-react";
-import { supabase } from "../api/supabase";
+import { registrationService } from "../api/services/registrationService"; // Assuming this service handles Supabase interaction
 
+// Using the VolunteerData interface from volunteerService.  This should be updated to reflect the Supabase schema.
 type FormData = {
   name: string;
   email: string;
@@ -14,8 +14,8 @@ type FormData = {
   message: string;
 };
 
-const VolunteerRegistrationPage: React.FC = () => {
-  const [showThankYouModal, setShowThankYouModal] = useState(false);
+
+const VolunteerRegistrationPage = () => {
   const {
     register,
     handleSubmit,
@@ -29,24 +29,13 @@ const VolunteerRegistrationPage: React.FC = () => {
     try {
       setIsSubmitting(true);
       setSubmitError(null);
-      
-      const { error } = await supabase
-        .from('volunteer_registrations')
-        .insert([{
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          interests: data.interests,
-          availability: data.availability,
-          experience: data.experience,
-          message: data.message,
-          status: 'pending'
-        }]);
 
-      if (error) throw error;
-      
-      setShowThankYouModal(true);
-      setTimeout(() => setShowThankYouModal(false), 3000);
+      // Send the form data to the backend using the volunteer service
+      await registrationService.createVolunteerRegistration(data);
+
+      alert(
+        "Thank you for your interest in volunteering! We'll contact you soon."
+      );
       reset();
     } catch (error) {
       console.error("Error submitting volunteer form:", error);
@@ -77,7 +66,6 @@ const VolunteerRegistrationPage: React.FC = () => {
       <section className="section bg-white">
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Left Column */}
             <div>
               <h2 className="text-3xl font-bold mb-6">Apply to Volunteer</h2>
               <p className="text-gray-600 mb-8">
@@ -140,7 +128,6 @@ const VolunteerRegistrationPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Column - Form */}
             <div>
               {submitError && (
                 <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
@@ -240,7 +227,8 @@ const VolunteerRegistrationPage: React.FC = () => {
                         className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
                         value="Event Coordination"
                         {...register("interests", {
-                          required: "Please select at least one area of interest",
+                          required:
+                            "Please select at least one area of interest",
                         })}
                       />
                       <label
@@ -464,19 +452,6 @@ const VolunteerRegistrationPage: React.FC = () => {
           </div>
         </div>
       </section>
-
-      {/* Thank You Modal */}
-      {showThankYouModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-8 max-w-md text-center">
-            <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
-            <p className="text-gray-600">
-              Thank you for your interest in volunteering! We'll contact you soon with more information.
-            </p>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
