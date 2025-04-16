@@ -1,8 +1,7 @@
-
-import { useState, useEffect } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '../api/supabase';
-import { authService } from '../api/services/authService';
+import { useState, useEffect } from "react";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "../api/supabase";
+import { authService } from "../api/services/authService";
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -16,7 +15,9 @@ export const useAuth = () => {
     });
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_, session) => {
       setUser(session?.user ?? null);
     });
 
@@ -29,5 +30,6 @@ export const useAuth = () => {
     signIn: authService.signIn,
     signUp: authService.signUp,
     signOut: authService.signOut,
+    signInWithGoogle: authService.signInWithGoogle,
   };
 };

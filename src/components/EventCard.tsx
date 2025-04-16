@@ -4,13 +4,15 @@ import { Calendar, MapPin, Clock } from "lucide-react";
 import AnimatedLink from "./AnimatedLink";
 
 interface EventCardProps {
-  id?: number;
+  id?: string | number;
   title: string;
   date: string;
   time: string;
   location: string;
   description: string;
   image: string;
+  price?: string;
+  capacity?: string;
   isPast?: boolean;
 }
 
@@ -22,6 +24,8 @@ const EventCard: React.FC<EventCardProps> = ({
   location,
   description,
   image,
+  price,
+  capacity,
   isPast = false,
 }) => {
   return (
@@ -31,6 +35,10 @@ const EventCard: React.FC<EventCardProps> = ({
           src={image}
           alt={title}
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={(e) => {
+            e.currentTarget.src = "https://placehold.co/600x400?text=No+Image";
+            console.log(`Image failed to load for event: ${title}`);
+          }}
         />
         {isPast && (
           <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
@@ -53,6 +61,16 @@ const EventCard: React.FC<EventCardProps> = ({
             <MapPin className="h-4 w-4 mr-2 text-primary-600" />
             <span>{location}</span>
           </div>
+          {price && (
+            <div className="flex items-center">
+              <span className="font-semibold text-primary-600">{price}</span>
+            </div>
+          )}
+          {capacity && (
+            <div className="flex items-center text-sm">
+              <span>{capacity}</span>
+            </div>
+          )}
         </div>
         <p className="text-gray-700 mb-4 flex-grow">{description}</p>
         {!isPast && (

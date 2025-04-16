@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Send, Users, Calendar, CheckCircle } from "lucide-react";
-import { registrationService } from "../api/services/registrationService"; // Assuming this service handles Supabase interaction
+import { registrationService } from "../api/services/registrationService";
+import RegistrationModal from "../components/RegistrationModal";
 
 // Using the VolunteerData interface from volunteerService.  This should be updated to reflect the Supabase schema.
 type FormData = {
@@ -14,7 +15,6 @@ type FormData = {
   message: string;
 };
 
-
 const VolunteerRegistrationPage = () => {
   const {
     register,
@@ -23,25 +23,45 @@ const VolunteerRegistrationPage = () => {
     reset,
   } = useForm<FormData>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    status: "success" | "error";
+    message: string;
+  }>({ isOpen: false, status: "success", message: "" });
 
   const onSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
-      setSubmitError(null);
+
+      // Transform form data to match VolunteerRegistration interface
+      const registrationData = {
+        full_name: data.name,
+        email: data.email,
+        phone: data.phone,
+        interests: data.interests,
+        availability: data.availability,
+        experience: data.experience,
+        message: data.message,
+      };
 
       // Send the form data to the backend using the volunteer service
-      await registrationService.createVolunteerRegistration(data);
+      await registrationService.createVolunteerRegistration(registrationData);
 
-      alert(
-        "Thank you for your interest in volunteering! We'll contact you soon."
-      );
+      setModalState({
+        isOpen: true,
+        status: "success",
+        message:
+          "Thank you for your interest in volunteering! We'll contact you soon.",
+      });
       reset();
     } catch (error) {
       console.error("Error submitting volunteer form:", error);
-      setSubmitError(
-        "There was an error submitting your application. Please try again later."
-      );
+      setModalState({
+        isOpen: true,
+        status: "error",
+        message:
+          "There was an error submitting your application. Please try again later.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -129,11 +149,12 @@ const VolunteerRegistrationPage = () => {
             </div>
 
             <div>
-              {submitError && (
-                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
-                  {submitError}
-                </div>
-              )}
+              <RegistrationModal
+                isOpen={modalState.isOpen}
+                onClose={() => setModalState({ ...modalState, isOpen: false })}
+                status={modalState.status}
+                message={modalState.message}
+              />
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="space-y-6 card p-8"

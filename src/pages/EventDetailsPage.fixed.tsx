@@ -16,8 +16,6 @@ import {
 } from "lucide-react";
 import { upcomingEvents } from "./EventsPage";
 import { useAuth } from "../hooks/useAuth";
-import NotificationPopup from "../components/NotificationPopup";
-import useNotification from "../hooks/useNotification";
 
 // Import event images
 import beachImg from "../assets/img/beach.jpg";
@@ -29,8 +27,6 @@ const EventDetailsPage = () => {
   const navigate = useNavigate();
   const [isGalleryOpen, setIsGalleryOpen] = useState(false); // Added gallery modal state
   const { user } = useAuth(); // Get current user from auth context
-  const { notification, showSuccess, showError, showInfo, closeNotification } =
-    useNotification();
 
   // Add state for form fields
   const [formData, setFormData] = useState({
@@ -40,6 +36,7 @@ const EventDetailsPage = () => {
     participants: 1,
     specialRequests: "",
     location: "", // Added location field
+    willPay: false, // Added payment checkbox state
   });
 
   // Import past events from EventsPage
@@ -116,30 +113,36 @@ const EventDetailsPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // For both logged-in and non-logged-in users
-      let registrationData: any = {
-        event_id: eventId,
-        additional_guests: Number(formData.participants) - 1, // Subtract 1 because the user counts as 1
-        special_requirements: formData.specialRequests,
-        status: "pending",
-        payment_status: false,
-      };
+      // Check if user is logged in
+      if (!user) {
+        // Store form data in session storage for after login
+        sessionStorage.setItem(
+          "pendingRegistration",
+          JSON.stringify({
+            eventId,
+            formData,
+          })
+        );
 
-      // If user is logged in, use their user_id
-      if (user) {
-        registrationData.user_id = user.id;
-      } else {
-        // For non-authenticated users, store their contact information
-        registrationData.guest_name = formData.name;
-        registrationData.guest_email = formData.email;
-        registrationData.guest_phone = formData.phone;
-        registrationData.guest_location = formData.location;
+        // Redirect to login page
+        alert("Please log in to complete your registration.");
+        navigate("/login");
+        return;
       }
 
-      // Insert the registration data
+      // If user is logged in, proceed with registration
       const { data, error } = await supabase
         .from("event_registrations")
-        .insert([registrationData])
+        .insert([
+          {
+            event_id: eventId,
+            user_id: user.id,
+            additional_guests: Number(formData.participants) - 1, // Subtract 1 because the user counts as 1
+            special_requirements: formData.specialRequests,
+            status: "pending",
+            payment_status: formData.willPay,
+          },
+        ])
         .select()
         .single();
 
@@ -151,7 +154,7 @@ const EventDetailsPage = () => {
         throw error;
       }
 
-      showSuccess(
+      alert(
         "Registration submitted successfully! We'll send you a confirmation email shortly."
       );
       setFormData({
@@ -161,10 +164,11 @@ const EventDetailsPage = () => {
         participants: 1,
         specialRequests: "",
         location: "",
+        willPay: false, // Reset the payment checkbox state
       });
     } catch (error: any) {
       console.error("Registration error:", error);
-      showError(
+      alert(
         error.message || "Failed to submit registration. Please try again."
       );
     }
@@ -174,15 +178,6 @@ const EventDetailsPage = () => {
 
   return (
     <div>
-      {/* Notification Popup */}
-      <NotificationPopup
-        type={notification.type}
-        message={notification.message}
-        isOpen={notification.isOpen}
-        onClose={closeNotification}
-        autoClose={true}
-        autoCloseTime={5000}
-      />
       {/* Hero Section with Event Image */}
       <div className="relative h-[50vh] w-full overflow-hidden cursor-pointer group">
         <img
@@ -424,29 +419,57 @@ const EventDetailsPage = () => {
                         ></textarea>
                       </div>
 
-                      <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-                          Payment Details
-                          <svg
-                            className="w-4 h-4 text-green-500 ml-2"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                      <div className="space-y-4">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="willPay"
+                            name="willPay"
+                            checked={formData.willPay}
+                            onChange={(e) =>
+                              handleInputChange({
+                                target: {
+                                  name: "willPay",
+                                  value: e.target.checked,
+                                },
+                              } as any)
+                            }
+                            className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                          />
+                          <label
+                            htmlFor="willPay"
+                            className="ml-2 block text-sm text-gray-900"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          MTN Mobile Money: 059 859 9616
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          (Mainstream House)
-                        </p>
+                            I will pay now
+                          </label>
+                        </div>
+
+                        {formData.willPay && (
+                          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <h4 className="font-medium text-gray-900 mb-2 flex items-center">
+                              Payment Details
+                              <svg
+                                className="w-4 h-4 text-green-500 ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M5 13l4 4L19 7"
+                                ></path>
+                              </svg>
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              MTN Mobile Money: 059 859 9616
+                            </p>
+                            <p className="text-sm text-gray-600">
+                              (Mainstream House)
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       <div className="pt-4">
@@ -493,8 +516,9 @@ const EventDetailsPage = () => {
               <X size={20} />
             </button>
             <div className="grid grid-cols-2 gap-4">
-              {/* Check if gallery exists and map through images */}
-              {"gallery" in event && Array.isArray(event.gallery) ? (
+              {"gallery" in event &&
+              Array.isArray(event.gallery) &&
+              event.gallery.length > 0 ? (
                 event.gallery.map((img, index) => (
                   <img
                     key={index}
@@ -504,7 +528,6 @@ const EventDetailsPage = () => {
                   />
                 ))
               ) : (
-                // Fallback to show at least the main event image if no gallery
                 <img
                   src={event.image}
                   alt={event.title}

@@ -10,10 +10,20 @@ import { upcomingEvents } from "./EventsPage";
 import backgroundImage from "../assets/img/back.jpg";
 
 const HomePage = () => {
-  // Get the first upcoming event
-  const nextEvent = upcomingEvents[0];
+  // Get the first upcoming event with a fallback for when events haven't loaded yet
+  const nextEvent = upcomingEvents[0] || {
+    id: 0,
+    title: "Upcoming Event",
+    date: "2025-04-18",
+    description: "Details coming soon",
+    location: "Accra",
+    image_url: "https://placehold.co/600x400?text=Coming+Soon",
+    price: 0,
+    capacity: 100,
+    time_range: "9:00 AM - 12:00 PM",
+  };
   // Set the target date based on the event date
-  const nextEventDate = new Date("2025-04-18T00:00:00"); // Keeping the hardcoded date for now
+  const nextEventDate = new Date(nextEvent.date || "2025-04-18T00:00:00");
 
   return (
     <div>
@@ -55,7 +65,7 @@ const HomePage = () => {
             <CountdownTimer
               targetDate={nextEventDate}
               eventTitle={`Next Event: ${nextEvent.title}`}
-              eventId={nextEvent.id}
+              eventId={nextEvent.id.toString()}
             />
           </div>
         </div>
@@ -127,37 +137,59 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Map through upcomingEvents from EventsPage instead of hardcoded events */}
-            {upcomingEvents.map((event) => (
-              <div key={event.id} className="card overflow-hidden group">
-                <div className="relative overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  {event.id === 1 && (
-                    <div className="absolute top-0 right-0 bg-primary-600 text-white px-3 py-1 m-2 rounded-full text-sm font-semibold">
-                      Popular
+            {upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event) => (
+                <div key={event.id} className="card overflow-hidden group">
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={event.image}
+                      alt={event.title}
+                      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {event.id === "1" && (
+                      <div className="absolute top-0 right-0 bg-primary-600 text-white px-3 py-1 m-2 rounded-full text-sm font-semibold">
+                        Popular
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+                    <p className="text-gray-600 mb-4">{event.description}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-primary-600 font-semibold">
+                        {event.date}
+                      </span>
+                      <Link
+                        to={`/events/${event.id}`}
+                        className="btn btn-primary py-2"
+                      >
+                        Details
+                      </Link>
                     </div>
-                  )}
-                </div>
-                <div className="p-5">
-                  <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-                  <p className="text-gray-600 mb-4">{event.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-primary-600 font-semibold">
-                      {event.date}
-                    </span>
-                    <Link
-                      to={`/events/${event.id}`}
-                      className="btn btn-primary py-2"
-                    >
-                      Details
-                    </Link>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="card overflow-hidden group col-span-1 md:col-span-3 text-center p-8">
+                <h3 className="text-xl font-bold mb-2">
+                  No upcoming events at the moment
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Check back soon for new events or join our community to be
+                  notified.
+                </p>
+                <div className="flex justify-center">
+                  <a
+                    href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary py-2"
+                  >
+                    Join Community
+                  </a>
+                </div>
               </div>
-            ))}
+            )}
           </div>
 
           <div className="text-center mt-12">

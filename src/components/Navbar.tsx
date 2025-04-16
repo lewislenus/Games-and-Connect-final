@@ -1,10 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Home, Calendar, Users, MessageSquare, Menu, X } from "lucide-react";
+import {
+  Home,
+  Calendar,
+  Users,
+  MessageSquare,
+  Menu,
+  X,
+  Settings,
+} from "lucide-react";
 import logo from "../assets/img/logo.png";
 import AnimatedLink from "./AnimatedLink"; // Added import statement
+import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
+  const { user } = useAuth();
+  const isAdmin = !!user;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -53,6 +64,15 @@ const Navbar = () => {
               <MessageSquare className="h-4 w-4" />
               <span>Contact</span>
             </AnimatedLink>
+            {isAdmin && (
+              <AnimatedLink
+                to="/admin"
+                className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
+              >
+                <Settings className="h-4 w-4" />
+                <span>Admin</span>
+              </AnimatedLink>
+            )}
           </div>
 
           <a
@@ -109,6 +129,15 @@ const Navbar = () => {
                 <MessageSquare className="h-5 w-5" />
                 <span>Contact</span>
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="nav-link flex items-center space-x-2 text-gray-700 hover:text-primary-600 py-2"
+                >
+                  <Settings className="h-5 w-5" />
+                  <span>Admin</span>
+                </Link>
+              )}
               <a
                 href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
                 target="_blank"
