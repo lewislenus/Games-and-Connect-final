@@ -14,90 +14,164 @@ import {
   ArrowLeft,
   X,
 } from "lucide-react";
-import { upcomingEvents } from "./EventsPage";
+// Remove hardcoded event imports
+// import { upcomingEvents } from "./EventsPage";
 import { useAuth } from "../hooks/useAuth";
 import NotificationPopup from "../components/NotificationPopup";
 import useNotification from "../hooks/useNotification";
+import ImageGalleryModal from "../components/ImageGalleryModal";
+import { eventService } from "../api/services/eventService"; // Import eventService
 
-// Import event images
+// Import event images (keep for fallback/local testing if needed, but prioritize fetched data)
 import beachImg from "../assets/img/beach.jpg";
 import aburiImg from "../assets/img/Aburi.jpg";
 
+// Define Event interface (consider moving to a shared types file)
+interface Event {
+  id: number | string; // Allow both number (local) and string (DB)
+  title: string;
+  date: string;
+  time?: string;
+  location: string;
+  description: string;
+  image?: string; // Can be URL string or imported image variable
+  price?: string | number; // Allow number from DB
+  capacity?: string | number; // Allow number from DB
+  additionalInfo?: string[];
+  isPast?: boolean;
+  gallery?: string[]; // Array of image URLs or imported variables
+  // Add fields from DB
+  image_url?: string;
+  time_range?: string;
+  status?: string;
+}
+
 // Combine upcoming and past events for the details page
+interface RegistrationDetails {
+  full_name: string;
+  email: string;
+  phone_number: string;
+  number_of_participants: number;
+  location: string;
+  special_requests: string;
+}
+
 const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
   const navigate = useNavigate();
-  const [isGalleryOpen, setIsGalleryOpen] = useState(false); // Added gallery modal state
-  const { user } = useAuth(); // Get current user from auth context
+  const [event, setEvent] = useState<Event | null>(null); // State for fetched event
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const { user } = useAuth();
   const { notification, showSuccess, showError, showInfo, closeNotification } =
     useNotification();
 
   // Add state for form fields
   const [formData, setFormData] = useState({
-    name: "",
+    full_name: "",
     email: "",
-    phone: "",
-    participants: 1,
-    specialRequests: "",
+    phone_number: "",
+    number_of_participants: 1,
+    special_requests: "",
     location: "", // Added location field
+    willPay: "pay_later", // Changed to string type with default value
   });
 
-  // Import past events from EventsPage
-  // This is a simplified approach - in a real app, you might fetch this data from an API
-  const pastEvents = [
-    {
-      id: 101,
-      title: "Beach Day & Games",
-      date: "January 04, 2025",
-      time: "10:00 AM - 5:00 PM",
-      location: "Bojo Beach, Accra",
-      description:
-        "A day of fun beach games, swimming, and networking at Labadi Beach. The event included volleyball, tug of war, and sand castle building competitions with prizes for winners.",
-      image: beachImg,
-      price: "GHS 250 per person",
-      capacity: "75 participants",
-      additionalInfo: [
-        "Beach entrance fees included",
-        "Lunch and refreshments provided",
-        "Professional photography services available",
-      ],
-      isPast: true,
-      gallery: [beachImg, aburiImg], // Added gallery images
-    },
-    {
-      id: 102,
-      title: "Aburi Botanical Gardens Hike",
-      date: "November 25, 2024",
-      time: "9:00 AM - 4:00 PM",
-      location: "Aburi Botanical Gardens",
-      description:
-        "A refreshing hike through the beautiful Aburi Botanical Gardens followed by a picnic lunch and team-building activities. Participants enjoyed the serene environment and made new connections.",
-      image: aburiImg,
-      price: "GHS 300 per person",
-      capacity: "40 participants",
-      additionalInfo: [
-        "Transportation from Accra included",
-        "Guided tour of the gardens",
-        "Picnic lunch and refreshments provided",
-        "Comfortable walking shoes recommended",
-      ],
-      isPast: true,
-      gallery: [aburiImg, beachImg], // Added gallery images
-    },
-  ];
+  // Fetch event data when component mounts or eventId changes
+  useEffect(() => {
+    const fetchEventDetails = async () => {
+      if (!eventId) {
+        setError("Event ID is missing.");
+        setLoading(false);
+        navigate("/events"); // Redirect if no ID
+        return;
+      }
 
-  // Combine all events
-  const allEvents = [...upcomingEvents, ...pastEvents];
+      setLoading(true);
+      setError(null);
+      try {
+        console.log(`Fetching event with ID: ${eventId}`);
+        const fetchedEvent = await eventService.getEvent(eventId);
+        console.log("Fetched event data:", fetchedEvent);
 
-  // Find the event with the matching ID
-  const event = allEvents.find((e) => e.id === parseInt(eventId || "0"));
+        if (!fetchedEvent) {
+          setError("Event not found.");
+          setLoading(false);
+          navigate("/events"); // Redirect if event not found
+          return;
+        }
 
-  // Redirect to events page if event not found
+        // Process fetched event data
+        const now = new Date();
+        const eventDate = new Date(fetchedEvent.date);
+        const isPastEvent =
+          fetchedEvent.status === "completed" || eventDate < now;
+
+        // Format price and capacity (similar to EventsPage)
+        const formattedPrice =
+          typeof fetchedEvent.price === "number"
+            ? `GHS ${fetchedEvent.price.toFixed(2)}`
+            : fetchedEvent.price || "Free"; // Handle null/undefined price
+
+        const formattedCapacity =
+          typeof fetchedEvent.capacity === "number"
+            ? `${fetchedEvent.capacity} participants`
+            : fetchedEvent.capacity || "Unlimited"; // Handle null/undefined capacity
+
+        // TODO: Handle gallery data if it exists in the fetchedEvent structure
+        // Assuming gallery might be a JSON string or array in the DB
+        let galleryImages: string[] = [];
+        if (fetchedEvent.gallery) {
+          if (typeof fetchedEvent.gallery === "string") {
+            try {
+              galleryImages = JSON.parse(fetchedEvent.gallery);
+            } catch (e) {
+              console.error("Failed to parse gallery JSON:", e);
+              // Use fallback if parsing fails
+              galleryImages = fetchedEvent.image_url
+                ? [fetchedEvent.image_url]
+                : [];
+            }
+          } else if (Array.isArray(fetchedEvent.gallery)) {
+            galleryImages = fetchedEvent.gallery;
+          }
+        } else if (fetchedEvent.image_url) {
+          galleryImages = [fetchedEvent.image_url]; // Use main image if no gallery
+        }
+
+        setEvent({
+          ...fetchedEvent,
+          id: fetchedEvent.id, // Ensure ID is correctly passed
+          image: fetchedEvent.image_url || beachImg, // Use image_url or fallback
+          isPast: isPastEvent,
+          price: formattedPrice,
+          capacity: formattedCapacity,
+          time: fetchedEvent.time_range || fetchedEvent.time || "TBA", // Use time_range or time
+          gallery: galleryImages, // Use processed gallery images
+          // Add any other necessary transformations
+        });
+      } catch (err: any) {
+        console.error("Error fetching event details:", err);
+        setError("Failed to load event details. " + err.message);
+        // Optionally navigate away or show a prominent error message
+        // navigate("/events");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEventDetails();
+  }, [eventId, navigate]);
+
+  // Remove redundant useEffect for checking event existence (handled in fetch)
+  /*
   useEffect(() => {
     if (!event && eventId) {
       navigate("/events");
     }
   }, [event, eventId, navigate]);
+  */
 
   // Handle form input changes
   const handleInputChange = (
@@ -105,36 +179,35 @@ const EventDetailsPage = () => {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: type === "checkbox" ? checked : value,
     });
   };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!event) {
+      showError("Event data is not loaded yet.");
+      return;
+    }
     try {
-      // For both logged-in and non-logged-in users
+      // Direct registration without login requirement
       let registrationData: any = {
-        event_id: eventId,
-        additional_guests: Number(formData.participants) - 1, // Subtract 1 because the user counts as 1
-        special_requirements: formData.specialRequests,
+        event_id: event.id, // Use the ID from the fetched event state
+        full_name: formData.full_name,
+        email: formData.email,
+        phone_number: formData.phone_number,
+        number_of_participants: Number(formData.number_of_participants),
+        special_requests: formData.special_requests,
         status: "pending",
-        payment_status: false,
+        payment_preference:
+          formData.willPay === "pay_now" ? "pay_now" : "pay_later", // Correctly map radio value
+        location: formData.location, // Include location in registration data
       };
-
-      // If user is logged in, use their user_id
-      if (user) {
-        registrationData.user_id = user.id;
-      } else {
-        // For non-authenticated users, store their contact information
-        registrationData.guest_name = formData.name;
-        registrationData.guest_email = formData.email;
-        registrationData.guest_phone = formData.phone;
-        registrationData.guest_location = formData.location;
-      }
 
       // Insert the registration data
       const { data, error } = await supabase
@@ -146,7 +219,11 @@ const EventDetailsPage = () => {
       if (error) {
         // Check if it's a unique constraint violation (user already registered)
         if (error.code === "23505") {
-          throw new Error("You have already registered for this event.");
+          // Consider checking by email AND event_id for non-logged-in users
+          showError(
+            "An registration with this email already exists for this event."
+          );
+          return; // Prevent further execution
         }
         throw error;
       }
@@ -155,12 +232,14 @@ const EventDetailsPage = () => {
         "Registration submitted successfully! We'll send you a confirmation email shortly."
       );
       setFormData({
-        name: "",
+        // Reset form
+        full_name: "",
         email: "",
-        phone: "",
-        participants: 1,
-        specialRequests: "",
+        phone_number: "",
+        number_of_participants: 1,
+        special_requests: "",
         location: "",
+        willPay: "pay_later", // Reset to default
       });
     } catch (error: any) {
       console.error("Registration error:", error);
@@ -170,7 +249,23 @@ const EventDetailsPage = () => {
     }
   };
 
-  if (!event) return null;
+  // Loading and Error states
+  if (loading) {
+    return <div className="text-center py-16">Loading event details...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-16 text-red-600">Error: {error}</div>;
+  }
+
+  if (!event) {
+    // This case should ideally be handled by the redirect in useEffect,
+    // but added as a safeguard.
+    return <div className="text-center py-16">Event not found.</div>;
+  }
+
+  // The rest of the component remains largely the same,
+  // using the 'event' state variable fetched dynamically.
 
   return (
     <div>
@@ -185,15 +280,20 @@ const EventDetailsPage = () => {
       />
       {/* Hero Section with Event Image */}
       <div className="relative h-[50vh] w-full overflow-hidden cursor-pointer group">
-        <img
-          src={event.image}
-          alt={event.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onClick={() => {
-            setIsGalleryOpen(true); // Open gallery modal
-          }}
-        />
-        {"isPast" in event && (
+        {event.image && ( // Check if image exists before rendering
+          <img
+            src={event.image} // Assumes event.image is a valid src (URL string or imported var)
+            alt={event.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            onClick={() => {
+              // Only open gallery if images are available
+              if ((event.gallery && event.gallery.length > 0) || event.image) {
+                setIsGalleryOpen(true);
+              }
+            }}
+          />
+        )}
+        {event.isPast && (
           <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full z-10">
             Past Event
           </div>
@@ -225,7 +325,14 @@ const EventDetailsPage = () => {
                       <Calendar className="h-5 w-5 mr-3 text-primary-600 mt-0.5" />
                       <div>
                         <h3 className="font-semibold">Date</h3>
-                        <p>{event.date}</p>
+                        {/* Format date for better readability */}
+                        <p>
+                          {new Date(event.date).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </p>
                       </div>
                     </div>
 
@@ -233,7 +340,8 @@ const EventDetailsPage = () => {
                       <Clock className="h-5 w-5 mr-3 text-primary-600 mt-0.5" />
                       <div>
                         <h3 className="font-semibold">Time</h3>
-                        <p>{event.time}</p>
+                        <p>{event.time || "N/A"}</p>{" "}
+                        {/* Display time or time_range */}
                       </div>
                     </div>
 
@@ -276,6 +384,8 @@ const EventDetailsPage = () => {
                   </p>
                 </div>
 
+                {/* Keep Additional Info section if applicable */}
+                {/* This might need adjustment based on how additional info is stored/fetched */}
                 {event.additionalInfo && event.additionalInfo.length > 0 && (
                   <div className="mb-6">
                     <h3 className="text-xl font-bold mb-3">
@@ -293,30 +403,47 @@ const EventDetailsPage = () => {
                 )}
               </div>
 
-              {/* Event cover image moved above map */}
-              <div
-                className="mb-6 overflow-hidden rounded-lg cursor-pointer w-[500px] h-[500px] mx-auto"
-                onClick={() => {
-                  setIsGalleryOpen(true); // Open gallery modal
-                }}
-              >
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                />
-              </div>
+              {/* Event cover image - Keep this section */}
+              {event.image && (
+                <div
+                  className="mb-6 overflow-hidden rounded-lg cursor-pointer w-full md:w-[500px] h-auto md:h-[500px] mx-auto group"
+                  onClick={() => {
+                    // Only open gallery if images are available
+                    if (
+                      (event.gallery && event.gallery.length > 0) ||
+                      event.image
+                    ) {
+                      setIsGalleryOpen(true);
+                    }
+                  }}
+                >
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center transition-opacity duration-300">
+                    <span className="text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      View Gallery
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Right side - Registration form */}
+            {/* Right side - Registration form or Past Event Info */}
             <div className="w-full md:w-2/5">
               <div className="bg-white rounded-xl shadow-md p-6 sticky top-4">
-                {!("isPast" in event) ? (
+                {/* Check if the event is NOT a past event */}
+                {!event.isPast ? (
+                  // Display Registration Form for upcoming events
                   <div>
                     <h3 className="text-2xl font-bold mb-6 text-center">
                       Register for This Event
                     </h3>
                     <form onSubmit={handleSubmit} className="space-y-4">
+                      {/* Form fields remain the same */}
+                      {/* Full Name Input */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Full Name *
@@ -327,8 +454,8 @@ const EventDetailsPage = () => {
                           </div>
                           <input
                             type="text"
-                            name="name"
-                            value={formData.name}
+                            name="full_name"
+                            value={formData.full_name}
                             onChange={handleInputChange}
                             required
                             className="pl-10 w-full p-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
@@ -337,6 +464,7 @@ const EventDetailsPage = () => {
                         </div>
                       </div>
 
+                      {/* Email Input */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Email Address *
@@ -357,6 +485,7 @@ const EventDetailsPage = () => {
                         </div>
                       </div>
 
+                      {/* Phone Number Input */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Phone Number
@@ -367,8 +496,8 @@ const EventDetailsPage = () => {
                           </div>
                           <input
                             type="tel"
-                            name="phone"
-                            value={formData.phone}
+                            name="phone_number"
+                            value={formData.phone_number}
                             onChange={handleInputChange}
                             className="pl-10 w-full p-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
                             placeholder="+233 XX XXX XXXX"
@@ -376,13 +505,14 @@ const EventDetailsPage = () => {
                         </div>
                       </div>
 
+                      {/* Number of Participants Input */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Number of Participants *
                         </label>
                         <select
-                          name="participants"
-                          value={formData.participants}
+                          name="number_of_participants"
+                          value={formData.number_of_participants}
                           onChange={handleInputChange}
                           required
                           className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
@@ -395,6 +525,7 @@ const EventDetailsPage = () => {
                         </select>
                       </div>
 
+                      {/* Location Input */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Your Location *
@@ -410,13 +541,14 @@ const EventDetailsPage = () => {
                         />
                       </div>
 
+                      {/* Special Requests Input */}
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Special Requests
                         </label>
                         <textarea
-                          name="specialRequests"
-                          value={formData.specialRequests}
+                          name="special_requests"
+                          value={formData.special_requests}
                           onChange={handleInputChange}
                           rows={3}
                           className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500"
@@ -424,9 +556,10 @@ const EventDetailsPage = () => {
                         ></textarea>
                       </div>
 
+                      {/* Payment Preference Section */}
                       <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-                          Payment Details
+                          Payment Preference
                           <svg
                             className="w-4 h-4 text-green-500 ml-2"
                             fill="none"
@@ -441,7 +574,31 @@ const EventDetailsPage = () => {
                             ></path>
                           </svg>
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <div className="space-y-2">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name="willPay"
+                              value="pay_now"
+                              checked={formData.willPay === "pay_now"}
+                              onChange={handleInputChange}
+                              className="form-radio h-4 w-4 text-primary-500"
+                            />
+                            <span className="ml-2">Pay Now</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name="willPay"
+                              value="pay_later"
+                              checked={formData.willPay === "pay_later"}
+                              onChange={handleInputChange}
+                              className="form-radio h-4 w-4 text-primary-500"
+                            />
+                            <span className="ml-2">Pay Later</span>
+                          </label>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-2">
                           MTN Mobile Money: 059 859 9616
                         </p>
                         <p className="text-sm text-gray-600">
@@ -449,6 +606,7 @@ const EventDetailsPage = () => {
                         </p>
                       </div>
 
+                      {/* Submit Button */}
                       <div className="pt-4">
                         <button
                           type="submit"
@@ -460,20 +618,34 @@ const EventDetailsPage = () => {
 
                       <p className="text-sm text-gray-500 mt-4">
                         By registering, you agree to our Terms of Service and
-                        Privacy Policy. Fields marked with * are required.
+                        Privacy Policy.
                       </p>
                     </form>
                   </div>
                 ) : (
-                  <div className="text-center py-12">
-                    <h3 className="text-2xl font-bold mb-4">Past Event</h3>
-                    <p className="text-gray-600 mb-6">
-                      This event has already taken place. Check out our upcoming
-                      events.
+                  // Display Past Event Info
+                  <div className="text-center p-6 bg-gray-100 rounded-lg">
+                    <h3 className="text-xl font-semibold mb-4">
+                      Event Concluded
+                    </h3>
+                    <p className="text-gray-600 mb-4">
+                      This event has already taken place. Registration is
+                      closed.
                     </p>
-                    <Link to="/events" className="btn btn-primary w-full">
-                      See Upcoming Events
-                    </Link>
+                    {/* Conditionally render gallery button */}
+                    {(event.gallery && event.gallery.length > 0) ||
+                    event.image ? (
+                      <button
+                        onClick={() => setIsGalleryOpen(true)}
+                        className="btn btn-secondary py-2 px-4"
+                      >
+                        View Gallery
+                      </button>
+                    ) : (
+                      <p className="text-gray-500 text-sm">
+                        No gallery available for this event.
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -482,38 +654,21 @@ const EventDetailsPage = () => {
         </div>
       </div>
 
-      {/* Gallery Modal */}
-      {isGalleryOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
-          <div className="relative bg-white rounded-lg shadow-lg p-4 w-96">
-            <button
-              className="absolute top-2 right-2"
-              onClick={() => setIsGalleryOpen(false)}
-            >
-              <X size={20} />
-            </button>
-            <div className="grid grid-cols-2 gap-4">
-              {/* Check if gallery exists and map through images */}
-              {"gallery" in event && Array.isArray(event.gallery) ? (
-                event.gallery.map((img, index) => (
-                  <img
-                    key={index}
-                    src={img}
-                    alt={`Gallery Image ${index + 1}`}
-                    className="w-full h-auto object-cover"
-                  />
-                ))
-              ) : (
-                // Fallback to show at least the main event image if no gallery
-                <img
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-auto object-cover col-span-2"
-                />
-              )}
-            </div>
-          </div>
-        </div>
+      {/* Image Gallery Modal */}
+      {isGalleryOpen && event && (
+        <ImageGalleryModal
+          isOpen={isGalleryOpen}
+          onClose={() => setIsGalleryOpen(false)}
+          images={
+            // Ensure a valid array is always passed
+            Array.isArray(event.gallery) && event.gallery.length > 0
+              ? event.gallery // Use gallery if available and not empty
+              : event.image // Check if single image exists
+              ? [event.image] // Use single image in an array if gallery is missing/empty
+              : [] // Default to empty array if no gallery and no single image
+          }
+          title={event.title} // Use title prop for the modal header
+        />
       )}
     </div>
   );

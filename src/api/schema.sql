@@ -36,16 +36,17 @@ CREATE TABLE events (
 CREATE TABLE event_registrations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   event_id UUID REFERENCES events(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  participants INTEGER DEFAULT 1,
   status registration_status DEFAULT 'pending',
-  additional_guests INTEGER DEFAULT 0,
   special_requirements TEXT,
   payment_status BOOLEAN DEFAULT false,
   payment_amount DECIMAL(10,2),
   payment_date TIMESTAMP WITH TIME ZONE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE(event_id, user_id)
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create event_categories table

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import EventCard from "../components/EventCard";
 import { eventService } from "../api/services/eventService";
 import { supabase } from "../api/supabase";
+import akosomboImg1 from "../assets/akosombo/_MG_1473.jpg"; // Import image 1
+import akosomboImg2 from "../assets/akosombo/_MG_2618.jpg"; // Import image 2
 
 // Define Event interface based on the Supabase database schema
 interface Event {
@@ -23,6 +25,7 @@ interface Event {
   image?: string;
   time?: string;
   additionalInfo?: string[];
+  gallery?: string[]; // Add gallery property
 }
 
 // Specify the types for the arrays to fix the "never" type error
@@ -71,7 +74,11 @@ const EventsPage = () => {
 
           const result = await eventService.createEvent({
             ...newEvent,
-            status: 'published' as 'draft' | 'published' | 'cancelled' | 'completed'
+            status: "published" as
+              | "draft"
+              | "published"
+              | "cancelled"
+              | "completed",
           });
           console.log("Added Akosombo event to Supabase:", result);
         } catch (error) {
@@ -84,7 +91,7 @@ const EventsPage = () => {
 
       // Fetch all events directly from Supabase using eventService
       try {
-        console.log('Attempting to fetch events...');
+        console.log("Attempting to fetch events...");
         const eventsData = await eventService.getEvents();
 
         console.log("Raw events data from Supabase:", eventsData); // Debug: Log raw data from API
@@ -102,63 +109,86 @@ const EventsPage = () => {
           return;
         }
 
-      // Process events to match our component's expected format
-      const processedEvents = eventsData.map((event) => {
-        const eventDate = new Date(event.date);
-        const now = new Date();
-        const isPastEvent = event.status === "completed" || eventDate < now;
+        // Process events to match our component's expected format
+        const processedEvents = eventsData.map((event) => {
+          // Parse the event date and get current date for comparison
+          const eventDate = new Date(event.date);
+          const now = new Date();
 
-        // Check if this is the Akosombo event and add the additionalInfo
-        const additionalInfo =
-          event.title === "Games Day at Akosombo"
-            ? [
-                "Transportation from Accra included",
-                "Lunch and refreshments provided",
-                "Swimming is optional (bring swimwear if interested)",
-              ]
-            : [];
+          // Determine if event is past based on date comparison or status
+          const isPastEvent = event.status === "completed" || eventDate < now;
 
-        return {
-          ...event,
-          // Keep ID as string since Supabase uses string UUIDs
-          id: event.id,
-          price:
-            typeof event.price === "number"
-              ? `GHS ${event.price.toFixed(2)}`
-              : "Free",
-          capacity:
-            typeof event.capacity === "number"
-              ? `${event.capacity} participants`
-              : "Unlimited",
-          image:
-            event.image_url || "https://placehold.co/600x400?text=No+Image",
-          isPast: isPastEvent,
-          additionalInfo: additionalInfo,
-          time: event.time_range || "TBA",
-          description: event.description || "No description available",
-        };
-      });
+          // Check if this is the Akosombo event and add the additionalInfo and gallery
+          let additionalInfo: string[] = [];
+          let galleryImages: string[] = [];
+          if (event.title === "Games Day at Akosombo") {
+            additionalInfo = [
+              "Transportation from Accra included",
+              "Lunch and refreshments provided",
+              "Swimming is optional (bring swimwear if interested)",
+            ];
+            galleryImages = [akosomboImg1, akosomboImg2]; // Add imported images to gallery
+          } else if (event.gallery && Array.isArray(event.gallery)) {
+            // Handle gallery if it exists for other events (assuming it's already an array of URLs/paths)
+            galleryImages = event.gallery;
+          } else if (event.gallery && typeof event.gallery === "string") {
+            // Basic handling if gallery is stored as JSON string in DB for other events
+            try {
+              galleryImages = JSON.parse(event.gallery);
+            } catch (e) {
+              console.error(
+                "Failed to parse gallery JSON for event:",
+                event.id,
+                e
+              );
+              galleryImages = event.image_url ? [event.image_url] : []; // Fallback
+            }
+          } else {
+            galleryImages = event.image_url ? [event.image_url] : []; // Fallback if no gallery
+          }
 
-      console.log("All processed events from Supabase:", processedEvents); // Debug: Log all processed events
-      setEvents(processedEvents);
+          return {
+            ...event,
+            // Keep ID as string since Supabase uses string UUIDs
+            id: event.id,
+            price:
+              typeof event.price === "number"
+                ? `GHS ${event.price.toFixed(2)}`
+                : "Free",
+            capacity:
+              typeof event.capacity === "number"
+                ? `${event.capacity} participants`
+                : "Unlimited",
+            image:
+              event.image_url || "https://placehold.co/600x400?text=No+Image",
+            isPast: isPastEvent,
+            additionalInfo: additionalInfo,
+            gallery: galleryImages, // Assign the gallery images
+            time: event.time_range || "TBA",
+            description: event.description || "No description available",
+          };
+        });
 
-      // Clear the arrays before populating them
-      upcomingEvents.length = 0;
-      pastEvents.length = 0;
+        console.log("All processed events from Supabase:", processedEvents); // Debug: Log all processed events
+        setEvents(processedEvents);
 
-      processedEvents.forEach((event) => {
-        if (event.isPast) {
-          pastEvents.push(event);
-        } else {
-          upcomingEvents.push(event);
-        }
-      });
-    } catch (error) {
-      console.error("Error fetching events from Supabase:", error);
-      setError("Failed to load events from database");
-    } finally {
-      setLoading(false);
-    }
+        // Clear the arrays before populating them
+        upcomingEvents.length = 0;
+        pastEvents.length = 0;
+
+        processedEvents.forEach((event) => {
+          if (event.isPast) {
+            pastEvents.push(event);
+          } else {
+            upcomingEvents.push(event);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching events from Supabase:", error);
+        setError("Failed to load events from database");
+      } finally {
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error in fetchEvents:", error);
       setError("Failed to fetch events");
@@ -190,6 +220,10 @@ const EventsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events
               .filter((event) => !event.isPast)
+              .sort(
+                (a, b) =>
+                  new Date(a.date).getTime() - new Date(b.date).getTime()
+              ) // Sort by date ascending (closest first)
               .map((event) => (
                 <EventCard
                   key={event.id}
@@ -222,6 +256,10 @@ const EventsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {events
               .filter((event) => event.isPast)
+              .sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              ) // Sort by date descending (most recent first)
               .map((event) => (
                 <EventCard
                   key={event.id}

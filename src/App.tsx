@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -19,27 +14,6 @@ import VolunteerCTA from "./components/VolunteerCTA";
 import GallerySection from "./components/GallerySection";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
-import { useAuth } from "./hooks/useAuth";
-
-// Protected route component for admin routes
-const ProtectedAdminRoute: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const { user, loading } = useAuth();
-
-  if (loading)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading...
-      </div>
-    );
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  return <>{children}</>;
-};
 
 function App() {
   return (
@@ -59,15 +33,8 @@ function App() {
             {/* Admin authentication */}
             <Route path="/login" element={<LoginPage />} />
 
-            {/* Admin routes - protected */}
-            <Route
-              path="/admin"
-              element={
-                <ProtectedAdminRoute>
-                  <AdminLayout />
-                </ProtectedAdminRoute>
-              }
-            >
+            {/* Admin routes - no longer protected */}
+            <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboardPage />} />
             </Route>
           </Routes>

@@ -40,30 +40,71 @@ const EventCard: React.FC<EventCardProps> = ({
             console.log(`Image failed to load for event: ${title}`);
           }}
         />
-        {isPast && (
+        {/* Status badge overlay */}
+        {isPast ? (
           <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
             <span className="text-white font-bold text-lg">Past Event</span>
           </div>
+        ) : (
+          <div className="absolute top-2 right-2">
+            <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              Upcoming
+            </span>
+          </div>
         )}
       </div>
-      <div className="p-5 flex-grow flex flex-col">
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <div
+        className={`p-5 flex-grow flex flex-col ${
+          isPast ? "bg-gray-50" : "bg-white"
+        }`}
+      >
+        <div className="flex justify-between items-start mb-2">
+          <h3 className="text-xl font-bold">{title}</h3>
+          {/* Status indicator */}
+          <span
+            className={`text-xs font-medium px-2 py-1 rounded ${
+              isPast
+                ? "bg-gray-200 text-gray-700"
+                : "bg-green-100 text-green-800"
+            }`}
+          >
+            {isPast ? "Past" : "Upcoming"}
+          </span>
+        </div>
         <div className="mb-4 space-y-2 text-gray-600">
           <div className="flex items-center">
-            <Calendar className="h-4 w-4 mr-2 text-primary-600" />
+            <Calendar
+              className={`h-4 w-4 mr-2 ${
+                isPast ? "text-gray-500" : "text-primary-600"
+              }`}
+            />
             <span>{date}</span>
           </div>
           <div className="flex items-center">
-            <Clock className="h-4 w-4 mr-2 text-primary-600" />
+            <Clock
+              className={`h-4 w-4 mr-2 ${
+                isPast ? "text-gray-500" : "text-primary-600"
+              }`}
+            />
             <span>{time}</span>
           </div>
           <div className="flex items-center">
-            <MapPin className="h-4 w-4 mr-2 text-primary-600" />
+            <MapPin
+              className={`h-4 w-4 mr-2 ${
+                isPast ? "text-gray-500" : "text-primary-600"
+              }`}
+            />
             <span>{location}</span>
           </div>
           {price && (
             <div className="flex items-center">
-              <span className="font-semibold text-primary-600">{price}</span>
+              <span
+                className={`font-semibold ${
+                  isPast ? "text-gray-600" : "text-primary-600"
+                }`}
+              >
+                {price}
+              </span>
             </div>
           )}
           {capacity && (
@@ -73,15 +114,14 @@ const EventCard: React.FC<EventCardProps> = ({
           )}
         </div>
         <p className="text-gray-700 mb-4 flex-grow">{description}</p>
-        {!isPast && (
+        {!isPast ? (
           <AnimatedLink
             to={id ? `/events/${id}` : "/events"}
             className="btn btn-primary w-full mt-auto text-center"
           >
             View Details
           </AnimatedLink>
-        )}
-        {isPast && (
+        ) : (
           <Link
             to={id ? `/events/${id}` : "/events"}
             className="btn btn-outline w-full mt-auto text-center"

@@ -1,5 +1,4 @@
-
-import sharp from 'sharp';
+import sharp from "sharp";
 
 export const optimizeImage = async (
   imagePath: string,
@@ -10,14 +9,14 @@ export const optimizeImage = async (
       .resize(options.width)
       .webp({ quality: options.quality })
       .toBuffer();
-    return `data:image/webp;base64,${optimized.toString('base64')}`;
+    return `data:image/webp;base64,${optimized.toString("base64")}`;
   } catch (error) {
-    console.error('Image optimization failed:', error);
+    console.error("Image optimization failed:", error);
     return imagePath;
   }
 };
 
 export const generateImageSrcSet = (imagePath: string) => {
   const sizes = [400, 800, 1200];
-  return sizes.map(size => `${imagePath} ${size}w`).join(', ');
+  return sizes.map((size) => `${imagePath} ${size}w`).join(", ");
 };
