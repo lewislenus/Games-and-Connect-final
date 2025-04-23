@@ -2,35 +2,62 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Users, Award } from "lucide-react";
 import CountdownTimer from "../components/CountdownTimer";
-import Carousel from "../components/Carousel";
 import TeamSection from "../components/TeamSection";
 import GamesSection from "../components/GamesSection";
 // Import upcomingEvents from EventsPage
 import { upcomingEvents } from "./EventsPage";
 import backgroundImage from "../assets/img/back.jpg";
+import { registerEvent, registerVolunteer } from "../api/services/supabase";
 
 const HomePage = () => {
   // Get the first upcoming event with a fallback for when events haven't loaded yet
-  const nextEvent = upcomingEvents[0] || {
-    id: 0,
-    title: "Upcoming Event",
-    date: "2025-04-18",
-    description: "Details coming soon",
-    location: "Accra",
-    image_url: "https://placehold.co/600x400?text=Coming+Soon",
-    price: 0,
-    capacity: 100,
-    time_range: "9:00 AM - 12:00 PM",
-  };
+  const nextEvent = upcomingEvents.length > 0 ? upcomingEvents[0] : null;
+
   // Set the target date based on the event date
-  const nextEventDate = new Date(nextEvent.date || "2025-04-18T00:00:00");
+  const nextEventDate = nextEvent ? new Date(nextEvent.date) : null;
+
+  // Event registration handler
+  const handleEventRegistration = async (eventData: { [key: string]: any }) => {
+    try {
+      const response = await registerEvent(eventData);
+      console.log("Event registered successfully:", response);
+      alert("Event registered successfully!");
+    } catch (error) {
+      console.error("Error registering event:", error);
+      alert("Error registering event. Please try again.");
+    }
+  };
+
+  // Volunteer registration handler
+  const handleVolunteerRegistration = async (volunteerData: {
+    [key: string]: any;
+  }) => {
+    try {
+      const response = await registerVolunteer(volunteerData);
+      console.log("Volunteer registered successfully:", response);
+      alert("Volunteer registered successfully!");
+    } catch (error) {
+      console.error("Error registering volunteer:", error);
+      alert("Error registering volunteer. Please try again.");
+    }
+  };
 
   return (
     <div>
       {/* Hero Section */}
       <section className="relative h-screen flex items-center">
-        <Carousel className="absolute inset-0 z-0" />
-
+        {/* YouTube video embed replacing Carousel */}
+        <div className="absolute inset-0 z-0 overflow-hidden w-full h-full">
+          <iframe
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            src="https://www.youtube.com/embed/dvjYm18Bldw?si=s5POukWiH2mNgItI&autoplay=1&mute=1&loop=1&playlist=dvjYm18Bldw"
+            title="Games Day at Akosombo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+          <div className="absolute inset-0 bg-black/40"></div>
+        </div>
         <div className="container-custom relative z-10 text-white">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
@@ -59,16 +86,19 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-
-        <div className="absolute bottom-10 left-0 right-0 z-10">
-          <div className="container-custom">
-            <CountdownTimer
-              targetDate={nextEventDate}
-              eventTitle={`Next Event: ${nextEvent.title}`}
-              eventId={nextEvent.id.toString()}
-            />
+        {nextEventDate && (
+          <div className="absolute bottom-10 left-0 right-0 z-10">
+            <div className="container-custom">
+              <CountdownTimer
+                targetDate={nextEventDate}
+                eventTitle={`Next Event: ${
+                  nextEvent ? nextEvent.title : "No Event"
+                }`}
+                eventId={nextEvent ? nextEvent.id.toString() : "0"}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       {/* About Section */}
@@ -227,7 +257,7 @@ const HomePage = () => {
                   className="w-12 h-12 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <h4 className="font-bold">Akosua Mensah</h4>
+                  <h4 className="font-bold">Jane Jecil</h4>
                   <p className="text-gray-600 text-sm">Community Member</p>
                 </div>
               </div>
@@ -246,7 +276,7 @@ const HomePage = () => {
                   className="w-12 h-12 rounded-full object-cover mr-4"
                 />
                 <div>
-                  <h4 className="font-bold">Kwame Osei</h4>
+                  <h4 className="font-bold">Fred Osei</h4>
                   <p className="text-gray-600 text-sm">Regular Participant</p>
                 </div>
               </div>

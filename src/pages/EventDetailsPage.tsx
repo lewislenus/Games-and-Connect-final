@@ -21,6 +21,7 @@ import NotificationPopup from "../components/NotificationPopup";
 import useNotification from "../hooks/useNotification";
 import ImageGalleryModal from "../components/ImageGalleryModal";
 import { eventService } from "../api/services/eventService"; // Import eventService
+import { cloudinaryService } from "../api/services/cloudinaryService"; // Import cloudinaryService
 
 // Import event images (keep for fallback/local testing if needed, but prioritize fetched data)
 import beachImg from "../assets/img/beach.jpg";
@@ -42,6 +43,7 @@ interface Event {
   gallery?: string[]; // Array of image URLs or imported variables
   // Add fields from DB
   image_url?: string;
+  cloudinary_public_id?: string; // Added for Cloudinary integration
   time_range?: string;
   status?: string;
 }
@@ -140,15 +142,42 @@ const EventDetailsPage = () => {
           galleryImages = [fetchedEvent.image_url]; // Use main image if no gallery
         }
 
+        // Prepare optimized image URLs using Cloudinary if available
+        let mainImageUrl = fetchedEvent.image_url || beachImg;
+        let optimizedGalleryImages = [...galleryImages]; // Create a copy to modify
+
+        // If we have a Cloudinary public_id, use it to generate optimized URLs
+        if (fetchedEvent.cloudinary_public_id) {
+          // Generate responsive main image URL
+          mainImageUrl = cloudinaryService.getResponsiveImageUrl(
+            fetchedEvent.cloudinary_public_id,
+            1200 // Optimal width for hero image
+          );
+
+          // Update gallery images if they're from the same Cloudinary source
+          if (
+            galleryImages.length === 1 &&
+            galleryImages[0] === fetchedEvent.image_url
+          ) {
+            // If gallery only contains the main image, optimize it
+            optimizedGalleryImages = [
+              cloudinaryService.getResponsiveImageUrl(
+                fetchedEvent.cloudinary_public_id,
+                800
+              ),
+            ];
+          }
+        }
+
         setEvent({
           ...fetchedEvent,
           id: fetchedEvent.id, // Ensure ID is correctly passed
-          image: fetchedEvent.image_url || beachImg, // Use image_url or fallback
+          image: mainImageUrl, // Use optimized image URL
           isPast: isPastEvent,
           price: formattedPrice,
           capacity: formattedCapacity,
           time: fetchedEvent.time_range || fetchedEvent.time || "TBA", // Use time_range or time
-          gallery: galleryImages, // Use processed gallery images
+          gallery: optimizedGalleryImages, // Use processed gallery images
           // Add any other necessary transformations
         });
       } catch (err: any) {
@@ -204,8 +233,8 @@ const EventDetailsPage = () => {
         number_of_participants: Number(formData.number_of_participants),
         special_requests: formData.special_requests,
         status: "pending",
-        payment_preference:
-          formData.willPay === "pay_now" ? "pay_now" : "pay_later", // Correctly map radio value
+        payment_status: "pending",
+        payment_preference: formData.willPay, // Use the willPay value directly
         location: formData.location, // Include location in registration data
       };
 
@@ -278,12 +307,26 @@ const EventDetailsPage = () => {
         autoClose={true}
         autoCloseTime={5000}
       />
+
+      {/* Image Gallery Modal */}
+      {isGalleryOpen && event && (
+        <ImageGalleryModal
+          isOpen={isGalleryOpen}
+          onClose={() => setIsGalleryOpen(false)}
+          images={event.gallery || (event.image ? [event.image] : [])}
+          title={event.title}
+          isPastEvent={event.isPast}
+          eventDate={event.date}
+          eventLocation={event.location}
+        />
+      )}
       {/* Hero Section with Event Image */}
       <div className="relative h-[50vh] w-full overflow-hidden cursor-pointer group">
         {event.image && ( // Check if image exists before rendering
           <img
-            src={event.image} // Assumes event.image is a valid src (URL string or imported var)
+            src={event.image} // Using Cloudinary optimized image URL
             alt={event.title}
+            loading="eager" // Load hero image immediately
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onClick={() => {
               // Only open gallery if images are available
@@ -418,8 +461,17 @@ const EventDetailsPage = () => {
                   }}
                 >
                   <img
-                    src={event.image}
+                    src={
+                      event.cloudinary_public_id
+                        ? cloudinaryService.getResponsiveImageUrl(
+                            event.cloudinary_public_id,
+                            500,
+                            500
+                          )
+                        : event.image
+                    }
                     alt={event.title}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center transition-opacity duration-300">

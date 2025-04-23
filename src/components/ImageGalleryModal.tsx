@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { cloudinaryService } from "../api/services/cloudinaryService";
 
 interface ImageGalleryModalProps {
   isOpen: boolean;
@@ -70,9 +71,13 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
             {images.length > 0 ? (
               <div className="relative w-full h-full flex items-center justify-center">
                 <img
-                  src={images[currentImageIndex]}
+                  src={cloudinaryService.getResponsiveImageUrl(
+                    images[currentImageIndex],
+                    900
+                  )}
                   alt={`${title} - Gallery Image ${currentImageIndex + 1}`}
                   className="max-h-full max-w-full object-contain"
+                  loading="lazy"
                 />
 
                 {/* Navigation buttons */}
@@ -117,9 +122,10 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                   onClick={() => setCurrentImageIndex(index)}
                 >
                   <img
-                    src={img}
+                    src={cloudinaryService.getResponsiveImageUrl(img, 200)}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-20 object-cover"
+                    loading="lazy"
                   />
                 </div>
               ))}
