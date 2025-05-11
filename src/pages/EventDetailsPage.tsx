@@ -403,19 +403,13 @@ const EventDetailsPage = () => {
         />
       )}
       {/* Hero Section with Event Image */}
-      <div className="relative h-[50vh] w-full overflow-hidden cursor-pointer group">
+      <div className="relative h-[50vh] w-full overflow-hidden">
         {event.image && ( // Check if image exists before rendering
           <img
             src={event.image} // Using Cloudinary optimized image URL
             alt={event.title}
             loading="eager" // Load hero image immediately
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            onClick={() => {
-              // Only open gallery for past events
-              if (event.isPast && ((event.gallery && event.gallery.length > 0) || event.image)) {
-                setIsGalleryOpen(true);
-              }
-            }}
+            className="w-full h-full object-cover"
           />
         )}
         {event.isPast && (
@@ -423,7 +417,7 @@ const EventDetailsPage = () => {
             Past Event
           </div>
         )}
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end group-hover:bg-opacity-30 transition-opacity">
+        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
           <div className="container-custom text-white pb-8">
             <Link
               to="/events"
@@ -509,18 +503,16 @@ const EventDetailsPage = () => {
                   </p>
                 </div>
 
-                {/* Event Gallery */}
-                <div
-                  className={`${
-                    event.isPast ? "bg-primary-900" : "bg-gray-900"
-                  } rounded-lg shadow-md overflow-hidden mb-8`}
-                >
-                  <GallerySection
-                    eventId={eventId}
-                    title="Event Gallery"
-                    subtitle="Visual Memories"
-                  />
-                </div>
+                {/* Event Gallery - Only for past events */}
+                {event.isPast && (
+                  <div className="bg-primary-900 rounded-lg shadow-md overflow-hidden mb-8">
+                    <GallerySection
+                      eventId={eventId}
+                      title="Event Gallery"
+                      subtitle="Visual Memories"
+                    />
+                  </div>
+                )}
 
                 {/* Keep Additional Info section if applicable */}
                 {/* This might need adjustment based on how additional info is stored/fetched */}
@@ -541,19 +533,10 @@ const EventDetailsPage = () => {
                 )}
               </div>
 
-              {/* Event cover image - Keep this section */}
+              {/* Event cover image - Non-clickable */}
               {event.image && (
                 <div
-                  className="mb-6 overflow-hidden rounded-lg cursor-pointer w-full md:w-[500px] h-auto md:h-[500px] mx-auto group"
-                  onClick={() => {
-                    // Only open gallery if images are available
-                    if (
-                      (event.gallery && event.gallery.length > 0) ||
-                      event.image
-                    ) {
-                      setIsGalleryOpen(true);
-                    }
-                  }}
+                  className="mb-6 overflow-hidden rounded-lg w-full md:w-[500px] h-auto md:h-[500px] mx-auto"
                 >
                   <img
                     src={
@@ -567,13 +550,8 @@ const EventDetailsPage = () => {
                     }
                     alt={event.title}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 flex items-center justify-center transition-opacity duration-300">
-                    <span className="text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      View Gallery
-                    </span>
-                  </div>
                 </div>
               )}
             </div>

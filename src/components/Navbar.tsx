@@ -6,6 +6,7 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
+import logoWhite from "../assets/img/logo white.png";
 
 const Navbar = () => {
   const { user } = useAuth();
@@ -21,7 +22,7 @@ const Navbar = () => {
       <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="flex items-center">
-            <h1 className="text-xl font-bold">Games & Connect</h1>
+            <img src={logoWhite} alt="Games & Connect" className="h-10" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -88,6 +89,9 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden fixed top-[60px] left-0 right-0 bottom-0 bg-[#0a1a2f] border-t border-gray-800 z-50 p-6 overflow-y-auto">
             <div className="flex flex-col space-y-6 py-4">
+              <div className="flex justify-center mb-4">
+                <img src={logoWhite} alt="Games & Connect" className="h-12" />
+              </div>
               <Link
                 to="/"
                 className="text-white hover:text-primary-400 transition-colors py-2"
