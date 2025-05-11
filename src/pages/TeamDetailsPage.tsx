@@ -195,63 +195,63 @@ const TeamDetailsPage = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section 
-        className="relative h-[70vh] flex items-end"
+        className="relative h-[60vh] sm:h-[70vh] flex items-end"
         style={{
           backgroundImage: `url(${team.image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/30 to-black/70"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/80"></div>
         
-        <div className="container mx-auto px-6 relative z-10 pb-16">
+        <div className="container mx-auto px-4 sm:px-6 relative z-10 pb-10 sm:pb-16">
           <Link 
             to="/" 
-            className="inline-flex items-center gap-2 text-white mb-8 hover:underline"
+            className="inline-flex items-center gap-2 text-white mb-4 sm:mb-8 hover:underline text-sm sm:text-base"
           >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-3 h-3 sm:w-4 sm:h-4" />
             Back to Home
           </Link>
           
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">{team.name}</h1>
-          <p className="text-xl text-white max-w-2xl">{team.description}</p>
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-2 sm:mb-4">{team.name}</h1>
+          <p className="text-base sm:text-xl text-white max-w-2xl">{team.description}</p>
           
-          <div className="flex flex-wrap gap-6 mt-8">
-            <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Users className="h-5 w-5 text-white mr-2" />
-              <p className="text-white">{team.members} Members</p>
+          <div className="flex flex-wrap gap-3 sm:gap-6 mt-4 sm:mt-8">
+            <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 text-white mr-1.5 sm:mr-2" />
+              <p className="text-white text-sm sm:text-base">{team.members} Members</p>
             </div>
-            <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Trophy className="h-5 w-5 text-white mr-2" />
-              <p className="text-white">{team.victories} Victories</p>
+            <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+              <Trophy className="h-4 w-4 sm:h-5 sm:w-5 text-white mr-1.5 sm:mr-2" />
+              <p className="text-white text-sm sm:text-base">{team.victories} Victories</p>
             </div>
-            <div className="flex items-center bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
-              <Target className="h-5 w-5 text-white mr-2" />
-              <p className="text-white">{team.specialty}</p>
+            <div className="flex items-center bg-white/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full">
+              <Target className="h-4 w-4 sm:h-5 sm:w-5 text-white mr-1.5 sm:mr-2" />
+              <p className="text-white text-sm sm:text-base">{team.specialty}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">About {team.name}</h2>
-            <p className="text-lg text-gray-700 mb-12 leading-relaxed">{team.longDescription}</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8">{team.name}</h2>
+            <p className="text-base sm:text-lg text-gray-700 mb-8 sm:mb-12 leading-relaxed">{team.longDescription}</p>
             
-            <div className="border-t border-gray-200 pt-12">
-              <h3 className="text-2xl font-bold mb-6">Team Lead</h3>
-              <p className="text-lg">{team.teamLead}</p>
+            <div className="border-t border-gray-200 pt-8 sm:pt-12">
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Team Lead</h3>
+              <p className="text-base sm:text-lg">{team.teamLead}</p>
             </div>
             
-            <div className="border-t border-gray-200 pt-12 mt-12">
-              <h3 className="text-2xl font-bold mb-6">Key Achievements</h3>
-              <ul className="space-y-4">
+            <div className="border-t border-gray-200 pt-8 sm:pt-12 mt-8 sm:mt-12">
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Key Achievements</h3>
+              <ul className="space-y-3 sm:space-y-4">
                 {team.achievements.map((achievement: string, index: number) => (
                   <li key={index} className="flex items-start">
                     <span className="inline-block w-2 h-2 rounded-full bg-[#0a1a2f] mt-2 mr-3"></span>
-                    <span className="text-lg">{achievement}</span>
+                    <span className="text-base sm:text-lg">{achievement}</span>
                   </li>
                 ))}
               </ul>
@@ -261,26 +261,28 @@ const TeamDetailsPage = () => {
       </section>
 
       {/* Team Gallery Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
+      <section className="py-12 sm:py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-12">Team Gallery</h2>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 sm:mb-8 md:mb-12">Team Gallery</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6">
               {teamId && galleryImages[teamId as keyof typeof galleryImages]?.map((image, index) => (
                 <div 
                   key={index} 
-                  className="overflow-hidden rounded-lg aspect-[4/3] group cursor-pointer relative"
+                  className="overflow-hidden rounded-lg aspect-[4/3] group cursor-pointer relative touch-manipulation"
                   onClick={() => openImageModal(image)}
                 >
                   <img 
                     src={image} 
                     alt={`${team.name} gallery image ${index + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <div className="bg-white/90 rounded-full p-3">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0a1a2f]"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path><path d="M11 8v6"></path><path d="M8 11h6"></path></svg>
+                  {/* Zoom indicator - Always visible on mobile, only on hover for desktop */}
+                  <div className="absolute inset-0 bg-black/20 sm:bg-black/30 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="bg-white/90 rounded-full p-2 sm:p-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0a1a2f]"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path><path d="M11 8v6"></path><path d="M8 11h6"></path></svg>
                     </div>
                   </div>
                 </div>
@@ -301,19 +303,19 @@ const TeamDetailsPage = () => {
       )}
 
       {/* Join Team Section */}
-      <section className="py-20 bg-[#0a1a2f] text-white">
-        <div className="container mx-auto px-6">
+      <section className="py-12 sm:py-16 md:py-20 bg-[#0a1a2f] text-white">
+        <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Join {team.name}</h2>
-            <p className="text-lg mb-12 max-w-2xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">Join {team.name}</h2>
+            <p className="text-base sm:text-lg mb-8 sm:mb-12 max-w-2xl mx-auto">
               Interested in becoming a part of our team? We're always looking for enthusiastic new members to join our community.
             </p>
             <Link 
               to="/contact" 
-              className="inline-flex items-center gap-2 bg-white text-[#0a1a2f] px-8 py-4 rounded-full hover:bg-gray-100 transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#0a1a2f] px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition-all w-full sm:w-auto max-w-xs mx-auto"
             >
               Contact Us
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </Link>
           </div>
         </div>

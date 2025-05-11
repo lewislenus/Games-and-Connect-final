@@ -30,14 +30,19 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="w-full bg-white py-24">
+    <section className="w-full bg-white py-16 md:py-24">
+      {/* Mobile Title - Only visible on small screens */}
+      <div className="md:hidden text-center mb-8 px-4">
+        <h2 className="text-3xl font-bold mb-3">Our Teams</h2>
+        <p className="text-gray-700">Explore our competitive teams</p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6 px-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 w-full gap-4 sm:gap-6 px-4 sm:px-6">
         {teams.map((team) => (
           <Link
             key={team.id}
             to={`/team/${team.id}`}
-            className="group relative overflow-hidden aspect-square flex flex-col justify-end"
+            className="group relative overflow-hidden aspect-square flex flex-col justify-end touch-manipulation"
           >
             {/* Background Image */}
             <div 
@@ -45,16 +50,16 @@ const TeamSection = () => {
               style={{ backgroundImage: `url(${team.image})` }}
             ></div>
             
-            {/* Light Overlay on Hover */}
-            <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-0"></div>
+            {/* Light Overlay - Always visible on mobile, only on hover for desktop */}
+            <div className="absolute inset-0 bg-black/10 md:opacity-0 md:transition-opacity md:duration-500 md:group-hover:opacity-100 z-0"></div>
             
-            {/* Content - Only visible on hover */}
-            <div className="relative z-10 p-8 md:p-10 bg-white/90 m-6 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-10px]">
-              <h3 className="text-2xl font-medium mb-2 text-[#0a1a2f]">{team.name}</h3>
+            {/* Content - Always visible on mobile, only on hover for desktop */}
+            <div className="relative z-10 p-4 sm:p-6 md:p-8 bg-white/90 m-3 sm:m-4 md:m-6 md:transition-all md:duration-500 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-[-10px]">
+              <h3 className="text-xl sm:text-2xl font-medium mb-1 sm:mb-2 text-[#0a1a2f]">{team.name}</h3>
               
-              <div className="flex items-center text-[#0a1a2f] transform transition-all duration-500">
-                <span className="mr-2 font-medium">View Team</span>
-                <ArrowUpRight className="h-5 w-5" />
+              <div className="flex items-center text-[#0a1a2f] transform md:transition-all md:duration-500">
+                <span className="mr-2 font-medium text-sm sm:text-base">View Team</span>
+                <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
             </div>
           </Link>

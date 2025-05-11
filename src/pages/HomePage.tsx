@@ -84,55 +84,55 @@ const HomePage = () => {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center py-24">
+      <section className="relative min-h-[100svh] flex items-center py-16 md:py-24">
         {/* YouTube video embed as background */}
         <div className="absolute inset-0 z-0 overflow-hidden w-full h-full">
           <iframe
-            className="absolute top-0 left-0 w-full h-full object-cover"
+            className="absolute top-0 left-0 w-[300%] sm:w-full h-full object-cover -left-[100%] sm:left-0"
             src="https://www.youtube.com/embed/dvjYm18Bldw?si=s5POukWiH2mNgItI&autoplay=1&mute=1&loop=1&playlist=dvjYm18Bldw"
             title="Games Day at Akosombo"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
-          <div className="absolute inset-0 bg-black/60"></div>
+          <div className="absolute inset-0 bg-black/70 md:bg-black/60"></div>
         </div>
         
-        <div className="container mx-auto px-6 relative z-10 text-white">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 text-white">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight">
               Redefining the Art of
               <span className="block">Social Connection</span>
             </h1>
-            <p className="text-xl md:text-2xl mb-12 text-gray-100 max-w-2xl">
+            <p className="text-lg sm:text-xl md:text-2xl mb-8 md:mb-12 text-gray-100 max-w-2xl">
               Discover experiences where fun meets meaningful connections.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-6 mb-16">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-12 md:mb-16">
               <Link 
                 to="/events" 
-                className="group flex items-center gap-2 text-lg font-medium bg-white text-black px-8 py-4 rounded-full hover:bg-gray-100 transition-all"
+                className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium bg-white text-black px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-gray-100 transition-all w-full sm:w-auto"
               >
                 Explore Events
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
                 href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center gap-2 text-lg font-medium border-2 border-white text-white px-8 py-4 rounded-full hover:bg-white/10 transition-all"
+                className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium border-2 border-white text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-white/10 transition-all w-full sm:w-auto"
               >
                 Join Community
-                <ArrowUpRight className="w-5 h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
+                <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
             
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-12">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <p className="text-4xl md:text-5xl font-bold mb-2">{stat.value}</p>
-                  <p className="text-gray-300">{stat.label}</p>
+                <div key={index} className="text-center p-3 md:p-4 bg-black/20 backdrop-blur-sm rounded-lg">
+                  <p className="text-3xl sm:text-4xl md:text-5xl font-bold mb-1 md:mb-2">{stat.value}</p>
+                  <p className="text-sm md:text-base text-gray-300">{stat.label}</p>
                 </div>
               ))}
             </div>
