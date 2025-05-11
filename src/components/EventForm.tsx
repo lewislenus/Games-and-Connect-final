@@ -5,7 +5,7 @@ import { cloudinaryService } from "../api/services/cloudinaryService";
 
 interface EventFormProps {
   onClose: () => void;
-  onSave: (eventData: any) => void;
+  onSave: (eventData: any, images?: File[]) => void;
   event?: {
     id?: string | number;
     title?: string;
@@ -18,6 +18,8 @@ interface EventFormProps {
     capacity?: number | string;
     price?: number | string;
     status?: string;
+    gallery?: string[];
+    cloudinary_public_id?: string;
   };
 }
 
@@ -29,41 +31,57 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
     time: event?.time || "",
     duration: "",
     location: event?.location || "",
-    image: null as File | null,
+    images: [] as File[],
     image_url: event?.image_url || event?.image || "",
     capacity: event?.capacity || "",
     price: event?.price || "",
     status: event?.status || "published",
   });
 
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
 
   // Set initial image preview if event has an image_url
+  // Updated useEffect with gallery priority
   useEffect(() => {
-    if (event?.image_url) {
-      setImagePreview(event.image_url);
+    if (event?.gallery && event.gallery.length > 0) {
+      setImagePreviews(event.gallery);
+    } else if (event?.image_url) {
+      setImagePreviews([event.image_url]);
     } else if (event?.cloudinary_public_id) {
-      // Generate optimized preview if we have a Cloudinary public_id
       const optimizedUrl = cloudinaryService.getResponsiveImageUrl(
         event.cloudinary_public_id,
-        300 // Preview size
+        300
       );
-      setImagePreview(optimizedUrl);
+      setImagePreviews([optimizedUrl]);
+    } else {
+      setImagePreviews([]);
     }
   }, [event]);
 
   // Handle image file selection
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleImageUpload = (acceptedFiles: File[]) => {
+    const newImages = acceptedFiles.map((file) => {
+      const previewUrl = URL.createObjectURL(file);
+      return { file, previewUrl };
+    });
 
-    // Update form data with the selected file
-    setFormData({ ...formData, image: file });
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...acceptedFiles],
+    }));
+    setImagePreviews((prev) => [
+      ...prev,
+      ...newImages.map((img) => img.previewUrl),
+    ]);
+  };
 
-    // Create a preview URL for the selected image
-    const previewUrl = URL.createObjectURL(file);
-    setImagePreview(previewUrl);
+  const removeImage = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index),
+    }));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -83,8 +101,8 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
         status: formData.status,
       };
 
-      // Call the onSave function with the event data and image file
-      await onSave(eventData, formData.image);
+      // Call the onSave function with the event data and images
+      await onSave(eventData, formData.images);
       onClose();
     } catch (error) {
       console.error("Error saving event:", error);
@@ -94,19 +112,23 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-lg w-full max-w-2xl">
-        <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-semibold">CREATE EVENT</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-lg w-full max-w-2xl my-4">
+        <div className="flex justify-between items-center p-4 sm:p-6 border-b">
+          <h2 className="text-lg sm:text-xl font-semibold">CREATE EVENT</h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
+            aria-label="Close"
           >
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto max-h-[calc(100vh-10rem)]"
+        >
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               TITLE
@@ -117,7 +139,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-sm md:text-base"
               required
             />
           </div>
@@ -131,12 +153,12 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="w-full p-2 border rounded h-32"
+              className="w-full p-2 border rounded h-28 sm:h-32 text-sm md:text-base"
               required
             />
           </div>
 
-          <div className="grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 DATE
@@ -147,7 +169,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, date: e.target.value })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-sm md:text-base"
                 required
               />
             </div>
@@ -161,7 +183,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, time: e.target.value })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-sm md:text-base"
               />
             </div>
             <div>
@@ -174,7 +196,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, capacity: e.target.value })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-sm md:text-base"
                 placeholder="e.g. 50 participants"
               />
             </div>
@@ -188,7 +210,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
                 onChange={(e) =>
                   setFormData({ ...formData, price: e.target.value })
                 }
-                className="w-full p-2 border rounded"
+                className="w-full p-2 border rounded text-sm md:text-base"
                 placeholder="e.g. GHS 250"
               />
             </div>
@@ -204,7 +226,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
               onChange={(e) =>
                 setFormData({ ...formData, location: e.target.value })
               }
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded text-sm md:text-base"
               required
             />
           </div>
@@ -214,30 +236,31 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               EVENT IMAGE
             </label>
-            <div className="flex flex-col items-center space-y-2">
+            <div className="flex flex-col items-center space-y-3">
               {/* Image preview */}
-              {imagePreview ? (
-                <div className="relative w-full h-48 mb-2 border rounded overflow-hidden">
+              {imagePreviews.length > 0 ? (
+                <div className="relative w-full h-40 sm:h-48 mb-2 border rounded overflow-hidden">
                   <img
-                    src={imagePreview}
+                    src={imagePreviews[0]}
                     alt="Event preview"
                     className="w-full h-full object-cover"
                   />
                   <button
                     type="button"
                     onClick={() => {
-                      setImagePreview(null);
-                      setFormData({ ...formData, image: null, image_url: "" });
+                      setImagePreviews([]);
+                      setFormData({ ...formData, images: [], image_url: "" });
                     }}
-                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full"
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full touch-manipulation"
+                    aria-label="Remove image"
                   >
                     <X size={16} />
                   </button>
                 </div>
               ) : (
-                <div className="w-full h-48 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center bg-gray-50">
+                <div className="w-full h-40 sm:h-48 border-2 border-dashed border-gray-300 rounded-md flex items-center justify-center bg-gray-50">
                   <div className="text-center p-4">
-                    <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+                    <ImageIcon className="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400" />
                     <p className="mt-1 text-sm text-gray-500">
                       Upload event image
                     </p>
@@ -246,13 +269,19 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
               )}
 
               {/* File input */}
-              <label className="w-full flex justify-center items-center px-4 py-2 bg-primary-600 text-white rounded cursor-pointer hover:bg-primary-700">
+              <label className="w-full flex justify-center items-center px-4 py-3 sm:py-2 bg-primary-600 text-white rounded cursor-pointer hover:bg-primary-700 touch-manipulation">
                 <Upload className="mr-2 h-4 w-4" />
-                {imagePreview ? "Change Image" : "Upload Image"}
+                <span className="text-sm sm:text-base">
+                  {imagePreviews.length > 0 ? "Change Image" : "Upload Image"}
+                </span>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={handleImageChange}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      handleImageUpload([...e.target.files]);
+                    }
+                  }}
                   className="hidden"
                 />
               </label>
@@ -262,17 +291,17 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
             </div>
           </div>
 
-          <div className="flex justify-end space-x-4 pt-4">
+          <div className="flex flex-col sm:flex-row sm:justify-end space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-2 border rounded text-gray-600 hover:bg-gray-50"
+              className="px-6 py-3 sm:py-2 border rounded text-gray-600 hover:bg-gray-50 text-sm sm:text-base touch-manipulation w-full sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 flex items-center justify-center"
+              className="px-6 py-3 sm:py-2 bg-primary-600 text-white rounded hover:bg-primary-700 flex items-center justify-center text-sm sm:text-base touch-manipulation w-full sm:w-auto"
               disabled={isUploading}
             >
               {isUploading ? (

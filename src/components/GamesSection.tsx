@@ -98,7 +98,7 @@ const GamesSection: React.FC = () => {
           {/* Games carousel with auto-scroll */}
           <div
             ref={scrollContainer}
-            className="flex overflow-x-auto pb-8 hide-scrollbar gap-6"
+            className="flex overflow-x-auto pb-8 hide-scrollbar gap-4 sm:gap-6 px-2 sm:px-0 -mx-2 sm:mx-0 touch-pan-x"
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
@@ -109,7 +109,7 @@ const GamesSection: React.FC = () => {
             {gameItems.map((game, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-64 md:w-72 transition-transform duration-300 hover:scale-105 relative"
+                className="flex-shrink-0 w-56 sm:w-64 md:w-72 transition-transform duration-300 hover:scale-105 relative rounded-lg overflow-hidden shadow-md"
               >
                 {index === 2 && (
                   <div className="absolute top-2 right-2 z-10 text-xs bg-white text-black px-2 py-1 rounded-full">
@@ -117,7 +117,7 @@ const GamesSection: React.FC = () => {
                   </div>
                 )}
                 <div className="bg-black overflow-hidden border border-gray-800 rounded-lg">
-                  <div className="h-56 overflow-hidden flex items-center justify-center p-4">
+                  <div className="h-48 sm:h-56 overflow-hidden flex items-center justify-center p-4">
                     <img
                       src={game.image}
                       alt={game.name}

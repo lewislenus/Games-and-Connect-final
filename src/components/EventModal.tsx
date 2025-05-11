@@ -300,9 +300,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
                 This event has already taken place. Check out our gallery for
                 photos or browse upcoming events.
               </p>
-              <button className="btn btn-outline w-full mb-4">
-                View Gallery
-              </button>
+              {/* View Gallery button removed */}
               <Link to="/events" className="btn btn-primary w-full">
                 See Upcoming Events
               </Link>

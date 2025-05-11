@@ -12,20 +12,38 @@ import {
   User,
   Phone,
   ArrowLeft,
-  X,
 } from "lucide-react";
 // Remove hardcoded event imports
 // import { upcomingEvents } from "./EventsPage";
-import { useAuth } from "../hooks/useAuth";
 import NotificationPopup from "../components/NotificationPopup";
 import useNotification from "../hooks/useNotification";
 import ImageGalleryModal from "../components/ImageGalleryModal";
+import GallerySection from "../components/GallerySection";
 import { eventService } from "../api/services/eventService"; // Import eventService
 import { cloudinaryService } from "../api/services/cloudinaryService"; // Import cloudinaryService
 
 // Import event images (keep for fallback/local testing if needed, but prioritize fetched data)
 import beachImg from "../assets/img/beach.jpg";
-import aburiImg from "../assets/img/Aburi.jpg";
+// Default gallery images for past events
+import img1344 from "../assets/img/_MG_1344.jpg";
+import img1414 from "../assets/img/_MG_1414.jpg";
+import img1424 from "../assets/img/_MG_1424.jpg";
+import img1614 from "../assets/img/_MG_1614.jpg";
+import img1623 from "../assets/img/_MG_1623.jpg";
+import img1656 from "../assets/img/_MG_1656.jpg";
+import img1677 from "../assets/img/_MG_1677.jpg";
+import img1679 from "../assets/img/_MG_1679.jpg";
+
+const DEFAULT_PAST_EVENT_GALLERY = [
+  img1344,
+  img1414,
+  img1424,
+  img1614,
+  img1623,
+  img1656,
+  img1677,
+  img1679,
+];
 
 // Define Event interface (consider moving to a shared types file)
 interface Event {
@@ -48,15 +66,7 @@ interface Event {
   status?: string;
 }
 
-// Combine upcoming and past events for the details page
-interface RegistrationDetails {
-  full_name: string;
-  email: string;
-  phone_number: string;
-  number_of_participants: number;
-  location: string;
-  special_requests: string;
-}
+// No additional interfaces needed
 
 const EventDetailsPage = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -65,8 +75,7 @@ const EventDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
-  const { user } = useAuth();
-  const { notification, showSuccess, showError, showInfo, closeNotification } =
+  const { notification, showSuccess, showError, closeNotification } =
     useNotification();
 
   // Add state for form fields
@@ -76,8 +85,7 @@ const EventDetailsPage = () => {
     phone_number: "",
     number_of_participants: 1,
     special_requests: "",
-    location: "", // Added location field
-    willPay: "pay_later", // Changed to string type with default value
+    location: "" // Added location field
   });
 
   // Fetch event data when component mounts or eventId changes
@@ -121,52 +129,87 @@ const EventDetailsPage = () => {
             ? `${fetchedEvent.capacity} participants`
             : fetchedEvent.capacity || "Unlimited"; // Handle null/undefined capacity
 
-        // TODO: Handle gallery data if it exists in the fetchedEvent structure
-        // Assuming gallery might be a JSON string or array in the DB
+        // Handle gallery data from Supabase
+        // The gallery might be stored in different formats, so we need to handle all cases
         let galleryImages: string[] = [];
+        
+        console.log('Processing gallery data from Supabase:', fetchedEvent.gallery);
+        
+        // Check if gallery exists in the fetched event
         if (fetchedEvent.gallery) {
+          // If gallery is a string (JSON), parse it
           if (typeof fetchedEvent.gallery === "string") {
             try {
               galleryImages = JSON.parse(fetchedEvent.gallery);
+              console.log('Successfully parsed gallery JSON:', galleryImages);
             } catch (e) {
               console.error("Failed to parse gallery JSON:", e);
               // Use fallback if parsing fails
-              galleryImages = fetchedEvent.image_url
-                ? [fetchedEvent.image_url]
-                : [];
+              if (fetchedEvent.image_url) {
+                galleryImages = [fetchedEvent.image_url];
+                console.log('Using image_url as fallback for gallery:', galleryImages);
+              }
             }
-          } else if (Array.isArray(fetchedEvent.gallery)) {
+          } 
+          // If gallery is already an array, use it directly
+          else if (Array.isArray(fetchedEvent.gallery)) {
             galleryImages = fetchedEvent.gallery;
+            console.log('Using array gallery directly:', galleryImages);
           }
-        } else if (fetchedEvent.image_url) {
-          galleryImages = [fetchedEvent.image_url]; // Use main image if no gallery
+        } 
+        // If no gallery but we have an image_url, use that as a single-item gallery
+        else if (fetchedEvent.image_url) {
+          galleryImages = [fetchedEvent.image_url];
+          console.log('No gallery found, using image_url:', galleryImages);
         }
 
         // Prepare optimized image URLs using Cloudinary if available
         let mainImageUrl = fetchedEvent.image_url || beachImg;
         let optimizedGalleryImages = [...galleryImages]; // Create a copy to modify
 
-        // If we have a Cloudinary public_id, use it to generate optimized URLs
+        // If we have a Cloudinary public_id, use it to generate optimized URLs for the main image only
         if (fetchedEvent.cloudinary_public_id) {
-          // Generate responsive main image URL
-          mainImageUrl = cloudinaryService.getResponsiveImageUrl(
-            fetchedEvent.cloudinary_public_id,
-            1200 // Optimal width for hero image
-          );
-
-          // Update gallery images if they're from the same Cloudinary source
-          if (
-            galleryImages.length === 1 &&
-            galleryImages[0] === fetchedEvent.image_url
-          ) {
-            // If gallery only contains the main image, optimize it
-            optimizedGalleryImages = [
-              cloudinaryService.getResponsiveImageUrl(
-                fetchedEvent.cloudinary_public_id,
-                800
-              ),
-            ];
+          try {
+            // Generate responsive main image URL
+            mainImageUrl = cloudinaryService.getResponsiveImageUrl(
+              fetchedEvent.cloudinary_public_id,
+              1200 // Optimal width for hero image
+            );
+            console.log('Using optimized Cloudinary URL for main image:', mainImageUrl);
+          } catch (error) {
+            console.error('Error generating Cloudinary URL:', error);
+            // Fallback to original image URL if Cloudinary processing fails
+            mainImageUrl = fetchedEvent.image_url || beachImg;
           }
+          
+          // We'll keep the original gallery images as they are
+          // This avoids issues with Cloudinary URL processing
+        }
+
+        // Only set gallery images for past events
+        if (isPastEvent) {
+          // If past event and gallery is empty, use default gallery
+          if (!optimizedGalleryImages || optimizedGalleryImages.length === 0) {
+            // Use default gallery but ensure each image is unique
+            optimizedGalleryImages = [...new Set(DEFAULT_PAST_EVENT_GALLERY)];
+            console.log('Using default gallery for past event:', optimizedGalleryImages.length, 'images');
+          } else {
+            // Ensure no duplicate images in the gallery
+            optimizedGalleryImages = [...new Set(optimizedGalleryImages)];
+            console.log('Using event gallery with', optimizedGalleryImages.length, 'unique images');
+          }
+          
+          // Validate all gallery images to ensure they are valid URLs or file paths
+          optimizedGalleryImages = optimizedGalleryImages.filter(img => {
+            if (!img || typeof img !== 'string') {
+              console.warn('Filtered out invalid gallery image:', img);
+              return false;
+            }
+            return true;
+          });
+        } else {
+          // For upcoming events, don't set any gallery images
+          optimizedGalleryImages = [];
         }
 
         setEvent({
@@ -224,38 +267,78 @@ const EventDetailsPage = () => {
       return;
     }
     try {
-      // Direct registration without login requirement
-      let registrationData: any = {
-        event_id: event.id, // Use the ID from the fetched event state
-        full_name: formData.full_name,
-        email: formData.email,
-        phone_number: formData.phone_number,
-        number_of_participants: Number(formData.number_of_participants),
-        special_requests: formData.special_requests,
-        status: "pending",
-        payment_status: "pending",
-        payment_preference: formData.willPay, // Use the willPay value directly
-        location: formData.location, // Include location in registration data
+      // Generate a numeric ID for user_id (bigint compatible)
+      const generateNumericId = () => {
+        // Generate a random number suitable for a bigint
+        // Avoiding very large numbers to prevent potential overflow
+        return Math.floor(Math.random() * 1000000000) + 1;
       };
+      
+      // Prepare registration data without user_id initially
+      const registrationData: any = {
+        event_id: event.id,
+        email: formData.email,
+        phone: formData.phone_number,
+        participants: Number(formData.number_of_participants),
+        special_requirements: formData.special_requests,
+        status: "pending",
+        payment_status: false,
+        name: formData.full_name,
+        location: formData.location,
+      };
+      
+      // Try to get a user ID from the auth system first
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          registrationData.user_id = session.user.id;
+          console.log('Using authenticated user ID:', session.user.id);
+        }
+      } catch (authError) {
+        console.log('No authenticated user found');
+      }
 
-      // Insert the registration data
-      const { data, error } = await supabase
+      // Skip checking for users table since we're using numeric IDs directly
+      console.log('Using direct numeric ID approach for event registration');
+      
+      // If we couldn't set user_id through the users table, use our UUID
+      if (!registrationData.user_id) {
+        // Generate a numeric ID as a last resort
+        registrationData.user_id = generateNumericId();
+        console.log('Using generated numeric ID as user_id:', registrationData.user_id);
+      }
+      
+      // Insert the registration data into event_registrations table
+      console.log('Submitting registration data to event_registrations table:', registrationData);
+      const { data: insertedRegistration, error } = await supabase
         .from("event_registrations")
         .insert([registrationData])
         .select()
         .single();
 
       if (error) {
+        console.error('Error inserting into event_registrations:', error);
+        
         // Check if it's a unique constraint violation (user already registered)
         if (error.code === "23505") {
-          // Consider checking by email AND event_id for non-logged-in users
           showError(
-            "An registration with this email already exists for this event."
+            "A registration with this email already exists for this event."
           );
           return; // Prevent further execution
         }
+        
+        // Check for foreign key constraint violations
+        if (error.code === "23503") {
+          showError(
+            "Registration failed: There was an issue with the event or user reference. Please try again."
+          );
+          return;
+        }
+        
         throw error;
       }
+      
+      console.log('Registration successfully stored in event_registrations table:', insertedRegistration);
 
       showSuccess(
         "Registration submitted successfully! We'll send you a confirmation email shortly."
@@ -267,8 +350,7 @@ const EventDetailsPage = () => {
         phone_number: "",
         number_of_participants: 1,
         special_requests: "",
-        location: "",
-        willPay: "pay_later", // Reset to default
+        location: ""
       });
     } catch (error: any) {
       console.error("Registration error:", error);
@@ -329,8 +411,8 @@ const EventDetailsPage = () => {
             loading="eager" // Load hero image immediately
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onClick={() => {
-              // Only open gallery if images are available
-              if ((event.gallery && event.gallery.length > 0) || event.image) {
+              // Only open gallery for past events
+              if (event.isPast && ((event.gallery && event.gallery.length > 0) || event.image)) {
                 setIsGalleryOpen(true);
               }
             }}
@@ -425,6 +507,19 @@ const EventDetailsPage = () => {
                   <p className="text-gray-700 whitespace-pre-line">
                     {event.description}
                   </p>
+                </div>
+
+                {/* Event Gallery */}
+                <div
+                  className={`${
+                    event.isPast ? "bg-primary-900" : "bg-gray-900"
+                  } rounded-lg shadow-md overflow-hidden mb-8`}
+                >
+                  <GallerySection
+                    eventId={eventId}
+                    title="Event Gallery"
+                    subtitle="Visual Memories"
+                  />
                 </div>
 
                 {/* Keep Additional Info section if applicable */}
@@ -611,7 +706,7 @@ const EventDetailsPage = () => {
                       {/* Payment Preference Section */}
                       <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <h4 className="font-medium text-gray-900 mb-2 flex items-center">
-                          Payment Preference
+                          Payment Information
                           <svg
                             className="w-4 h-4 text-green-500 ml-2"
                             fill="none"
@@ -626,30 +721,6 @@ const EventDetailsPage = () => {
                             ></path>
                           </svg>
                         </h4>
-                        <div className="space-y-2">
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name="willPay"
-                              value="pay_now"
-                              checked={formData.willPay === "pay_now"}
-                              onChange={handleInputChange}
-                              className="form-radio h-4 w-4 text-primary-500"
-                            />
-                            <span className="ml-2">Pay Now</span>
-                          </label>
-                          <label className="flex items-center">
-                            <input
-                              type="radio"
-                              name="willPay"
-                              value="pay_later"
-                              checked={formData.willPay === "pay_later"}
-                              onChange={handleInputChange}
-                              className="form-radio h-4 w-4 text-primary-500"
-                            />
-                            <span className="ml-2">Pay Later</span>
-                          </label>
-                        </div>
                         <p className="text-sm text-gray-600 mt-2">
                           MTN Mobile Money: 059 859 9616
                         </p>
@@ -684,20 +755,7 @@ const EventDetailsPage = () => {
                       This event has already taken place. Registration is
                       closed.
                     </p>
-                    {/* Conditionally render gallery button */}
-                    {(event.gallery && event.gallery.length > 0) ||
-                    event.image ? (
-                      <button
-                        onClick={() => setIsGalleryOpen(true)}
-                        className="btn btn-secondary py-2 px-4"
-                      >
-                        View Gallery
-                      </button>
-                    ) : (
-                      <p className="text-gray-500 text-sm">
-                        No gallery available for this event.
-                      </p>
-                    )}
+                    {/* Gallery instruction text removed */}
                   </div>
                 )}
               </div>
@@ -711,15 +769,12 @@ const EventDetailsPage = () => {
         <ImageGalleryModal
           isOpen={isGalleryOpen}
           onClose={() => setIsGalleryOpen(false)}
-          images={
-            // Ensure a valid array is always passed
-            Array.isArray(event.gallery) && event.gallery.length > 0
-              ? event.gallery // Use gallery if available and not empty
-              : event.image // Check if single image exists
-              ? [event.image] // Use single image in an array if gallery is missing/empty
-              : [] // Default to empty array if no gallery and no single image
-          }
-          title={event.title} // Use title prop for the modal header
+          images={event.gallery || []}
+          initialIndex={0}
+          title={event.title}
+          isPastEvent={event.isPast}
+          eventDate={event.date}
+          eventLocation={event.location}
         />
       )}
     </div>

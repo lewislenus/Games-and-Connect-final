@@ -124,4 +124,50 @@ export const cloudinaryService = {
       return null;
     }
   },
+
+  /**
+   * Delete an image from Cloudinary using its public_id
+   * @param publicId The public_id of the image to delete
+   * @returns Promise resolving to the deletion result
+   */
+  async deleteImage(publicId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      // Create a FormData object for the deletion request
+      const formData = new FormData();
+      formData.append("public_id", publicId);
+      formData.append("api_key", import.meta.env.VITE_CLOUDINARY_API_KEY || "");
+      formData.append(
+        "timestamp",
+        String(Math.round(new Date().getTime() / 1000))
+      );
+
+      // For signed requests, you would need to generate a signature
+      // This is a simplified version that works with unsigned deletion if configured in Cloudinary
+      formData.append(
+        "upload_preset",
+        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET ||
+          "games_and_connect_unsigned"
+      );
+
+      // Use the Cloudinary delete endpoint
+      fetch(
+        `https://api.cloudinary.com/v1_1/${
+          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+        }/image/destroy`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            reject(new Error(data.error.message));
+          } else {
+            resolve(data);
+          }
+        })
+        .catch((error) => reject(error));
+    });
+  },
 };

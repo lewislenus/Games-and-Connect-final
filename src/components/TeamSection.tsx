@@ -1,170 +1,64 @@
-import React from "react";
-import { Users, Trophy, Target } from "lucide-react";
-
-// Import team images
-import redImg from "../assets/img/red.jpg";
-import greenImg from "../assets/img/green.jpg";
-import blueImg from "../assets/img/blue.jpg";
-import whiteImg from "../assets/img/white.jpg";
+import { ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const TeamSection = () => {
+  const teams = [
+    {
+      id: "red",
+      name: "Team Red",
+      image: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1746915399/_MG_2393_cv5xbp.jpg",
+      description: "Known for their fierce competitiveness and team spirit",
+    },
+    {
+      id: "green",
+      name: "Team Green",
+      image: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1746915398/_MG_2403_hknyss.jpg",
+      description: "Champions of outdoor activities and nature challenges",
+    },
+    {
+      id: "blue",
+      name: "Team Blue",
+      image: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1746918906/_MG_2027_oblrvo.jpg",
+      description: "Masters of trivia and intellectual challenges",
+    },
+    {
+      id: "yellow",
+      name: "Team Yellow",
+      image: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1746915401/_MG_2185_rqpdrv.jpg",
+      description: "All-rounders who excel in diverse challenges",
+    },
+  ];
+
   return (
-    <section className="bg-white py-16 w-full">
-      <div className="w-full">
-        <div className="text-center mb-12">
-          <span className="text-primary-400 font-semibold mb-4 block">
-            Our Teams
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Meet Our Competitive Teams
-          </h2>
-          <p className="text-gray-600 max-w-3xl mx-auto">
-            Join one of our four dynamic teams and compete in our exciting
-            events and challenges
-          </p>
-        </div>
+    <section className="w-full bg-white py-24">
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full max-w-none">
-          {/* Team Red */}
-          <div
-            className="team-section-card p-6 hover:shadow-lg transition-all duration-300 relative overflow-hidden aspect-[4/3] flex flex-col justify-end"
-            style={{
-              backgroundImage: `url(${redImg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+      <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6 px-6">
+        {teams.map((team) => (
+          <Link
+            key={team.id}
+            to={`/team/${team.id}`}
+            className="group relative overflow-hidden aspect-square flex flex-col justify-end"
           >
-            {/* Dark overlay - reduced opacity by 50% */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/35 z-0"></div>
-            <div className="relative z-10 text-left">
-              <h3 className="text-2xl font-bold mb-2 text-white">Team Red</h3>
-              <p className="text-white mb-4">
-                Known for their fierce competitiveness and team spirit
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">25 Active Members</p>
-                </div>
-                <div className="flex items-center">
-                  <Trophy className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">12 Event Victories</p>
-                </div>
-                <div className="flex items-center">
-                  <Target className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">
-                    Specializes in Strategy Games
-                  </p>
-                </div>
+            {/* Background Image */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-in-out group-hover:scale-105"
+              style={{ backgroundImage: `url(${team.image})` }}
+            ></div>
+            
+            {/* Light Overlay on Hover */}
+            <div className="absolute inset-0 bg-black/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100 z-0"></div>
+            
+            {/* Content - Only visible on hover */}
+            <div className="relative z-10 p-8 md:p-10 bg-white/90 m-6 transition-all duration-500 opacity-0 group-hover:opacity-100 group-hover:translate-y-[-10px]">
+              <h3 className="text-2xl font-medium mb-2 text-[#0a1a2f]">{team.name}</h3>
+              
+              <div className="flex items-center text-[#0a1a2f] transform transition-all duration-500">
+                <span className="mr-2 font-medium">View Team</span>
+                <ArrowUpRight className="h-5 w-5" />
               </div>
             </div>
-          </div>
-
-          {/* Team Green */}
-          <div
-            className="team-section-card p-6 hover:shadow-lg transition-all duration-300 relative overflow-hidden aspect-[4/3] flex flex-col justify-end"
-            style={{
-              backgroundImage: `url(${greenImg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            {/* Dark overlay - reduced opacity by 50% */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/35 z-0"></div>
-            <div className="relative z-10 text-left">
-              <h3 className="text-2xl font-bold mb-2 text-white">Team Green</h3>
-              <p className="text-white mb-4">
-                Champions of outdoor activities and nature challenges
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">28 Active Members</p>
-                </div>
-                <div className="flex items-center">
-                  <Trophy className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">15 Event Victories</p>
-                </div>
-                <div className="flex items-center">
-                  <Target className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">
-                    Specializes in Outdoor Challenges
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Team Blue */}
-          <div
-            className="team-section-card p-6 hover:shadow-lg transition-all duration-300 relative overflow-hidden aspect-[4/3] flex flex-col justify-end"
-            style={{
-              backgroundImage: `url(${blueImg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            {/* Dark overlay - reduced opacity by 50% */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/35 z-0"></div>
-            <div className="relative z-10 text-left">
-              <h3 className="text-2xl font-bold mb-2 text-white">Team Blue</h3>
-              <p className="text-white mb-4">
-                Masters of trivia and intellectual challenges
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">22 Active Members</p>
-                </div>
-                <div className="flex items-center">
-                  <Trophy className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">10 Event Victories</p>
-                </div>
-                <div className="flex items-center">
-                  <Target className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">
-                    Specializes in Trivia Competitions
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Team White */}
-          <div
-            className="team-section-card p-6 hover:shadow-lg transition-all duration-300 relative overflow-hidden aspect-[4/3] flex flex-col justify-end"
-            style={{
-              backgroundImage: `url(${whiteImg})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          >
-            {/* Dark overlay - reduced opacity by 50% */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/30 to-black/35 z-0"></div>
-            <div className="relative z-10 text-left">
-              <h3 className="text-2xl font-bold mb-2 text-white">Team White</h3>
-              <p className="text-white mb-4">
-                All-rounders who excel in diverse challenges
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">20 Active Members</p>
-                </div>
-                <div className="flex items-center">
-                  <Trophy className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">8 Event Victories</p>
-                </div>
-                <div className="flex items-center">
-                  <Target className="h-4 w-4 text-white mr-2" />
-                  <p className="text-white text-sm">
-                    Specializes in Team Building
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

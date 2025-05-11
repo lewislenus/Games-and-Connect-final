@@ -1,16 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  Home,
-  Calendar,
-  Users,
-  MessageSquare,
   Menu,
   X,
-  Settings,
+  ArrowRight
 } from "lucide-react";
-import logo from "../assets/img/logo.png";
-import AnimatedLink from "./AnimatedLink"; // Added import statement
 import { useAuth } from "../hooks/useAuth";
 
 const Navbar = () => {
@@ -23,55 +17,46 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md z-50">
-      <div className="container-custom py-4">
+    <nav className="bg-[#0a1a2f] text-white z-50 sticky top-0">
+      <div className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <img
-              src={logo}
-              alt="Games & Connect Logo"
-              className="h-16 w-auto"
-            />
+          <Link to="/" className="flex items-center">
+            <h1 className="text-xl font-bold">Games & Connect</h1>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <AnimatedLink
+            <Link
               to="/"
-              className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
+              className="text-white hover:text-primary-400 transition-colors"
             >
-              <Home className="h-4 w-4" />
-              <span>Home</span>
-            </AnimatedLink>
-            <AnimatedLink
+              Home
+            </Link>
+            <Link
               to="/events"
-              className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
+              className="text-white hover:text-primary-400 transition-colors"
             >
-              <Calendar className="h-4 w-4" />
-              <span>Events</span>
-            </AnimatedLink>
-            <AnimatedLink
+              Events
+            </Link>
+            <Link
               to="/community"
-              className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
+              className="text-white hover:text-primary-400 transition-colors"
             >
-              <Users className="h-4 w-4" />
-              <span>Community</span>
-            </AnimatedLink>
-            <AnimatedLink
+              Community
+            </Link>
+            <Link
               to="/contact"
-              className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
+              className="text-white hover:text-primary-400 transition-colors"
             >
-              <MessageSquare className="h-4 w-4" />
-              <span>Contact</span>
-            </AnimatedLink>
+              Contact
+            </Link>
             {isAdmin && (
-              <AnimatedLink
+              <Link
                 to="/admin"
-                className="nav-link flex items-center space-x-1 text-gray-700 hover:text-primary-600"
+                className="text-white hover:text-primary-400 transition-colors"
               >
-                <Settings className="h-4 w-4" />
-                <span>Admin</span>
-              </AnimatedLink>
+                Admin
+              </Link>
             )}
           </div>
 
@@ -79,15 +64,17 @@ const Navbar = () => {
             href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden md:block btn btn-primary"
+            className="hidden md:flex items-center gap-2 text-sm font-medium border border-white text-white px-4 py-2 rounded-full hover:bg-white/10 transition-all"
           >
             Join Community
+            <ArrowRight className="w-4 h-4" />
           </a>
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-gray-700 focus:outline-none"
+            className="md:hidden text-white focus:outline-none p-2 touch-manipulation"
             onClick={toggleMenu}
+            aria-label="Toggle mobile menu"
           >
             {isMenuOpen ? (
               <X className="h-6 w-6" />
@@ -99,52 +86,53 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-[#0a1a2f] border-t border-gray-800 z-50 p-6">
             <div className="flex flex-col space-y-4">
               <Link
                 to="/"
-                className="nav-link flex items-center space-x-2 text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-primary-400 transition-colors py-2"
+                onClick={toggleMenu}
               >
-                <Home className="h-5 w-5" />
-                <span>Home</span>
+                Home
               </Link>
               <Link
                 to="/events"
-                className="nav-link flex items-center space-x-2 text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-primary-400 transition-colors py-2"
+                onClick={toggleMenu}
               >
-                <Calendar className="h-5 w-5" />
-                <span>Events</span>
+                Events
               </Link>
               <Link
                 to="/community"
-                className="nav-link flex items-center space-x-2 text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-primary-400 transition-colors py-2"
+                onClick={toggleMenu}
               >
-                <Users className="h-5 w-5" />
-                <span>Community</span>
+                Community
               </Link>
               <Link
                 to="/contact"
-                className="nav-link flex items-center space-x-2 text-gray-700 hover:text-primary-600 py-2"
+                className="text-white hover:text-primary-400 transition-colors py-2"
+                onClick={toggleMenu}
               >
-                <MessageSquare className="h-5 w-5" />
-                <span>Contact</span>
+                Contact
               </Link>
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className="nav-link flex items-center space-x-2 text-gray-700 hover:text-primary-600 py-2"
+                  className="text-white hover:text-primary-400 transition-colors py-2"
+                  onClick={toggleMenu}
                 >
-                  <Settings className="h-5 w-5" />
-                  <span>Admin</span>
+                  Admin
                 </Link>
               )}
               <a
                 href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-primary w-full text-center"
+                className="flex items-center justify-center gap-2 bg-white text-black px-4 py-2 rounded-full mt-2"
               >
                 Join Community
+                <ArrowRight className="w-4 h-4" />
               </a>
             </div>
           </div>

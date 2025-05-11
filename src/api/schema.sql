@@ -36,6 +36,7 @@ CREATE TABLE events (
 CREATE TABLE event_registrations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   event_id UUID REFERENCES events(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES users(id) ON DELETE SET NULL,
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   phone TEXT NOT NULL,

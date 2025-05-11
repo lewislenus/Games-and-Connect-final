@@ -281,6 +281,7 @@ const EventsPage = () => {
                       : `${event.capacity} participants`
                   }
                   isPast={true}
+                  gallery={event.gallery || []}
                 />
               ))}
           </div>

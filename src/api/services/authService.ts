@@ -1,5 +1,6 @@
 import { supabase } from "../supabase";
 import { Provider } from "@supabase/supabase-js";
+import bcrypt from "bcryptjs";
 
 export interface LoginCredentials {
   email: string;
@@ -17,9 +18,11 @@ export const authService = {
       throw new Error("Only authorized admin emails are allowed to sign up.");
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
-      password,
+      password: hashedPassword,
     });
 
     if (authError) throw authError;
@@ -63,22 +66,60 @@ export const authService = {
         await supabase.auth.signOut();
         throw new Error("Access denied. Only administrators can log in.");
       }
+
+      // Log successful login attempt
+      await supabase.from("login_attempts").insert([
+        {
+          user_id: data.user.id,
+          success: true,
+          timestamp: new Date().toISOString(),
+          ip_address: "{{request.ip}}", // Placeholder for actual IP
+        },
+      ]);
     }
 
     return { data, error };
   },
 
-  async signInWithGoogle() {
-    return await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/`,
-      },
-    });
+  async signOut() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) throw error;
+
+    // Log sign out attempt
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from("login_attempts").insert([
+        {
+          user_id: user.id,
+          success: false,
+          timestamp: new Date().toISOString(),
+          ip_address: "{{request.ip}}", // Placeholder for actual IP
+        },
+      ]);
+    }
+
+    return { error };
   },
 
-  async signOut() {
-    return await supabase.auth.signOut();
+  async resetPassword(email: string) {
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+
+    if (error) throw error;
+
+    // Log password reset attempt
+    await supabase.from("login_attempts").insert([
+      {
+        email,
+        success: true,
+        timestamp: new Date().toISOString(),
+        ip_address: "{{request.ip}}", // Placeholder for actual IP
+      },
+    ]);
+
+    return { error };
   },
 
   async getProfile() {
