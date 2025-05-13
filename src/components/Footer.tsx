@@ -65,7 +65,7 @@ const Footer = () => {
             <h3 className="text-xl font-bold mb-4 border-t-2 border-white pt-4">Contact Information</h3>
             <p className="text-gray-300 mb-2">Accra, Ghana</p>
             <p className="text-gray-300 mb-2">info@gamesandconnect.com</p>
-            <p className="text-gray-300 mb-4">+233 20 123 4567</p>
+            <p className="text-gray-300 mb-4">+233 50 589 1665</p>
             <Link 
               to="/contact" 
               className="group inline-flex items-center gap-2 text-white border-b border-white pb-1 hover:border-primary-400 hover:text-primary-400 transition-colors"

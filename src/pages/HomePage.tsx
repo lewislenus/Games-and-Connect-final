@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import SEO from "../components/SEO";
 import { Calendar, Users, Award, ArrowRight, ArrowUpRight } from "lucide-react";
 import CountdownTimer from "../components/CountdownTimer";
 import TeamSection from "../components/TeamSection";
@@ -82,7 +83,12 @@ const HomePage = () => {
   // They are kept for future implementation of registration functionality
 
   return (
-    <div className="overflow-hidden">
+    <div className="min-h-screen bg-white">
+      <SEO 
+        title="Games & Connect - Community Events and Team Building"
+        description="Join Games & Connect for exciting community events, team building activities, and sports competitions in Ghana. Connect with like-minded individuals and teams."
+        canonical="https://gamesandconnect.com"
+      />
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex items-center py-16 md:py-24">
         {/* YouTube video embed as background */}

@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
 import Footer from "./components/Footer";
@@ -51,12 +52,14 @@ const AppLayout = () => {
   );
 };
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <HelmetProvider>
+      <Router>
+        <AppLayout />
+      </Router>
+    </HelmetProvider>
   );
-}
+};
 
 export default App;

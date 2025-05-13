@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SEO from "../components/SEO";
 import EventCard from "../components/EventCard";
 import { eventService } from "../api/services/eventService";
 import { supabase } from "../api/supabase";
@@ -210,7 +211,12 @@ const EventsPage = () => {
     return <div className="text-red-500 text-center py-8">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-white">
+      <SEO 
+        title="Events - Games & Connect"
+        description="Discover upcoming community events, sports competitions, and team building activities organized by Games & Connect in Ghana."
+        canonical="https://gamesandconnect.com/events"
+      />
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-8">Events</h1>
 

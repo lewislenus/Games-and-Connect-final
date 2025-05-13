@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import SEO from "../components/SEO";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Users, Trophy, Target, ArrowRight } from "lucide-react";
 import ImageModal from "../components/ImageModal";
@@ -191,8 +192,19 @@ const TeamDetailsPage = () => {
     );
   }
 
+  // Create dynamic meta description from team details
+  const metaDescription = `${team.name} - ${team.description}. Learn more about our team members, achievements, and upcoming events.`;
+  const canonicalUrl = `https://gamesandconnect.com/team/${teamId}`;
+
   return (
     <div className="min-h-screen">
+      <SEO
+        title={`${team.name} - Games & Connect`}
+        description={metaDescription}
+        canonical={canonicalUrl}
+        ogType="profile"
+        ogImage={team.image}
+      />
       {/* Hero Section */}
       <section 
         className="relative h-[60vh] sm:h-[70vh] flex items-end"

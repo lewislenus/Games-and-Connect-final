@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import SEO from "../components/SEO";
 import { supabase } from "../api/supabase";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
@@ -25,6 +26,7 @@ import { cloudinaryService } from "../api/services/cloudinaryService"; // Import
 // Import event images (keep for fallback/local testing if needed, but prioritize fetched data)
 import beachImg from "../assets/img/beach.jpg";
 // Default gallery images for past events
+
 import img1344 from "../assets/img/_MG_1344.jpg";
 import img1414 from "../assets/img/_MG_1414.jpg";
 import img1424 from "../assets/img/_MG_1424.jpg";
@@ -374,12 +376,23 @@ const EventDetailsPage = () => {
     // but added as a safeguard.
     return <div className="text-center py-16">Event not found.</div>;
   }
+  
+  // Create dynamic meta description from event details
+  const metaDescription = `${event.title} - ${event.date} at ${event.location}. ${event.description.substring(0, 150)}${event.description.length > 150 ? '...' : ''}`;
+  const canonicalUrl = `https://gamesandconnect.com/events/${eventId}`;
 
   // The rest of the component remains largely the same,
   // using the 'event' state variable fetched dynamically.
 
   return (
     <div>
+      <SEO
+        title={`${event.title} - Games & Connect`}
+        description={metaDescription}
+        canonical={canonicalUrl}
+        ogType="article"
+        ogImage={event.image || ''}
+      />
       {/* Notification Popup */}
       <NotificationPopup
         type={notification.type}
