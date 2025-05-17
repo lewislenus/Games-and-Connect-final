@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { X } from 'lucide-react';
+import React from "react";
+import { X } from "lucide-react";
 
 interface GalleryModalProps {
   isOpen: boolean;
@@ -8,7 +7,11 @@ interface GalleryModalProps {
   images: string[];
 }
 
-const GalleryModal: React.FC<GalleryModalProps> = ({ isOpen, onClose, images }) => {
+const GalleryModal: React.FC<GalleryModalProps> = ({
+  isOpen,
+  onClose,
+  images,
+}) => {
   if (!isOpen) return null;
 
   return (
@@ -24,11 +27,22 @@ const GalleryModal: React.FC<GalleryModalProps> = ({ isOpen, onClose, images }) 
           <h3 className="text-2xl font-bold mb-4">Event Gallery</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {images.map((image, index) => (
-              <div key={index} className="aspect-square relative overflow-hidden rounded-lg">
+              <div
+                key={index}
+                className="aspect-square relative overflow-hidden rounded-lg"
+              >
                 <img
-                  src={image}
+                  src={image || ""}
                   alt={`Gallery image ${index + 1}`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    console.error("Gallery image failed to load:", image);
+                    e.currentTarget.src =
+                      "https://placehold.co/600x400?text=Image+Not+Available";
+                    // Prevent infinite error loops if placeholder also fails
+                    e.currentTarget.onerror = null;
+                  }}
                 />
               </div>
             ))}

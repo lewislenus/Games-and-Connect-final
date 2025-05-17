@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import {
   MessageCircle,
@@ -424,11 +423,7 @@ const CommunityPage = () => {
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-bold mb-1">Volunteer at an Event</h4>
-                  <p className="text-gray-600">
-                    Earn 200 points when you volunteer to help organize or run
-                    an event
-                  </p>
+
                 </div>
               </div>
             </div>

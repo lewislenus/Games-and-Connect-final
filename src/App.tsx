@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from "./components/Navbar";
 import LoginPage from "./pages/LoginPage";
@@ -9,16 +9,11 @@ import CommunityPage from "./pages/CommunityPage";
 import ContactPage from "./pages/ContactPage";
 import EventDetailsPage from "./pages/EventDetailsPage";
 import TeamDetailsPage from "./pages/TeamDetailsPage";
-import VolunteerRegistrationPage from "./pages/VolunteerRegistrationPage";
-import VolunteerCTA from "./components/VolunteerCTA";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
 
 // Layout component that conditionally renders footer based on route
 const AppLayout = () => {
-  const location = useLocation();
-  const isHomePage = location.pathname === "/";
-  
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -31,8 +26,6 @@ const AppLayout = () => {
           <Route path="/team/:teamId" element={<TeamDetailsPage />} />
           <Route path="/community" element={<CommunityPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/volunteer" element={<VolunteerRegistrationPage />} />
-
           {/* Admin authentication */}
           <Route path="/login" element={<LoginPage />} />
 
@@ -42,9 +35,6 @@ const AppLayout = () => {
           </Route>
         </Routes>
       </main>
-      
-      {/* Only show VolunteerCTA on non-homepage routes */}
-      {!isHomePage && <VolunteerCTA />}
       
       {/* Footer is shown on all pages */}
       <Footer />

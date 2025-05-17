@@ -1,6 +1,5 @@
-import React from "react";
 import { Link } from "react-router-dom";
-import { Award, Gift, Star, Users, CheckCircle } from "lucide-react";
+import { Award, Gift, Star, CheckCircle } from "lucide-react";
 
 const LoyaltyPage = () => {
   return (
@@ -10,11 +9,10 @@ const LoyaltyPage = () => {
         <div className="container-custom text-white">
           <div className="max-w-2xl">
             <h1 className="text-4xl font-bold mb-4">
-              Loyalty Program & Volunteering
+              Loyalty Program
             </h1>
             <p className="text-xl mb-0">
-              Earn rewards for your participation and give back to the community
-              through volunteering.
+              Earn rewards for your participation and engagement in our community.
             </p>
           </div>
         </div>
@@ -122,20 +120,7 @@ const LoyaltyPage = () => {
                 </div>
               </div>
 
-              <div className="flex items-start">
-                <div className="flex-shrink-0 mr-4">
-                  <div className="bg-primary-100 w-10 h-10 rounded-full flex items-center justify-center">
-                    <span className="font-bold text-primary-600">200</span>
-                  </div>
-                </div>
-                <div>
-                  <h4 className="font-bold mb-1">Volunteer at an Event</h4>
-                  <p className="text-gray-600">
-                    Earn 200 points when you volunteer to help organize or run
-                    an event
-                  </p>
-                </div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -285,161 +270,7 @@ const LoyaltyPage = () => {
         </div>
       </section>
 
-      {/* Volunteering */}
-      <section className="section bg-white">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-block p-3 bg-primary-100 rounded-full mb-4">
-                <Users className="h-8 w-8 text-primary-600" />
-              </div>
-              <h2 className="text-3xl font-bold mb-4">
-                Volunteer Opportunities
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Help us create amazing experiences for the community while
-                developing your skills and expanding your network. Volunteering
-                is a great way to give back and earn substantial loyalty points.
-              </p>
 
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-primary-600 mt-1 mr-3" />
-                  <div>
-                    <h4 className="font-bold">Event Coordination</h4>
-                    <p className="text-gray-700">
-                      Help plan and execute our events, from logistics to
-                      on-site management.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-primary-600 mt-1 mr-3" />
-                  <div>
-                    <h4 className="font-bold">Community Engagement</h4>
-                    <p className="text-gray-700">
-                      Assist in managing our WhatsApp community, facilitating
-                      discussions, and organizing online activities.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-primary-600 mt-1 mr-3" />
-                  <div>
-                    <h4 className="font-bold">Content Creation</h4>
-                    <p className="text-gray-700">
-                      Help create engaging content for our social media channels
-                      and website.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-primary-600 mt-1 mr-3" />
-                  <div>
-                    <h4 className="font-bold">Photography & Documentation</h4>
-                    <p className="text-gray-700">
-                      Capture moments at our events to share with the community
-                      and for promotional purposes.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <Link
-                to="/volunteer"
-                className="btn btn-primary"
-              >
-                Apply to Volunteer
-              </Link>
-            </div>
-
-            <div className="relative">
-              <img
-                src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Volunteers working together"
-                className="rounded-lg shadow-lg"
-              />
-              <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg">
-                <div className="flex items-center space-x-2">
-                  <Users className="h-8 w-8 text-primary-600" />
-                  <div>
-                    <p className="font-bold">Join Our Team</p>
-                    <p className="text-sm text-gray-600">Make an Impact</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Volunteer Benefits */}
-      <section className="section bg-primary-50">
-        <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">
-              Benefits of Volunteering
-            </h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
-              Volunteering with Games & Connect offers numerous personal and
-              professional benefits.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="card p-6">
-              <h3 className="text-xl font-bold mb-3">Skill Development</h3>
-              <p className="text-gray-600">
-                Gain practical experience in event management, communication,
-                leadership, and other valuable skills that enhance your resume.
-              </p>
-            </div>
-
-            <div className="card p-6">
-              <h3 className="text-xl font-bold mb-3">Networking</h3>
-              <p className="text-gray-600">
-                Connect with professionals from various industries and expand
-                your personal and professional network in Accra.
-              </p>
-            </div>
-
-            <div className="card p-6">
-              <h3 className="text-xl font-bold mb-3">Recognition</h3>
-              <p className="text-gray-600">
-                Receive acknowledgment for your contributions, including special
-                mentions at events and in our community communications.
-              </p>
-            </div>
-
-            <div className="card p-6">
-              <h3 className="text-xl font-bold mb-3">Loyalty Points</h3>
-              <p className="text-gray-600">
-                Earn substantial loyalty points for your volunteer work, helping
-                you progress through membership tiers faster.
-              </p>
-            </div>
-
-            <div className="card p-6">
-              <h3 className="text-xl font-bold mb-3">Free Event Access</h3>
-              <p className="text-gray-600">
-                Volunteers receive free access to the events they help organize,
-                allowing you to enjoy the experience while contributing.
-              </p>
-            </div>
-
-            <div className="card p-6">
-              <h3 className="text-xl font-bold mb-3">Personal Fulfillment</h3>
-              <p className="text-gray-600">
-                Experience the satisfaction of contributing to positive
-                experiences for others and building a stronger community.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="bg-primary-700 py-16">
@@ -447,7 +278,7 @@ const LoyaltyPage = () => {
           <h2 className="text-3xl font-bold mb-4">Ready to Get Involved?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
             Whether you want to earn rewards through our loyalty program or
-            contribute as a volunteer, there are many ways to get more involved
+            participate in our events, there are many ways to get more involved
             with Games & Connect.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

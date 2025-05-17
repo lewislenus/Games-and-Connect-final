@@ -22,16 +22,31 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
   eventDate,
   eventLocation,
 }) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(initialIndex);
+  // Filter out any null, undefined or empty string image URLs
+  const validImages = images.filter((img) => img && img.trim() !== "");
+
+  // Use a safe initial index that's within bounds of the filtered array
+  const safeInitialIndex =
+    validImages.length > 0
+      ? initialIndex < validImages.length
+        ? initialIndex
+        : 0
+      : 0;
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(safeInitialIndex);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handlePrevImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
-  }, [images.length]);
+    setCurrentImageIndex((prev) =>
+      prev === 0 ? validImages.length - 1 : prev - 1
+    );
+  }, [validImages.length]);
 
   const handleNextImage = useCallback(() => {
-    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-  }, [images.length]);
+    setCurrentImageIndex((prev) =>
+      prev === validImages.length - 1 ? 0 : prev + 1
+    );
+  }, [validImages.length]);
 
   // Effect to handle keyboard events globally
   useEffect(() => {
@@ -90,29 +105,35 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
         <div className="flex flex-col md:flex-row h-[80vh] md:h-[85vh] overflow-hidden">
           {/* Large image view */}
           <div className="relative flex-grow flex items-center justify-center bg-gray-100 p-0 overflow-hidden">
-            {images.length > 0 ? (
+            {validImages.length > 0 ? (
               <div className="relative w-full h-full flex items-center justify-center overflow-auto">
                 <img
-                  src={images[currentImageIndex]}
+                  src={validImages[currentImageIndex] || ""}
                   alt={`${title} - Gallery Image ${currentImageIndex + 1}`}
                   style={{
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                    width: 'auto',
-                    height: 'auto',
-                    objectFit: 'contain',
-                    display: 'block',
-                    margin: '0 auto'
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                    width: "auto",
+                    height: "auto",
+                    objectFit: "contain",
+                    display: "block",
+                    margin: "0 auto",
                   }}
                   loading="lazy"
                   onError={(e) => {
-                    console.error('Image failed to load:', images[currentImageIndex]);
-                    e.currentTarget.src = 'https://placehold.co/600x400?text=Image+Not+Available';
+                    console.error(
+                      "Image failed to load:",
+                      validImages[currentImageIndex]
+                    );
+                    e.currentTarget.src =
+                      "https://placehold.co/600x400?text=Image+Not+Available";
+                    // Prevent infinite error loops if placeholder also fails
+                    e.currentTarget.onerror = null;
                   }}
                 />
 
                 {/* Navigation buttons - larger touch targets for mobile */}
-                {images.length > 1 && (
+                {validImages.length > 1 && (
                   <>
                     <button
                       onClick={handlePrevImage}
@@ -133,7 +154,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
 
                 {/* Image counter */}
                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-xs sm:text-sm">
-                  {currentImageIndex + 1} / {images.length}
+                  {currentImageIndex + 1} / {validImages.length}
                 </div>
               </div>
             ) : (
@@ -146,7 +167,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
           {/* Thumbnails sidebar - horizontal on mobile, vertical on desktop */}
           <div className="w-full h-20 md:h-auto md:w-[15%] border-t md:border-t-0 md:border-l border-gray-200 overflow-x-auto md:overflow-y-auto md:overflow-x-hidden p-1">
             <div className="flex md:flex-col gap-1">
-              {images.map((img, index) => (
+              {validImages.map((img, index) => (
                 <div
                   key={index}
                   className={`flex-shrink-0 cursor-pointer rounded-md overflow-hidden border-2 ${
@@ -157,13 +178,16 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                   onClick={() => setCurrentImageIndex(index)}
                 >
                   <img
-                    src={img}
+                    src={img || ""}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                     loading="lazy"
                     onError={(e) => {
-                      console.error('Thumbnail failed to load:', img);
-                      e.currentTarget.src = 'https://placehold.co/200x200?text=Thumbnail';
+                      console.error("Thumbnail failed to load:", img);
+                      e.currentTarget.src =
+                        "https://placehold.co/200x200?text=Thumbnail";
+                      // Prevent infinite error loops if placeholder also fails
+                      e.currentTarget.onerror = null;
                     }}
                   />
                 </div>
