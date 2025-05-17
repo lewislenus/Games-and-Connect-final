@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Helmet } from "react-helmet-async";
 
 interface ImageGalleryModalProps {
   isOpen: boolean;
@@ -83,6 +84,32 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
       className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-0"
       onClick={handleBackdropClick}
     >
+      {isOpen && validImages.length > 0 && (
+        <Helmet>
+          <meta property="og:title" content={`${title} - Photo Gallery`} />
+          <meta
+            property="og:description"
+            content={
+              isPastEvent
+                ? `Photos from our ${title} event held on ${eventDate} at ${eventLocation}`
+                : `Photo gallery for ${title}`
+            }
+          />
+          <meta property="og:image" content={validImages[currentImageIndex]} />
+          <meta property="og:type" content="article" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={`${title} - Photo Gallery`} />
+          <meta
+            name="twitter:description"
+            content={
+              isPastEvent
+                ? `Photos from our ${title} event held on ${eventDate} at ${eventLocation}`
+                : `Photo gallery for ${title}`
+            }
+          />
+          <meta name="twitter:image" content={validImages[currentImageIndex]} />
+        </Helmet>
+      )}
       <div
         ref={modalRef}
         className="relative bg-white rounded-lg shadow-lg w-[95vw] h-[95vh] overflow-hidden flex flex-col"
