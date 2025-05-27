@@ -231,9 +231,26 @@ const EventsPage = () => {
   return (
     <div className="min-h-screen bg-white">
       <SEO 
-        title="Events - Games & Connect"
-        description="Discover upcoming community events, sports competitions, and team building activities organized by Games & Connect in Ghana."
+        title="Events - Games & Connect | Social Events in Accra"
+        description="Discover upcoming outdoor games, social events, and team building activities in Ghana. Join fun activities, trivia nights, beach parties, and networking events in Accra organized by Games & Connect."
         canonical="https://gamesandconnect.com/events"
+        keywords="social events in Accra, Ghana community events, upcoming game day events in Ghana, trivia nights Accra, beach parties Ghana, team building activities Ghana, fun activities Ghana, networking events Ghana, young people events Ghana"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "name": "Games & Connect Events",
+          "description": "Upcoming and past social events, outdoor games, and team building activities in Ghana",
+          "url": "https://gamesandconnect.com/events",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Games and Connect",
+            "url": "https://gamesandconnect.com"
+          },
+          "about": {
+            "@type": "Thing",
+            "name": "Community Events in Ghana"
+          }
+        }}
       />
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center mb-8">Events</h1>

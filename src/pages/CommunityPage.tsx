@@ -8,11 +8,30 @@ import {
   Gift,
   Star,
 } from "lucide-react";
+import SEO from "../components/SEO";
 import communityImage from "../assets/img/events.jpg";
 
 const CommunityPage = () => {
   return (
     <div>
+      <SEO 
+        title="Community - Games & Connect | Ghana Community Events"
+        description="Join our vibrant community of young Ghanaians for social events, outdoor games, and travel adventures. Connect with like-minded individuals through our WhatsApp group and loyalty program."
+        canonical="https://gamesandconnect.com/community"
+        keywords="Ghana community events, young people events Ghana, games and connect Ghana, networking events Ghana, social events in Accra, fun activities Ghana, group games and travel Ghana"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Games & Connect Community",
+          "description": "Join our community of young Ghanaians for social events and travel adventures",
+          "url": "https://gamesandconnect.com/community",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Games and Connect",
+            "url": "https://gamesandconnect.com"
+          }
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-20">
         <div className="absolute inset-0 z-0">

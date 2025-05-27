@@ -1,9 +1,28 @@
 import { Link } from "react-router-dom";
 import { Award, Gift, Star, CheckCircle } from "lucide-react";
+import SEO from "../components/SEO";
 
 const LoyaltyPage = () => {
   return (
     <div>
+      <SEO 
+        title="Loyalty Program - Games & Connect | Social Events Ghana"
+        description="Earn rewards for participating in our community events and activities. Our loyalty program offers exclusive benefits for active members joining outdoor games and social events in Ghana."
+        canonical="https://gamesandconnect.com/loyalty"
+        keywords="loyalty programs for social events Ghana, Ghana community events, games and connect Ghana, fun activities Ghana, social events in Accra, young people events Ghana"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Games & Connect Loyalty Program",
+          "description": "Earn rewards for participating in community events and activities in Ghana",
+          "url": "https://gamesandconnect.com/loyalty",
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Games and Connect",
+            "url": "https://gamesandconnect.com"
+          }
+        }}
+      />
       {/* Hero Section */}
       <section className="relative py-20 bg-primary-700">
         <div className="container-custom text-white">

@@ -87,9 +87,28 @@ const HomePage = () => {
     <div className="min-h-screen bg-white relative overflow-hidden">
       <Animations />
       <SEO 
-        title="Games & Connect - Community Events and Team Building"
-        description="Join Games & Connect for exciting community events, team building activities, and sports competitions in Ghana. Connect with like-minded individuals and teams."
+        title="Games & Connect - Outdoor Games and Social Events in Ghana"
+        description="Join Games & Connect for exciting outdoor games, social events, and team building activities in Ghana. Connect with like-minded individuals and explore travel adventures."
         canonical="https://gamesandconnect.com"
+        keywords="outdoor games Ghana, social events in Accra, travel and adventure Ghana, young people events Ghana, Ghana community events, games and connect Ghana, fun activities Ghana, networking events Ghana, team building activities Ghana"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Games and Connect",
+          "url": "https://gamesandconnect.com",
+          "logo": "https://gamesandconnect.com/logo.png",
+          "description": "Community events, outdoor games, and travel adventures for young people in Ghana",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Accra",
+            "addressRegion": "Greater Accra",
+            "addressCountry": "Ghana"
+          },
+          "sameAs": [
+            "https://www.instagram.com/gamesandconnect",
+            "https://twitter.com/gamesandconnect"
+          ]
+        }}
       />
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex items-center py-16 md:py-24">
