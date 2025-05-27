@@ -152,10 +152,28 @@ const EventsPage = () => {
             ...event,
             // Keep ID as string since Supabase uses string UUIDs
             id: event.id,
-            price:
-              typeof event.price === "number"
-                ? `GHS ${event.price.toFixed(2)}`
-                : "Free",
+            price: (() => {
+              // Handle numeric price
+              if (typeof event.price === "number") {
+                return `GHS ${event.price.toFixed(2)}`;
+              }
+              // Handle null/undefined/zero price
+              if (event.price === 0 || event.price === null || event.price === undefined) {
+                return "GHS 0.00";
+              }
+              // Handle string price that might contain 'Gh' suffix
+              if (typeof event.price === "string") {
+                // Remove any 'Gh' suffix and convert to number if possible
+                const cleanPrice = event.price.toString().replace(/Gh$/i, '').trim();
+                const numPrice = parseFloat(cleanPrice);
+                if (!isNaN(numPrice)) {
+                  return `GHS ${numPrice.toFixed(2)}`;
+                }
+                return `GHS ${cleanPrice}`;
+              }
+              // Fallback
+              return `GHS ${event.price}`.replace(/Gh$/i, '');
+            })(),
             capacity:
               typeof event.capacity === "number"
                 ? `${event.capacity} participants`

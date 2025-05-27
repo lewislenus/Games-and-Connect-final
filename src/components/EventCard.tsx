@@ -62,7 +62,7 @@ const EventCard: React.FC<EventCardProps> = ({
     };
   }, [isAutoScrolling, galleryImages.length]);
   return (
-    <div className="card group h-full flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden">
+    <div className="card group h-full flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300 rounded-lg overflow-hidden border-2 border-secondary-300">
       {/* Card image with overlay */}
       <div
         className="relative mb-3 sm:mb-4 overflow-hidden cursor-pointer"

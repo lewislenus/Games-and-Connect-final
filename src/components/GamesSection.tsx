@@ -116,7 +116,7 @@ const GamesSection: React.FC = () => {
                     Featured
                   </div>
                 )}
-                <div className="bg-primary-600 overflow-hidden border border-gray-800 rounded-lg">
+                <div className="bg-secondary-300 overflow-hidden border border-gray-800 rounded-lg">
                   <div className="h-48 sm:h-56 overflow-hidden flex items-center justify-center p-4">
                     <img
                       src={game.image}
