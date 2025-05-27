@@ -41,10 +41,24 @@ export default {
           '50%': { transform: 'translateY(-100px) scale(1)', opacity: 0.6 },
           '90%': { opacity: 0.1 },
           '100%': { transform: 'translateY(-200px) scale(0.5)', opacity: 0 }
+        },
+        noise: {
+          '0%': { transform: 'translate(0,0)' },
+          '10%': { transform: 'translate(-1%,-1%)' },
+          '20%': { transform: 'translate(-2%,0)' },
+          '30%': { transform: 'translate(1%,-1%)' },
+          '40%': { transform: 'translate(-1%,2%)' },
+          '50%': { transform: 'translate(-2%,1%)' },
+          '60%': { transform: 'translate(2%,1%)' },
+          '70%': { transform: 'translate(1%,-1%)' },
+          '80%': { transform: 'translate(-1%,1%)' },
+          '90%': { transform: 'translate(1%,2%)' },
+          '100%': { transform: 'translate(0,0)' }
         }
       },
       animation: {
         'float': 'float 20s ease-in-out infinite',
+        'noise': 'noise 120s linear infinite',
       },
     },
   },

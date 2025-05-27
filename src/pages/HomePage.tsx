@@ -119,7 +119,7 @@ const HomePage = () => {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-12 md:mb-16">
               <Link 
                 to="/events" 
-                className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium bg-primary-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-gray-100 transition-all w-full sm:w-auto"
+                className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium bg-secondary-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-secondary-600 transition-all w-full sm:w-auto"
               >
                 Explore Events
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
@@ -138,7 +138,7 @@ const HomePage = () => {
         </div>
         
         {nextEventDate && (
-          <div className="absolute bottom-10 left-0 right-0 z-10">
+          <div className="md:absolute md:bottom-10 left-0 right-0 z-10 mt-8 md:mt-0">
             <div className="container mx-auto px-6">
               <CountdownTimer
                 targetDate={nextEventDate}
