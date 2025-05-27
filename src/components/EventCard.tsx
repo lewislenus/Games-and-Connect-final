@@ -107,7 +107,7 @@ const EventCard: React.FC<EventCardProps> = ({
           </div>
         )}
         {isPast ? (
-          <div className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center">
+          <div className="absolute inset-0 bg-primary-900 bg-opacity-60 flex items-center justify-center">
             <span className="text-white text-sm sm:text-lg font-semibold px-3 py-1.5 sm:px-4 sm:py-2 bg-primary-600 rounded">
               Past Event
             </span>

@@ -82,7 +82,7 @@ const GamesSection: React.FC = () => {
   };
 
   return (
-    <section className="bg-black py-16 w-full">
+    <section className="bg-black/90 py-16 w-full">
       <div className="container-custom">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
@@ -116,7 +116,7 @@ const GamesSection: React.FC = () => {
                     Featured
                   </div>
                 )}
-                <div className="bg-black overflow-hidden border border-gray-800 rounded-lg">
+                <div className="bg-primary-600 overflow-hidden border border-gray-800 rounded-lg">
                   <div className="h-48 sm:h-56 overflow-hidden flex items-center justify-center p-4">
                     <img
                       src={game.image}

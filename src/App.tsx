@@ -11,11 +11,13 @@ import EventDetailsPage from "./pages/EventDetailsPage";
 import TeamDetailsPage from "./pages/TeamDetailsPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminLayout from "./components/AdminLayout";
+import Animations from "./components/Animations";
 
 // Layout component that conditionally renders footer based on route
 const AppLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white relative overflow-hidden">
+      <Animations />
       <Navbar />
       <main className="flex-grow">
         <Routes>

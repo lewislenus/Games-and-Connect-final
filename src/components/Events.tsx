@@ -9,6 +9,7 @@ interface Event {
   date: string;
   user_id: string;
   created_at: string;
+  price: number;
 }
 
 interface EventFormData {
@@ -268,9 +269,14 @@ export const Events = () => {
           <div key={event.id} className="border rounded p-4 shadow">
             <h3 className="text-xl font-semibold">{event.title}</h3>
             <p className="text-gray-600">{event.description}</p>
-            <p className="text-sm text-gray-500">
-              {new Date(event.date).toLocaleDateString()}
-            </p>
+            <div className="flex justify-between items-center mt-2">
+              <p className="text-sm text-gray-500">
+                {new Date(event.date).toLocaleDateString()}
+              </p>
+              <p className="text-sm font-medium">
+                {event.price > 0 ? `$${event.price.toFixed(2)}` : 'Free'}
+              </p>
+            </div>
             {session.user.id === event.user_id && (
               <div className="mt-4 space-x-2">
                 <button

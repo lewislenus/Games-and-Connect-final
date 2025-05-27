@@ -34,27 +34,27 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ targetDate, eventTitle,
   const { days, hours, minutes, seconds } = timeLeft;
 
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-lg p-6 text-center">
-      <h3 className="text-2xl font-bold text-primary-600 mb-4">{eventTitle}</h3>
+    <div className="bg-primary-900/30 backdrop-blur-md rounded-lg p-6 text-center">
+      <h3 className="text-2xl font-bold text-white mb-4">{eventTitle}</h3>
       <div className="flex justify-center items-center gap-4 mb-6">
         <div className="text-center">
-          <span className="text-3xl font-bold text-primary-600">{days}</span>
-          <span className="text-gray-600 text-sm ml-1">d</span>
+          <span className="text-3xl font-bold text-white">{days}</span>
+          <span className="text-gray-300 text-sm ml-1">d</span>
         </div>
-        <span className="text-2xl text-primary-600">:</span>
+        <span className="text-2xl text-white">:</span>
         <div className="text-center">
-          <span className="text-3xl font-bold text-primary-600">{hours}</span>
-          <span className="text-gray-600 text-sm ml-1">h</span>
+          <span className="text-3xl font-bold text-white">{hours}</span>
+          <span className="text-gray-300 text-sm ml-1">h</span>
         </div>
-        <span className="text-2xl text-primary-600">:</span>
+        <span className="text-2xl text-white">:</span>
         <div className="text-center">
-          <span className="text-3xl font-bold text-primary-600">{minutes}</span>
-          <span className="text-gray-600 text-sm ml-1">m</span>
+          <span className="text-3xl font-bold text-white">{minutes}</span>
+          <span className="text-gray-300 text-sm ml-1">m</span>
         </div>
-        <span className="text-2xl text-primary-600">:</span>
+        <span className="text-2xl text-white">:</span>
         <div className="text-center">
-          <span className="text-3xl font-bold text-primary-600">{seconds}</span>
-          <span className="text-gray-600 text-sm ml-1">s</span>
+          <span className="text-3xl font-bold text-white">{seconds}</span>
+          <span className="text-gray-300 text-sm ml-1">s</span>
         </div>
       </div>
       <Link 

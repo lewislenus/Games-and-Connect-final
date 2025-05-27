@@ -51,7 +51,7 @@ const TeamSection = () => {
             ></div>
             
             {/* Light Overlay - Always visible on mobile, only on hover for desktop */}
-            <div className="absolute inset-0 bg-black/10 md:opacity-0 md:transition-opacity md:duration-500 md:group-hover:opacity-100 z-0"></div>
+            <div className="absolute inset-0 bg-primary-900/10 md:opacity-0 md:transition-opacity md:duration-500 md:group-hover:opacity-100 z-0"></div>
             
             {/* Content - Always visible on mobile, only on hover for desktop */}
             <div className="relative z-10 p-4 sm:p-6 md:p-8 bg-white/90 m-3 sm:m-4 md:m-6 md:transition-all md:duration-500 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-[-10px]">

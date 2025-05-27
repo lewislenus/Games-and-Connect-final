@@ -131,7 +131,7 @@ const EventDetailsPage = () => {
       }
 
       // If user is logged in, proceed with registration
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("event_registrations")
         .insert([
           {
@@ -189,11 +189,11 @@ const EventDetailsPage = () => {
           }}
         />
         {"isPast" in event && (
-          <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full z-10">
+          <div className="absolute top-4 left-4 bg-primary-900 bg-opacity-70 text-white px-4 py-2 rounded-full z-10">
             Past Event
           </div>
         )}
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end group-hover:bg-opacity-30 transition-opacity">
+        <div className="absolute inset-0 bg-primary-900 bg-opacity-40 flex items-end group-hover:bg-opacity-30 transition-opacity">
           <div className="container-custom text-white pb-8">
             <Link
               to="/events"
@@ -507,7 +507,7 @@ const EventDetailsPage = () => {
 
       {/* Gallery Modal */}
       {isGalleryOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-primary-900 bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="relative bg-white rounded-lg shadow-lg p-4 w-96">
             <button
               className="absolute top-2 right-2"

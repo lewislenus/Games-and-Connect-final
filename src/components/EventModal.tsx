@@ -72,7 +72,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center overflow-y-auto p-4">
+    <div className="fixed inset-0 bg-primary-900 bg-opacity-80 z-50 flex items-center justify-center overflow-y-auto p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row">
         {/* Close button - now positioned absolutely in the top-right corner */}
         <button
@@ -93,7 +93,7 @@ const EventModal: React.FC<EventModalProps> = ({ event, onClose }) => {
               className="w-full h-full object-cover"
             />
             {event.isPast && (
-              <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full">
+              <div className="absolute top-4 left-4 bg-primary-900 bg-opacity-70 text-white px-4 py-2 rounded-full">
                 Past Event
               </div>
             )}

@@ -292,7 +292,7 @@ const TeamDetailsPage = () => {
                     loading="lazy"
                   />
                   {/* Zoom indicator - Always visible on mobile, only on hover for desktop */}
-                  <div className="absolute inset-0 bg-black/20 sm:bg-black/30 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-primary-900/20 sm:bg-primary-900/30 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="bg-white/90 rounded-full p-2 sm:p-3">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#0a1a2f]"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path><path d="M11 8v6"></path><path d="M8 11h6"></path></svg>
                     </div>

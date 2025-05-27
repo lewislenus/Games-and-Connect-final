@@ -38,7 +38,8 @@ const RegistrationModal: React.FC<RegistrationModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30 transition-opacity duration-300"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-primary-900 bg-opacity-30 transition-opacity duration-300"
+      style={{ opacity: isOpen ? 1 : 0, pointerEvents: isOpen ? 'auto' : 'none' }}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}

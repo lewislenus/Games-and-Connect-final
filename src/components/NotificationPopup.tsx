@@ -83,7 +83,7 @@ const NotificationPopup: React.FC<NotificationPopupProps> = ({
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30 transition-opacity duration-300"
+      className="fixed inset-0 flex items-center justify-center z-50 bg-primary-900 bg-opacity-30 transition-opacity duration-300"
       style={{ opacity: isVisible ? 1 : 0 }}
       onClick={(e) => {
         // Close when clicking outside the popup

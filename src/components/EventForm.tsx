@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
-import { supabase } from "../api/supabase";
 import { cloudinaryService } from "../api/services/cloudinaryService";
 
 interface EventFormProps {
@@ -60,7 +59,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
   }, [event]);
 
   // Handle image file selection
-  const handleImageUpload = (acceptedFiles: File[]) => {
+  const handleImageUpload = useCallback(async (acceptedFiles: File[]) => {
     const newImages = acceptedFiles.map((file) => {
       const previewUrl = URL.createObjectURL(file);
       return { file, previewUrl };
@@ -74,15 +73,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
       ...prev,
       ...newImages.map((img) => img.previewUrl),
     ]);
-  };
-
-  const removeImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-    }));
-    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-  };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,7 +103,7 @@ export default function EventForm({ onClose, onSave, event }: EventFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 bg-primary-900 bg-opacity-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-lg w-full max-w-2xl my-4">
         <div className="flex justify-between items-center p-4 sm:p-6 border-b">
           <h2 className="text-lg sm:text-xl font-semibold">CREATE EVENT</h2>

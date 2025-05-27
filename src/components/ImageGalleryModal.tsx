@@ -81,7 +81,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-0"
+      className="fixed inset-0 bg-primary-900 bg-opacity-90 z-50 flex items-center justify-center p-0"
       onClick={handleBackdropClick}
     >
       {isOpen && validImages.length > 0 && (
@@ -164,14 +164,14 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                   <>
                     <button
                       onClick={handlePrevImage}
-                      className="absolute left-2 p-2 sm:p-3 rounded-full bg-black bg-opacity-50 text-white hover:bg-opacity-70 transition-all touch-manipulation"
+                      className="absolute left-2 p-2 sm:p-3 rounded-full bg-primary-900 bg-opacity-50 text-white hover:bg-opacity-70 transition-all touch-manipulation"
                       aria-label="Previous image"
                     >
                       <ChevronLeft size={20} className="sm:h-6 sm:w-6" />
                     </button>
                     <button
                       onClick={handleNextImage}
-                      className="absolute right-2 p-2 sm:p-3 rounded-full bg-black bg-opacity-50 text-white hover:bg-opacity-70 transition-all touch-manipulation"
+                      className="absolute right-2 p-2 sm:p-3 rounded-full bg-primary-900 bg-opacity-50 text-white hover:bg-opacity-70 transition-all touch-manipulation"
                       aria-label="Next image"
                     >
                       <ChevronRight size={20} className="sm:h-6 sm:w-6" />
@@ -180,7 +180,7 @@ const ImageGalleryModal: React.FC<ImageGalleryModalProps> = ({
                 )}
 
                 {/* Image counter */}
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-xs sm:text-sm">
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-primary-900 bg-opacity-50 text-white px-3 py-1 rounded-full text-xs sm:text-sm">
                   {currentImageIndex + 1} / {validImages.length}
                 </div>
               </div>

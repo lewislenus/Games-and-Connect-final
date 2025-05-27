@@ -426,11 +426,11 @@ const EventDetailsPage = () => {
           />
         )}
         {event.isPast && (
-          <div className="absolute top-4 left-4 bg-black bg-opacity-70 text-white px-4 py-2 rounded-full z-10">
+          <div className="absolute top-4 left-4 bg-primary-900 bg-opacity-70 text-white px-4 py-2 rounded-full z-10">
             Past Event
           </div>
         )}
-        <div className="absolute inset-0 bg-black bg-opacity-40 flex items-end">
+        <div className="absolute inset-0 bg-primary-900 bg-opacity-40 flex items-end">
           <div className="container-custom text-white pb-8">
             <Link
               to="/events"

@@ -6,6 +6,7 @@ import CountdownTimer from "../components/CountdownTimer";
 import TeamSection from "../components/TeamSection";
 import GamesSection from "../components/GamesSection";
 import GallerySection from "../components/GallerySection";
+import Animations from "../components/Animations";
 import backgroundImage from "../assets/img/back.jpg";
 // Import will be used when registration functionality is implemented
 // import { registerEvent, registerVolunteer } from "../api/services/supabase";
@@ -83,7 +84,8 @@ const HomePage = () => {
   // They are kept for future implementation of registration functionality
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white relative overflow-hidden">
+      <Animations />
       <SEO 
         title="Games & Connect - Community Events and Team Building"
         description="Join Games & Connect for exciting community events, team building activities, and sports competitions in Ghana. Connect with like-minded individuals and teams."
@@ -101,23 +103,23 @@ const HomePage = () => {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           ></iframe>
-          <div className="absolute inset-0 bg-black/70 md:bg-black/60"></div>
+          <div className="absolute inset-0 bg-black/30"></div>
         </div>
         
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-white">
           <div className="max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight">
-              Redefining the Art of
-              <span className="block">Social Connection</span>
+              Play, Travel
+              <span className="block">& Connect</span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl mb-8 md:mb-12 text-gray-100 max-w-2xl">
-              Discover experiences where fun meets meaningful connections.
+            <p className="text-lg sm:text-xl md:text-2xl mb-8 md:mb-12 text-white max-w-2xl">
+            Join a growing community of young Ghanaians making memories through fun, adventure, and connection.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-12 md:mb-16">
               <Link 
                 to="/events" 
-                className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium bg-white text-black px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-gray-100 transition-all w-full sm:w-auto"
+                className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium bg-primary-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-gray-100 transition-all w-full sm:w-auto"
               >
                 Explore Events
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 transition-transform" />
@@ -131,16 +133,6 @@ const HomePage = () => {
                 Join Community
                 <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
               </a>
-            </div>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-12">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center p-3 md:p-4 bg-black/20 backdrop-blur-sm rounded-lg">
-                  <p className="text-3xl sm:text-4xl md:text-5xl font-bold mb-1 md:mb-2">{stat.value}</p>
-                  <p className="text-sm md:text-base text-gray-300">{stat.label}</p>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -175,7 +167,7 @@ const HomePage = () => {
                 organize diverse events that cater to various interests and create
                 unforgettable experiences for our community members.
               </p>
-              <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-primary-900 flex items-center justify-center">
                 <Calendar className="h-6 w-6 text-white" />
               </div>
             </div>
@@ -187,7 +179,7 @@ const HomePage = () => {
                 individuals, participate in discussions, and stay updated on
                 upcoming events. We foster genuine connections in a welcoming environment.
               </p>
-              <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-primary-900 flex items-center justify-center">
                 <Users className="h-6 w-6 text-white" />
               </div>
             </div>
@@ -199,7 +191,7 @@ const HomePage = () => {
                 benefits, discounts, and special access to premium events. The more
                 you participate, the more rewards you unlock.
               </p>
-              <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-primary-900 flex items-center justify-center">
                 <Award className="h-6 w-6 text-white" />
               </div>
             </div>
@@ -260,6 +252,20 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Stats Section */}
+      <section className="py-16 bg-primary-900 text-white">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
+            {stats.map((stat, index) => (
+              <div key={index} className="text-center p-6">
+                <p className="text-5xl sm:text-6xl md:text-7xl font-bold mb-3">{stat.value}</p>
+                <p className="text-lg md:text-xl text-gray-300">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Featured Events Section */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-6">
@@ -288,7 +294,7 @@ const HomePage = () => {
                       alt={event.title}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <div className="absolute inset-0 bg-primary-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <Link
                         to={`/events/${event.id}`}
                         className="bg-white text-black px-6 py-3 rounded-full font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform"
@@ -319,7 +325,7 @@ const HomePage = () => {
                   href="https://chat.whatsapp.com/LT0Zolnz9fMLm7b7aKtQld"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-black text-white px-8 py-4 rounded-full font-medium hover:bg-gray-800 transition-colors"
+                  className="inline-flex items-center gap-2 bg-primary-900 text-white px-8 py-4 rounded-full font-medium hover:bg-gray-800 transition-colors"
                 >
                   Join Our Community
                   <ArrowRight className="w-5 h-5" />
@@ -332,7 +338,7 @@ const HomePage = () => {
             <div className="mt-16 text-center">
               <Link 
                 to="/events" 
-                className="inline-flex items-center gap-2 text-lg font-medium border-2 border-black px-8 py-4 rounded-full hover:bg-black hover:text-white transition-colors"
+                className="inline-flex items-center gap-2 text-lg font-medium border-2 border-black px-8 py-4 rounded-full hover:bg-primary-900 hover:text-white transition-colors"
               >
                 View All Events
                 <ArrowRight className="w-5 h-5" />
@@ -385,7 +391,7 @@ const HomePage = () => {
             alt="Friends having fun"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-black/70"></div>
+          <div className="absolute inset-0 bg-primary-900/70"></div>
         </div>
 
         <div className="container mx-auto px-6 relative z-10 text-center text-white">
