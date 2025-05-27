@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "build"
+  publish = "dist"
 
 # This is the important part - it tells Netlify to redirect all requests to index.html
 # This allows React Router to handle the routing client-side
