@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { Calendar, Users, Award, ArrowRight, ArrowUpRight } from "lucide-react";
+import { Calendar, Users, Award, ArrowRight, ArrowUpRight, Play } from "lucide-react";
 import CountdownTimer from "../components/CountdownTimer";
 import TeamSection from "../components/TeamSection";
 import GamesSection from "../components/GamesSection";
 import GallerySection from "../components/GallerySection";
 import Animations from "../components/Animations";
+import ImageCarousel from "../components/ImageCarousel";
 import backgroundImage from "../assets/img/back.jpg";
 // Import will be used when registration functionality is implemented
 // import { registerEvent, registerVolunteer } from "../api/services/supabase";
@@ -83,6 +84,30 @@ const HomePage = () => {
   // Note: Event and volunteer registration handlers are defined but not currently used
   // They are kept for future implementation of registration functionality
 
+  // Cloudinary images for carousel
+  const carouselImages = [
+    {
+      url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488675/_MG_1414_ij80mu.jpg",
+      caption: "Lavender Dreams"
+    },
+    {
+      url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488675/_MG_1679_ovnanp.jpg",
+      caption: "Cosmic Blue"
+    },
+    {
+      url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488675/_MG_1623_olhksw.jpg",
+      caption: "Neon Glow"
+    },
+    {
+      url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488676/_MG_1677_v8n5nu.jpg",
+      caption: "Electric Dreams"
+    },
+    {
+      url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488676/back_k2fwpf.jpg",
+      caption: "Community Fun"
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       <Animations />
@@ -112,17 +137,16 @@ const HomePage = () => {
       />
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex flex-col justify-center py-16 md:py-24">
-        {/* YouTube video embed as background */}
+        {/* Image Carousel as background */}
         <div className="absolute inset-0 z-0 overflow-hidden w-full h-full">
-          <iframe
-            className="absolute top-0 left-0 w-[300%] sm:w-full h-full object-cover -left-[100%] sm:left-0"
-            src="https://www.youtube.com/embed/dvjYm18Bldw?si=s5POukWiH2mNgItI&autoplay=1&mute=1&loop=1&playlist=dvjYm18Bldw"
-            title="Games Day at Akosombo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-          ></iframe>
-          <div className="absolute inset-0 bg-black/30"></div>
+          <ImageCarousel 
+            images={carouselImages} 
+            interval={6000} 
+            showControls={true}
+            showIndicators={true}
+            overlay={true}
+            animationEffect="kenBurns"
+          />
         </div>
         
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-white">
@@ -165,6 +189,43 @@ const HomePage = () => {
             />
           </div>
         )}
+      </section>
+      
+      {/* Video Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience Our Community</h2>
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                Watch our highlights and get a glimpse of the fun and excitement at our events
+              </p>
+            </div>
+            
+            <div className="relative overflow-hidden rounded-xl shadow-2xl aspect-video bg-black">
+              <iframe
+                className="w-full h-full"
+                src="https://www.youtube.com/embed/dvjYm18Bldw?si=s5POukWiH2mNgItI&autoplay=1&mute=1&loop=1&playlist=dvjYm18Bldw&controls=1"
+                title="Games Day at Akosombo"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              ></iframe>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <a 
+                href="https://www.youtube.com/@GamesConnect-gh" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-primary-900 hover:text-primary-700 font-medium transition-colors"
+              >
+                <Play className="w-5 h-5" />
+                Watch more videos on our YouTube channel
+              </a>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Our Services Section */}
