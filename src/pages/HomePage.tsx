@@ -181,7 +181,7 @@ const HomePage = () => {
         </div>
         
         {nextEventDate && (
-          <div className="w-full mt-8 md:mt-4">
+          <div className="max-w-4xl mx-auto mt-8 md:mt-4">
             <CountdownTimer
               targetDate={nextEventDate}
               eventTitle={`Next Event: ${nextEvent ? nextEvent.title : "No Event"}`}
