@@ -111,7 +111,7 @@ const HomePage = () => {
         }}
       />
       {/* Hero Section */}
-      <section className="relative min-h-[100svh] flex items-center py-16 md:py-24">
+      <section className="relative min-h-[100svh] flex flex-col justify-center py-16 md:py-24">
         {/* YouTube video embed as background */}
         <div className="absolute inset-0 z-0 overflow-hidden w-full h-full">
           <iframe
@@ -157,14 +157,12 @@ const HomePage = () => {
         </div>
         
         {nextEventDate && (
-          <div className="md:absolute md:bottom-10 left-0 right-0 z-10 mt-8 md:mt-0">
-            <div className="container mx-auto px-6">
-              <CountdownTimer
-                targetDate={nextEventDate}
-                eventTitle={`Next Event: ${nextEvent ? nextEvent.title : "No Event"}`}
-                eventId={nextEvent ? nextEvent.id.toString() : "0"}
-              />
-            </div>
+          <div className="w-full mt-8 md:mt-4">
+            <CountdownTimer
+              targetDate={nextEventDate}
+              eventTitle={`Next Event: ${nextEvent ? nextEvent.title : "No Event"}`}
+              eventId={nextEvent ? nextEvent.id.toString() : "0"}
+            />
           </div>
         )}
       </section>
