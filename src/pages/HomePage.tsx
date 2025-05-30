@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
-import { Calendar, Users, Award, ArrowRight, ArrowUpRight, Play } from "lucide-react";
+import {
+  Calendar,
+  Users,
+  Award,
+  ArrowRight,
+  ArrowUpRight,
+  Play,
+} from "lucide-react";
 import CountdownTimer from "../components/CountdownTimer";
 import TeamSection from "../components/TeamSection";
 import GamesSection from "../components/GamesSection";
@@ -30,7 +37,7 @@ const HomePage = () => {
     setError(null);
     try {
       const eventsData = await eventService.getEvents();
-      
+
       if (!eventsData) {
         setUpcomingEvents([]);
         setError("No events data received");
@@ -49,9 +56,16 @@ const HomePage = () => {
         return {
           ...event,
           id: event.id,
-          price: typeof event.price === "number" ? `GHS ${event.price.toFixed(2)}` : "Free",
-          capacity: typeof event.capacity === "number" ? `${event.capacity} participants` : "Unlimited",
-          image: event.image_url || "https://placehold.co/600x400?text=No+Image",
+          price:
+            typeof event.price === "number"
+              ? `GHS ${event.price.toFixed(2)}`
+              : "Free",
+          capacity:
+            typeof event.capacity === "number"
+              ? `${event.capacity} participants`
+              : "Unlimited",
+          image:
+            event.image_url || "https://placehold.co/600x400?text=No+Image",
           isPast: isPastEvent,
           time: event.time_range || "TBA",
           description: event.description || "No description available",
@@ -59,7 +73,7 @@ const HomePage = () => {
       });
 
       // Filter to only upcoming events
-      const upcoming = processedEvents.filter(event => !event.isPast);
+      const upcoming = processedEvents.filter((event) => !event.isPast);
       setUpcomingEvents(upcoming);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -78,7 +92,7 @@ const HomePage = () => {
   const stats = [
     { value: "24+", label: "Events Organized" },
     { value: "200+", label: "Active Members" },
-    { value: "100%", label: "Fun Guaranteed" }
+    { value: "100%", label: "Fun Guaranteed" },
   ];
 
   // Note: Event and volunteer registration handlers are defined but not currently used
@@ -88,30 +102,30 @@ const HomePage = () => {
   const carouselImages = [
     {
       url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488675/_MG_1414_ij80mu.jpg",
-      caption: "Lavender Dreams"
+      caption: "Lavender Dreams",
     },
     {
       url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488675/_MG_1679_ovnanp.jpg",
-      caption: "Cosmic Blue"
+      caption: "Cosmic Blue",
     },
     {
       url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488675/_MG_1623_olhksw.jpg",
-      caption: "Neon Glow"
+      caption: "Neon Glow",
     },
     {
       url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488676/_MG_1677_v8n5nu.jpg",
-      caption: "Electric Dreams"
+      caption: "Electric Dreams",
     },
     {
       url: "https://res.cloudinary.com/drkjnrvtu/image/upload/v1742488676/back_k2fwpf.jpg",
-      caption: "Community Fun"
-    }
+      caption: "Community Fun",
+    },
   ];
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden">
       <Animations />
-      <SEO 
+      <SEO
         title="Games & Connect - Outdoor Games and Social Events in Ghana"
         description="Join Games & Connect for exciting outdoor games, social events, and team building activities in Ghana. Connect with like-minded individuals and explore travel adventures."
         canonical="https://gamesandconnect.com"
@@ -119,49 +133,51 @@ const HomePage = () => {
         schema={{
           "@context": "https://schema.org",
           "@type": "Organization",
-          "name": "Games and Connect",
-          "url": "https://gamesandconnect.com",
-          "logo": "https://gamesandconnect.com/logo.png",
-          "description": "Community events, outdoor games, and travel adventures for young people in Ghana",
-          "address": {
+          name: "Games and Connect",
+          url: "https://gamesandconnect.com",
+          logo: "https://gamesandconnect.com/logo.png",
+          description:
+            "Community events, outdoor games, and travel adventures for young people in Ghana",
+          address: {
             "@type": "PostalAddress",
-            "addressLocality": "Accra",
-            "addressRegion": "Greater Accra",
-            "addressCountry": "Ghana"
+            addressLocality: "Accra",
+            addressRegion: "Greater Accra",
+            addressCountry: "Ghana",
           },
-          "sameAs": [
+          sameAs: [
             "https://www.instagram.com/gamesandconnect",
-            "https://twitter.com/gamesandconnect"
-          ]
+            "https://twitter.com/gamesandconnect",
+          ],
         }}
       />
       {/* Hero Section */}
       <section className="relative min-h-[100svh] flex flex-col justify-center py-16 md:py-24">
         {/* Image Carousel as background */}
         <div className="absolute inset-0 z-0 overflow-hidden w-full h-full">
-          <ImageCarousel 
-            images={carouselImages} 
-            interval={6000} 
+          <ImageCarousel
+            images={carouselImages}
+            interval={6000}
             showControls={true}
             showIndicators={true}
             overlay={true}
             animationEffect="kenBurns"
           />
         </div>
-        
+
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-white">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-4xl mx-auto flex flex-col">
             <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 md:mb-8 leading-tight">
               Play, Travel
               <span className="block">& Connect</span>
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl mb-8 md:mb-12 text-white max-w-2xl">
-            Join a growing community of young Ghanaians making memories through fun, adventure, and connection.
+              Join a growing community of young Ghanaians making memories
+              through fun, adventure, and connection.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-12 md:mb-16">
-              <Link 
-                to="/events" 
+              <Link
+                to="/events"
                 className="group flex items-center justify-center gap-2 text-base md:text-lg font-medium bg-secondary-500 text-white px-6 md:px-8 py-3 md:py-4 rounded-full hover:bg-secondary-600 transition-all w-full sm:w-auto"
               >
                 Explore Events
@@ -177,31 +193,35 @@ const HomePage = () => {
                 <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
+            {nextEventDate && (
+              <div className="mt-8 md:mt-4">
+                <CountdownTimer
+                  targetDate={nextEventDate}
+                  eventTitle={`Next Event: ${
+                    nextEvent ? nextEvent.title : "No Event"
+                  }`}
+                  eventId={nextEvent ? nextEvent.id.toString() : "0"}
+                />
+              </div>
+            )}
           </div>
         </div>
-        
-        {nextEventDate && (
-          <div className="max-w-4xl mx-auto mt-8 md:mt-4">
-            <CountdownTimer
-              targetDate={nextEventDate}
-              eventTitle={`Next Event: ${nextEvent ? nextEvent.title : "No Event"}`}
-              eventId={nextEvent ? nextEvent.id.toString() : "0"}
-            />
-          </div>
-        )}
       </section>
-      
+
       {/* Video Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-6xl mx-auto">
             <div className="mb-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Experience Our Community</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Experience Our Community
+              </h2>
               <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-                Watch our highlights and get a glimpse of the fun and excitement at our events
+                Watch our highlights and get a glimpse of the fun and excitement
+                at our events
               </p>
             </div>
-            
+
             <div className="relative overflow-hidden rounded-xl shadow-2xl aspect-video bg-black">
               <iframe
                 className="w-full h-full"
@@ -212,11 +232,11 @@ const HomePage = () => {
                 allowFullScreen
               ></iframe>
             </div>
-            
+
             <div className="mt-8 text-center">
-              <a 
-                href="https://www.youtube.com/@GamesConnect-gh" 
-                target="_blank" 
+              <a
+                href="https://www.youtube.com/@GamesConnect-gh"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-primary-900 hover:text-primary-700 font-medium transition-colors"
               >
@@ -242,8 +262,8 @@ const HomePage = () => {
               <h3 className="text-2xl font-bold mb-6">Exciting Events</h3>
               <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                 From outdoor adventures to beach parties and game nights, we
-                organize diverse events that cater to various interests and create
-                unforgettable experiences for our community members.
+                organize diverse events that cater to various interests and
+                create unforgettable experiences for our community members.
               </p>
               <div className="w-12 h-12 rounded-full bg-primary-900 flex items-center justify-center">
                 <Calendar className="h-6 w-6 text-white" />
@@ -255,7 +275,8 @@ const HomePage = () => {
               <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                 Join our WhatsApp community to connect with like-minded
                 individuals, participate in discussions, and stay updated on
-                upcoming events. We foster genuine connections in a welcoming environment.
+                upcoming events. We foster genuine connections in a welcoming
+                environment.
               </p>
               <div className="w-12 h-12 rounded-full bg-primary-900 flex items-center justify-center">
                 <Users className="h-6 w-6 text-white" />
@@ -266,8 +287,8 @@ const HomePage = () => {
               <h3 className="text-2xl font-bold mb-6">Loyalty Program</h3>
               <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                 Our loyalty program rewards active members with exclusive
-                benefits, discounts, and special access to premium events. The more
-                you participate, the more rewards you unlock.
+                benefits, discounts, and special access to premium events. The
+                more you participate, the more rewards you unlock.
               </p>
               <div className="w-12 h-12 rounded-full bg-primary-900 flex items-center justify-center">
                 <Award className="h-6 w-6 text-white" />
@@ -293,7 +314,8 @@ const HomePage = () => {
                 <span className="text-4xl font-light">1</span>
               </div>
               <p className="text-gray-700">
-                We carefully plan each event to ensure it meets our high standards for fun, safety, and social connection.
+                We carefully plan each event to ensure it meets our high
+                standards for fun, safety, and social connection.
               </p>
             </div>
 
@@ -303,7 +325,8 @@ const HomePage = () => {
                 <span className="text-4xl font-light">2</span>
               </div>
               <p className="text-gray-700">
-                Our team prepares all necessary elements, from venue setup to activity materials, for a seamless experience.
+                Our team prepares all necessary elements, from venue setup to
+                activity materials, for a seamless experience.
               </p>
             </div>
 
@@ -313,7 +336,8 @@ const HomePage = () => {
                 <span className="text-4xl font-light">3</span>
               </div>
               <p className="text-gray-700">
-                On the day, our experienced facilitators ensure everyone feels welcome and activities run smoothly.
+                On the day, our experienced facilitators ensure everyone feels
+                welcome and activities run smoothly.
               </p>
             </div>
 
@@ -323,7 +347,8 @@ const HomePage = () => {
                 <span className="text-4xl font-light">4</span>
               </div>
               <p className="text-gray-700">
-                After each event, we gather feedback and maintain the connections formed to build our community.
+                After each event, we gather feedback and maintain the
+                connections formed to build our community.
               </p>
             </div>
           </div>
@@ -336,7 +361,9 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-12">
             {stats.map((stat, index) => (
               <div key={index} className="text-center p-6">
-                <p className="text-5xl sm:text-6xl md:text-7xl font-bold mb-3">{stat.value}</p>
+                <p className="text-5xl sm:text-6xl md:text-7xl font-bold mb-3">
+                  {stat.value}
+                </p>
                 <p className="text-lg md:text-xl text-gray-300">{stat.label}</p>
               </div>
             ))}
@@ -362,7 +389,9 @@ const HomePage = () => {
                 <div className="w-12 h-12 border-4 border-black border-t-transparent rounded-full animate-spin"></div>
               </div>
             ) : error ? (
-              <div className="col-span-3 text-center py-12 text-red-500">{error}</div>
+              <div className="col-span-3 text-center py-12 text-red-500">
+                {error}
+              </div>
             ) : upcomingEvents.length > 0 ? (
               upcomingEvents.map((event) => (
                 <div key={event.id} className="group overflow-hidden">
@@ -384,9 +413,13 @@ const HomePage = () => {
                   <div className="pt-6">
                     <div className="flex justify-between items-center mb-2">
                       <h3 className="text-xl font-bold">{event.title}</h3>
-                      <span className="text-gray-600 font-medium">{event.date}</span>
+                      <span className="text-gray-600 font-medium">
+                        {event.date}
+                      </span>
                     </div>
-                    <p className="text-gray-700 line-clamp-2">{event.description}</p>
+                    <p className="text-gray-700 line-clamp-2">
+                      {event.description}
+                    </p>
                   </div>
                 </div>
               ))
@@ -414,8 +447,8 @@ const HomePage = () => {
 
           {upcomingEvents.length > 0 && (
             <div className="mt-16 text-center">
-              <Link 
-                to="/events" 
+              <Link
+                to="/events"
                 className="inline-flex items-center gap-2 text-lg font-medium border-2 border-black px-8 py-4 rounded-full hover:bg-primary-900 hover:text-white transition-colors"
               >
                 View All Events
@@ -433,14 +466,12 @@ const HomePage = () => {
       <section className="py-24 bg-gray-50">
         <div className="container mx-auto px-6">
           <div className="mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Our Teams
-            </h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Teams</h2>
             <p className="text-gray-700 text-lg max-w-3xl">
               Join one of our competitive teams and be part of the excitement.
             </p>
           </div>
-          
+
           <TeamSection />
         </div>
       </section>
@@ -453,10 +484,11 @@ const HomePage = () => {
               Games Collection
             </h2>
             <p className="text-gray-700 text-lg max-w-3xl">
-              Explore our variety of exciting games and activities for all skill levels.
+              Explore our variety of exciting games and activities for all skill
+              levels.
             </p>
           </div>
-          
+
           <GamesSection />
         </div>
       </section>
